@@ -14,4 +14,4 @@ Applications for this toolkit are broad, and include: language compilers; struct
 document scanners and interpreters; syntax highlighting and verification; workflow engines 
 built from scenario descriptions; state machines described by a formal grammar.
 
-THe full documentation is available in the (/RopleyIT/GLRParser/wiki)[GitHub Wiki] for this project.
+The full documentation is available in the Wiki for this project.
