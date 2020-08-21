@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Sean D Smith</Authors>
+    <Company>Ropley IT Ltd</Company>
+    <Description>Simple class library that wraps the C# Roslyn compiler, so that a C# string or text stream can be compiled and loaded as a dynamic assembly at runtime.</Description>
+    <Copyright>Ropley Information Technology Ltd, MIT License</Copyright>
+    <PackageLicenseUrl>https://github.com/RopleyIT/DynamicCSharp/blob/master/README.md</PackageLicenseUrl>
+    <Product>DynamicCSharp dynamic assembly generator and loader for .NET Core 3.1 and later</Product>
+    <RepositoryUrl>https://github.com/RopleyIT/DynamicCSharp</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/RopleyIT/DynamicCSharp</PackageProjectUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags />
+    <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <FileVersion>1.0.2.0</FileVersion>
+    <Version>1.0.2</Version>
+    <PackageReleaseNotes></PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.6" />
+  </ItemGroup>
+
+</Project>

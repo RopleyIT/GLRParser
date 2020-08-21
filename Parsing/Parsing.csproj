@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooleanLib\BooleanLib.csproj" />
+    <ProjectReference Include="..\DynamicCSharp\DynamicCSharp.csproj" />
+    <ProjectReference Include="..\ParserGenerator\ParserGenerator.csproj" />
+  </ItemGroup>
+
+</Project>
