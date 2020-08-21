@@ -13,3 +13,5 @@ This enables the tool to be used for grammar-driven finite state machine constru
 Applications for this toolkit are broad, and include: language compilers; structured 
 document scanners and interpreters; syntax highlighting and verification; workflow engines 
 built from scenario descriptions; state machines described by a formal grammar.
+
+THe full documentation is available in the [/RopleyIT/GLRParser/wiki](GitHub Wiki) for this project.
