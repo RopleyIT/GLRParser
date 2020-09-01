@@ -263,3 +263,4 @@ __pycache__/
 # Custom for this project
 Kit/
 *.zip
+/Docs

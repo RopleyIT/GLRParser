@@ -1,0 +1,20 @@
+﻿@inject PedXController.CrossingController CxController;
+ 
+<svg id="trafficLight" width="80" height="480">
+    <rect x="30" y="0" width="20" height="480" style="fill:rgb(128, 128, 128);stroke-width:2;stroke:rgb(0,0,0)" />
+    <rect width="80" height="240" style="fill:rgb(0, 0, 0);stroke-width:2;stroke:rgb(0,0,0)" />
+    <circle id="redBulb" cx="40" cy="40" r="30" fill=@GetRed() />
+    <circle id="yellowBulb" cx="40" cy="120" r="30" fill=@GetYellow() />
+    <circle id="greenBulb" cx=" 40" cy="200" r="30" fill=@GetGreen() />
+</svg>
+@code {
+    protected override void OnInitialized() =>
+        CxController.Light.PropertyChanged += OnControllerChangeEvent;
+
+    private void OnControllerChangeEvent(object o, EventArgs e) =>
+        InvokeAsync(() => StateHasChanged());
+
+    string GetRed() => CxController.Light.Red ? "red" : "gray";
+    string GetYellow() => CxController.Light.Yellow ? "yellow" : "gray";
+    string GetGreen() => CxController.Light.Green ? "green" : "gray";
+}

@@ -17,7 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicCSharp", "DynamicCSh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicCSharpTests", "DynamicCSharpTests\DynamicCSharpTests.csproj", "{1B8BB20B-4C0A-4C96-84F1-B3E7F8CDF4EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLRParserTests", "GLRParserTests\GLRParserTests.csproj", "{DEA86726-7C7B-4379-9842-C2902B0E2272}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GLRParserTests", "GLRParserTests\GLRParserTests.csproj", "{DEA86726-7C7B-4379-9842-C2902B0E2272}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseLR", "ParseLR\ParseLR.csproj", "{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedXController", "TrafficLightControllerExample\PedXController\PedXController.csproj", "{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedXDemo", "TrafficLightControllerExample\PedXDemo\PedXDemo.csproj", "{2951BED7-1199-42D4-A1CA-76C80A3BC148}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +63,18 @@ Global
 		{DEA86726-7C7B-4379-9842-C2902B0E2272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEA86726-7C7B-4379-9842-C2902B0E2272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEA86726-7C7B-4379-9842-C2902B0E2272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
