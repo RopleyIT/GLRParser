@@ -23,7 +23,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseLR", "ParseLR\ParseLR.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedXController", "TrafficLightControllerExample\PedXController\PedXController.csproj", "{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PedXDemo", "TrafficLightControllerExample\PedXDemo\PedXDemo.csproj", "{2951BED7-1199-42D4-A1CA-76C80A3BC148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedXDemo", "TrafficLightControllerExample\PedXDemo\PedXDemo.csproj", "{2951BED7-1199-42D4-A1CA-76C80A3BC148}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorDemo", "CalculatorExample\CalculatorDemo\CalculatorDemo.csproj", "{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorDemoTest", "CalculatorExample\CalculatorDemoTest\CalculatorDemoTest.csproj", "{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorDemoApp", "CalculatorExample\CalculatorDemoApp\CalculatorDemoApp.csproj", "{EE2EE9B6-4657-422F-86D6-5E2F272D980D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,6 +81,18 @@ Global
 		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2951BED7-1199-42D4-A1CA-76C80A3BC148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

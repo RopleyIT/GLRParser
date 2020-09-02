@@ -1,0 +1,158 @@
+﻿<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <input type="radio" name="lr1parser" id="lr1parser" value="LR(1) Parser" @onchange="RadioSelection" checked=@(RadioValue.Equals("LR(1) Parser", StringComparison.OrdinalIgnoreCase)) />
+            <label for="lr1parser">Use LR(1) Calculator Parser</label>
+        </div>
+        <div class="col-3">
+            <input type="radio" name="glrparser" id="glrparser" value="GLR Parser" @onchange="RadioSelection" checked=@(RadioValue.Equals("GLR Parser", StringComparison.OrdinalIgnoreCase)) />
+            <label for="glrparser">Use GLR Calculator Parser</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-12 my-2">
+                    <button type="button" class="btn btn-primary btn-lg btn-block" disabled>@Expression</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('1'))">1</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('2'))">2</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('3'))">3</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="Clear">C</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('+'))">+</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('-'))">-</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('4'))">4</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('5'))">5</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('6'))">6</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="Undo">CE</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('*'))">*</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('/'))">/</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('7'))">7</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('8'))">8</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('9'))">9</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('('))">(</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('^'))">^</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="Calc">=</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col my-2">
+
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-dark btn-lg btn-block" @onclick="@(e=>CalcClick('0'))">0</button>
+                </div>
+                <div class="col my-2">
+
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick(')'))">)</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('.'))">.</button>
+                </div>
+                <div class="col my-2">
+                    <button type="button" class="btn btn-secondary btn-lg btn-block" @onclick="@(e=>CalcClick('E'))">E</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h5>Parser shifts and reductions:</h5>
+            <textarea style="font-family: monospace;font-size:small" 
+                      rows="15" cols="64" readonly>@DebugResults</textarea>
+        </div>
+    </div>
+</div>
+@code {
+    // Handle the selection of the parser type to be used
+
+    string RadioValue = "LR(1) Parser";
+
+    void RadioSelection(ChangeEventArgs args)
+    {
+        RadioValue = args.Value.ToString();
+    }
+
+    // Handle the capture and parsing of the arithmetic expression
+
+    string Expression = "0";
+    string DebugResults;
+
+    private void CalcClick(char c)
+    {
+        if (Expression == "0" && (char.IsDigit(c) || c == '.'))
+            Expression = c.ToString();
+        else
+            Expression += c;
+    }
+
+    private void Clear()
+    {
+        Expression = "0";
+        DebugResults = string.Empty;
+    }
+
+    private void Undo()
+    {
+        var length = Expression.Length;
+        if (Expression != "0")
+            Expression = Expression.Substring(0, Expression.Length - 1);
+        if (string.IsNullOrEmpty(Expression))
+            Clear();
+    }
+
+    private void Calc()
+    {
+        if(RadioValue == "LR(1) Parser")
+        {
+            Expression = CalculatorDemo.Calculator.Calculate(Expression);
+            DebugResults = CalculatorDemo.Calculator.DebugResults;
+        }
+        else
+        {
+            Expression = CalculatorDemo.GLRCalculator.Calculate(Expression);
+            DebugResults = CalculatorDemo.GLRCalculator.DebugResults;
+        }
+    }
+}
