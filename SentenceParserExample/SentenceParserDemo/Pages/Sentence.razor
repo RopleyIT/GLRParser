@@ -1,0 +1,96 @@
+﻿@using SentenceParser;
+@using System.Text;
+@using System.IO;
+<h3>Simple sentence parser demonstration</h3>
+<p>
+    The vocabulary for this sample tokeniser is very limited, being
+    taken from the following words, plus their plurals, and their
+    present (e.g. licks) and perfect (e.g. licked) tenses if verbs:
+    <br />ARTICLES: the, a
+    <br />NOUNS: cat, dog, rabbit, human
+    <br />VERBS: lick, defend, like, reveal
+    <br />ADJECTIVES: hairy, pink, little, cold
+    <br />ADVERBS: noisily, lovingly, morosely, quickly
+    <br />Don't forget to terminate your sentence with a period!
+</p>
+<p>
+    Please type your sentence in the box below, then click 'Analyse sentence':
+</p>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <input class="form-control" @bind="TypedText" />
+        </div>
+        <div class="col-2">
+            <button class="btn btn-primary" @onclick="ParseSentences">Analyse sentence</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <p>@Errors</p>
+        </div>
+    </div>
+</div>
+<br />
+<table>
+    <tr>
+        <td>Present tense sentences&nbsp;&nbsp;</td>
+        <td>@PresentTense</td>
+    </tr>
+    <tr>
+        <td>Past tense sentences</td>
+        <td>@PastTense</td>
+    </tr>
+    <tr>
+        <td>Plural sentences</td>
+        <td>@Plural</td>
+    </tr>
+    <tr>
+        <td>Singular</td>
+        <td>@Singular</td>
+    </tr>
+    <tr>
+        <td>Total adjectives</td>
+        <td>@Adjectives</td>
+    </tr>
+</table>
+<br />
+<h3>Parser debug output:</h3>
+<textarea rows="48" cols="128">@DebugOutput</textarea>
+
+@code {
+    string TypedText = "";
+    string Errors = "";
+    int PresentTense;
+    int PastTense;
+    int Plural;
+    int Singular;
+    int Adjectives;
+    string DebugOutput;
+    private void ParseSentences()
+    {
+        StringBuilder sb = new StringBuilder();
+        StringWriter sw = new StringWriter(sb);
+
+        var theParser = new InlineSentenceParser();
+        theParser.DebugStream = sw;
+        var parserInstance = theParser.ParseSentence(TypedText);
+        if (!string.IsNullOrEmpty(parserInstance.Errors))
+        {
+            Errors = parserInstance.Errors;
+        }
+        else
+        {
+            Errors = string.Empty;
+            PresentTense = parserInstance.PresentCount;
+            PastTense = parserInstance.PastCount;
+            Plural = parserInstance.PluralCount;
+            Singular = parserInstance.SingularCount;
+            Adjectives = parserInstance.AdjectivesCount;
+        }
+        DebugOutput = sb.ToString();
+        InvokeAsync(() => StateHasChanged());
+    }
+}
+
+

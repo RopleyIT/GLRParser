@@ -25,11 +25,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedXController", "TrafficLi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedXDemo", "TrafficLightControllerExample\PedXDemo\PedXDemo.csproj", "{2951BED7-1199-42D4-A1CA-76C80A3BC148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorDemo", "CalculatorExample\CalculatorDemo\CalculatorDemo.csproj", "{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorDemo", "CalculatorExample\CalculatorDemo\CalculatorDemo.csproj", "{CB9A0F3B-17C3-41E1-AE5A-02B9023A2AF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorDemoTest", "CalculatorExample\CalculatorDemoTest\CalculatorDemoTest.csproj", "{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorDemoTest", "CalculatorExample\CalculatorDemoTest\CalculatorDemoTest.csproj", "{CB1DDB11-B4D0-4E96-A0CF-DEB554A5E271}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorDemoApp", "CalculatorExample\CalculatorDemoApp\CalculatorDemoApp.csproj", "{EE2EE9B6-4657-422F-86D6-5E2F272D980D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorDemoApp", "CalculatorExample\CalculatorDemoApp\CalculatorDemoApp.csproj", "{EE2EE9B6-4657-422F-86D6-5E2F272D980D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParser", "SentenceParserExample\SentenceParser\SentenceParser.csproj", "{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParserTests", "SentenceParserExample\SentenceParserTests\SentenceParserTests.csproj", "{0D039E92-F602-4142-B83C-D3641424A1A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParserDemo", "SentenceParserExample\SentenceParserDemo\SentenceParserDemo.csproj", "{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +99,18 @@ Global
 		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE2EE9B6-4657-422F-86D6-5E2F272D980D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D039E92-F602-4142-B83C-D3641424A1A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D039E92-F602-4142-B83C-D3641424A1A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D039E92-F602-4142-B83C-D3641424A1A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D039E92-F602-4142-B83C-D3641424A1A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
