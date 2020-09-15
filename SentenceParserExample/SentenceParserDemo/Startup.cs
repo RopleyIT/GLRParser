@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace SentenceParserDemo
 {
@@ -34,16 +35,18 @@ namespace SentenceParserDemo
         {
             if (env.IsDevelopment())
             {
+                ConfigureForwarding(app);
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/Error");
+                ConfigureForwarding(app);
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -54,5 +57,12 @@ namespace SentenceParserDemo
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
+
+        public void ConfigureForwarding(IApplicationBuilder app) =>
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor 
+                    | ForwardedHeaders.XForwardedProto
+            });
     }
 }

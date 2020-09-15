@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PedXController;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace PedXDemo
 {
@@ -28,15 +29,18 @@ namespace PedXDemo
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                ConfigureForwarding(app); // If a proxy sits between client and server, configure middleware
             }
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                ConfigureForwarding(app);
+                // The default HSTS value is 30 days. You may want to change this for 
+                // production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -47,5 +51,12 @@ namespace PedXDemo
                 endpoints.MapFallbackToPage("/_Host");
             });
         }
+        
+        public void ConfigureForwarding(IApplicationBuilder app) =>
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor 
+                    | ForwardedHeaders.XForwardedProto
+            });
     }
 }
