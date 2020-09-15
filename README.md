@@ -1,3 +1,4 @@
+## The GLRParser Toolkit
 The GLRParser toolkit is an LR(1) and GLR parser and finite state machine generator 
 for use with the C# language on the .NET Core platform. It can be used to convert
 a formal grammar into C# source code that can parse data or event sequences conforming 
@@ -14,4 +15,5 @@ Applications for this toolkit are broad, and include: language compilers; struct
 document scanners and interpreters; syntax highlighting and verification; workflow engines 
 built from scenario descriptions; state machines described by a formal grammar.
 
-The full documentation is available in the Wiki for this project.
+The full documentation is available in the 
+[Wiki for this project](https://github.com/RopleyIT/GLRParser/wiki).
