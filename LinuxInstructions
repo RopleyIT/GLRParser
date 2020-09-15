@@ -1,0 +1,261 @@
+BUILDING AND RUNNING THE PARSER AND ITS EXAMPLES ON LINUX UBUNTU
+
+1.  Ensure dotnet SDK installed on ubuntu.
+ 
+2.  Clone the github repository to your ubuntu machine.
+
+3.  Build the projects by changing to the root folder of the app and
+    typing the command 'dotnet build'. This finds the .SLN file, and
+    builds each project in it.
+
+4.  Unfortunately, the static content for the three Blazor examples
+    will not be loaded correctly if you just try to launch the apps
+    at this point. We need to publish the content to a suitable
+    web folder. Publish the content of your application (any of the 
+    three folders CalculaterExample/CalculatorDemoApp,
+    SentenceParserExample/SentenceParserDemo, or
+    TrafficLightControllerExample/PedXDemo) by changing to their 
+    folders, and typing the command:
+
+    sudo dotnet publish -o (OutputFolder) -c Release
+    
+    where (OutputFolder) is a folder selected by you to host
+    your published application. You only need the 'sudo' if
+    you do not have owner rights to create files and folders
+    at your chosen location. If you don't provide the -of
+    option and its output folder, the web content will be
+    saved into the project's bin/Release/netcoreapp3.1/publish
+    folder.
+
+5.  To run your application, change directory to (OutputFolder)
+    and type the name of the executable to launch it. If you
+    are running one of the three examples, your executable will
+    be named CalculatorDemoApp, SentenceParserDemo or PedXDemo.
+    Note that as this is not Windows, none of them has a '.exe'
+    filename extension.
+
+6.  Navigate to http://localhost:5000/ on your browser to
+    launch the client side of the application. Port 5000 is
+    the default port number used by the Blazor project template,
+    but you may have changed this to a different port number
+    in your appsettings.json file. If so, modify the URL 
+    above accordingly.
+
+7.  Don't forget to stop your application in the terminal
+    window when you have finished running the program. Otherwise
+    your next publish command will fail until you do.
+
+PUBLISHING YOUR BLAZOR APP ON A PRODUCTION LINUX SERVER
+
+8.  If you have not done so already, for non-localhost users
+    configure a reverse proxy web server to host the Blazor
+    server-side applications. Install NGINX to do this.
+
+9.  Make sure your Ubuntu system is up to date using:
+
+    sudo apt update && sudo apt upgrade
+
+10. Assuming you do not already have a Web server installed, such as
+    Apache for example, install nginx using 'sudo apt install nginx'
+
+11. You should see a placeholder Web page displayed from nginx
+    if you browse to http://localhost/ welcoming you to NGINX.
+
+12. If you are allowing external traffic onto your nginx server,
+    update the firewall for the http and https ports using:
+
+    sudo ufw allow 'Nginx Full'
+
+13. Configure nginx so that it starts automatically after reboots:
+
+    sudo systemctl enable nginx
+
+14. We wish to publish the application so that it can be
+    accessed across the network, using NGINX as a reverse
+    proxy. Before you do this, you also need to modify
+    the app source code so that it uses the Forwarded
+    Headers Middleware. This allows redirects and
+    security policies to work correctly.
+
+    Edit your application's Startup.Configure method to
+    include the following at the top of the function:
+
+    // using Microsoft.AspNetCore.HttpOverrides;
+
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor 
+            | ForwardedHeaders.XForwardedProto
+    });
+    // app.UseAuthentication(); // If authenticating
+
+    Note the comment telling you to add a using directive
+    at the top of the source file.
+
+15. If you are running NGINX on the same machine as the
+    blazor applications, skip this step. If however
+    your NGINX proxy server is on a different machine
+    to the application you want to be hosted, you will also
+    need to tell your application about the trusted
+    proxy server machine. Add to you Startup.Configure
+    method the following extra lines of code:
+
+    // using System.Net;
+
+    services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.KnownProxies.Add(IPAddress.Parse("10.0.0.2"));
+    });
+
+    Obviously replace the 10.0.0.2 with the IP address of
+    the actual proxy server. Also note the need for a using
+    directive at the top of the source file.
+
+    For more details on configuring the middleware, see the
+    Microsoft article at https://docs.microsoft.com/en-us/
+        aspnet/core/host-and-deploy/proxy-load-balancer
+        ?view=aspnetcore-3.1
+
+16. Build and publish the content of your application (for
+    example, any of the three examples in the folders
+    CalculaterExample/CalculatorDemoApp,
+    SentenceParserExample/SentenceParserDemo, or
+    TrafficLightControllerExample/PedXDemo) by changing to its 
+    project folder, and typing the command:
+
+    dotnet publish -c Release
+
+    where (ProjectName) is the name of the project, for example
+    one of the three projects CalculatorDemoApp, 
+    SentenceParserDemo or PedXDemo. This will place the set of
+    files to be published to the web server in a subfolder of
+    your project folder called bin/Release/netcoreapp3.1/publish.
+
+17. Now configure NGINX as a reverse proxy to forward requests 
+    to your ASP.NET Core app, and to enable the SignalR WebSocket
+    protocols used by Blazor server technology to work correctly.
+
+    Open the NGINX primary configuration file for editing using:
+
+    sudo nano /etc/nginx/nginx.conf
+
+18. Scroll down into the http {} section and find the two lines
+    that include the conf.d configuration files and the files
+    from the sites-enabled folders. Above these two lines
+    add the following two lines that enable SignalR tunnelling:
+
+        map $http_upgrade $connection_upgrade {
+            default Upgrade;
+            ''      close;
+        }
+
+    Save the file using ^O and ^X.
+
+19. Replace the contents of file /etc/nginx/sites-available/default 
+    with the following:
+
+    server {
+        listen      80;
+        server_name whatever.com *.whatever.com;
+        location / {
+            proxy_pass         http://localhost:5000;
+            proxy_http_version 1.1;
+            proxy_set_header   Upgrade $http_upgrade;
+            proxy_set_header   Connection $connection_upgrade;
+            proxy_set_header   Host $host;
+            proxy_cache_bypass $http_upgrade;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Proto $scheme;
+        }
+    }
+
+    where whatever.com should be replaced with the URL
+    at which users have been told the application is hosted.
+    DNS services should route these requests from the client
+    machines to the machine containing your NGINX server.
+
+    Note that if there is only one set of server { } tags
+    accessible to the whole NGINX configuration, this becomes
+    the default server for everything, and the applocation.com
+    will be ignored anyway.
+
+    Note there are one or two other security concerns to address
+    here if you are intending to host your application out there
+    in the hostile internet. See the Microsoft article at:
+
+    https://docs.microsoft.com/en-us/aspnet/core/
+        host-and-deploy/linux-nginx?view=aspnetcore-3.1
+
+20. Run 'sudo nginx -t' to check you typed the file contents
+    correctly. If so, reload the nginx server using:
+
+    sudo nginx -s reload
+
+21. To try out your application behind NGINX, change directory
+    to the bin/Release/netcoreapp3.1/publish folder under
+    your project folder, and launch the application by typing 
+    the name of the project. For example, if the project you
+    built was called CalculatorDemoApp, once you get to its
+    'publish' folder, just type the command: ./CalculatorDemoApp
+
+22. From a different machine on the network, type the url or
+    IP address of your machine into the browser's address bar.
+    NGINX should route your request to the application.
+
+LAUNCHING THE ASP.NET CORE APP AUTOMATICALLY   
+
+23. NGINX will not start or stop the application when a client
+    requests the URL. To make this happen automatically on
+    your server, you will need to set it up as a service
+    launched on system startup by default. The systemd
+    daemon manages these services.
+
+    Launch an editor to set up the new service's definition file:
+
+    sudo nano /etc/systemd/system/kestrel-(ProjectName).service
+
+    where (ProjectName) should be replaced with the name of your
+    application.
+
+    Paste the following into the editor. Note that (PublishPath)
+    is the full path from the root of the filesystem to the folder
+    containing the executable:
+
+    [Unit]
+    Description=(ProjectName) service running on Ubuntu
+
+    [Service]
+    WorkingDirectory=/var/www/(ProjectName)
+    ExecStart=(PublishPath)/(ProjectName)
+    Restart=always
+    # Restart service after 10 seconds if the dotnet service crashes:
+    RestartSec=10
+    KillSignal=SIGINT
+    SyslogIdentifier=dotnet-example
+    # www-data is the user that owns the service and its files.
+    # Ensure that their UID has full rwx access to the files.
+    User=www-data
+    Environment=ASPNETCORE_ENVIRONMENT=Production
+    Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+    [Install]
+    WantedBy=multi-user.target
+
+24. Save the file away with ^O ^X, then enable the service:
+
+    sudo systemctl enable kestrel-(ProjectName).service
+
+25. To start the service without waiting for a reboot, or to
+    test that the service is running, use the commands:
+
+    sudo systemctl start kestrel-(ProjectName).service
+    sudo systemctl status kestrel-(ProjectName).service
+
+    To subsequently inspect the service's operational
+    log file entries, you can use the command:
+
+    sudo journalctl -fu kestrel-(ProjectName).service
+
+26. You should now be able to use your application both
+    from the local machine and over the network as a
+    web application, even after server reboots.
