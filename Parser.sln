@@ -31,11 +31,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorDemoTest", "Calcu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculatorDemoApp", "CalculatorExample\CalculatorDemoApp\CalculatorDemoApp.csproj", "{EE2EE9B6-4657-422F-86D6-5E2F272D980D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParser", "SentenceParserExample\SentenceParser\SentenceParser.csproj", "{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentenceParser", "SentenceParserExample\SentenceParser\SentenceParser.csproj", "{C5496A98-F4B7-49DD-AD12-D23390DDDCA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParserTests", "SentenceParserExample\SentenceParserTests\SentenceParserTests.csproj", "{0D039E92-F602-4142-B83C-D3641424A1A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentenceParserTests", "SentenceParserExample\SentenceParserTests\SentenceParserTests.csproj", "{0D039E92-F602-4142-B83C-D3641424A1A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParserDemo", "SentenceParserExample\SentenceParserDemo\SentenceParserDemo.csproj", "{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentenceParserDemo", "SentenceParserExample\SentenceParserDemo\SentenceParserDemo.csproj", "{3A9AB6E6-7F47-4132-80C2-4C6CCDCAEB74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EE0847D0-683B-4358-B637-44FEB16776EA}"
+	ProjectSection(SolutionItems) = preProject
+		LinuxInstructions = LinuxInstructions
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

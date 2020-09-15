@@ -77,6 +77,12 @@ PUBLISHING YOUR BLAZOR APP ON A PRODUCTION LINUX SERVER
     Headers Middleware. This allows redirects and
     security policies to work correctly.
 
+    In the three examples added to the GitHub repository,
+    this has already been done. However, for new projects
+    using Blazor server hosting behind an NGINX reverse
+    proxy, you will want to make the edits to Startup.cs
+    described here.
+
     Edit your application's Startup.Configure method to
     include the following at the top of the function:
 
