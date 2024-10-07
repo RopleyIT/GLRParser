@@ -101,14 +101,14 @@ namespace BooleanLib
         /// </summary>
 
         private static readonly ulong[] lowOrderPatterns =
-        {
+        [
             0xAAAAAAAAAAAAAAAAL,
             0xCCCCCCCCCCCCCCCCL,
             0xF0F0F0F0F0F0F0F0L,
             0xFF00FF00FF00FF00L,
             0xFFFF0000FFFF0000L,
             0xFFFFFFFF00000000L
-        };
+        ];
 
         /// <summary>
         /// Given the index of a leaf, return the leaf's

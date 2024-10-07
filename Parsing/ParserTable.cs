@@ -50,15 +50,13 @@ namespace Parsing
 
             foreach (ParserState state in States)
                 foreach (ParserStateColumn col in state.TerminalColumns)
-                    if (col.Condition != null)
-                        col.Condition.Bind(parserType, true);
+                    col.Condition?.Bind(parserType, true);
 
             // Bind all the action functions using a compiled
             // expression proxy.
 
             foreach (ParserProduction pp in Productions)
-                if (pp.InlineAction != null)
-                    pp.InlineAction.Bind(parserType);
+                pp.InlineAction?.Bind(parserType);
 
             // Bind any merge actions held by the parser table
 
@@ -89,8 +87,7 @@ namespace Parsing
         {
             // Argument validation
 
-            if (autoGenParserType == null)
-                throw new ArgumentNullException(nameof(autoGenParserType));
+            ArgumentNullException.ThrowIfNull(autoGenParserType);
 
             // Create dynamic IL code to invoke the constructor
             // for the found parser class type, then cache it

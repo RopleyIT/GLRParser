@@ -22,25 +22,19 @@
 
 namespace BooleanLib
 {
-    public class OrExpr : BoolExpr
+    public class OrExpr(BoolExpr l, BoolExpr r) : BoolExpr
     {
         public BoolExpr Left
         {
             get;
             private set;
-        }
+        } = l;
 
         public BoolExpr Right
         {
             get;
             private set;
-        }
-
-        public OrExpr(BoolExpr l, BoolExpr r)
-        {
-            Left = l;
-            Right = r;
-        }
+        } = r;
 
         /// <summary>
         /// Return the block of 64 bits from the truth table

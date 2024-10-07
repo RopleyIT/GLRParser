@@ -231,11 +231,11 @@ namespace ParserParserTests
         [TestMethod]
         public void TestSentenceOffline()
         {
-            StringBuilder tableString = new StringBuilder();
+            StringBuilder tableString = new();
             TextWriter tabOut = new StringWriter(tableString);
-            StringBuilder debugString = new StringBuilder();
+            StringBuilder debugString = new();
             TextWriter dbgOut = new StringWriter(debugString);
-            StringBuilder parserString = new StringBuilder();
+            StringBuilder parserString = new();
             TextWriter parserOut = new StringWriter(parserString);
             string err =
                 ParserFactory.CreateOfflineParser
@@ -255,11 +255,11 @@ namespace ParserParserTests
         [TestMethod]
         public void TestMultiplicityInlineParser()
         {
-            StringBuilder tableString = new StringBuilder();
+            StringBuilder tableString = new();
             TextWriter tabOut = new StringWriter(tableString);
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder srcString = new();
             TextWriter srcOut = new StringWriter(srcString);
-            StringBuilder errString = new StringBuilder();
+            StringBuilder errString = new();
 
             ParserFactory<InlineTestParser>.InitializeFromGrammar
             (
@@ -285,7 +285,7 @@ namespace ParserParserTests
             // Create the input tokeniser, connecting it to the
             // list of terminal token values from the parser
 
-            TestTokeniser tt = new TestTokeniser(new StringReader(grammarInput), itp.Tokens);
+            TestTokeniser tt = new(new StringReader(grammarInput), itp.Tokens);
 
             // Now execute the parse
 
@@ -321,9 +321,9 @@ namespace ParserParserTests
         [TestMethod]
         public void TestCloneInlineParser()
         {
-            StringBuilder tableString = new StringBuilder();
+            StringBuilder tableString = new();
             TextWriter tabOut = new StringWriter(tableString);
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder srcString = new();
             TextWriter srcOut = new StringWriter(srcString);
 
             ParserFactory<InlineTestParser>.InitializeFromGrammar
@@ -351,7 +351,7 @@ namespace ParserParserTests
             // Create the input tokeniser, connecting it to the
             // list of terminal token values from the parser
 
-            TestTokeniser tt = new TestTokeniser(new StringReader(grammarInput), itp.Tokens);
+            TestTokeniser tt = new(new StringReader(grammarInput), itp.Tokens);
 
             // Now execute the parse
 
@@ -387,9 +387,9 @@ namespace ParserParserTests
         [TestMethod]
         public void TestPluralInlineParser()
         {
-            StringBuilder tableString = new StringBuilder();
+            StringBuilder tableString = new();
             TextWriter tabOut = new StringWriter(tableString);
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder srcString = new();
             TextWriter srcOut = new StringWriter(srcString);
 
             ParserFactory<InlineTestParser>.InitializeFromGrammar
@@ -416,7 +416,7 @@ namespace ParserParserTests
             // Create the input tokeniser, connecting it to the
             // list of terminal token values from the parser
 
-            TestTokeniser tt = new TestTokeniser(new StringReader(grammarInput), itp.Tokens);
+            TestTokeniser tt = new(new StringReader(grammarInput), itp.Tokens);
 
             // Now execute the parse
 

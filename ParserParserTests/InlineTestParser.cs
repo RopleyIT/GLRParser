@@ -68,7 +68,7 @@ namespace ParserParserTests
 
         // Default constructor
 
-        public InlineTestParser() => AdjectiveList = new List<string>();
+        public InlineTestParser() => AdjectiveList = [];
 
         // Actions
 
@@ -86,8 +86,7 @@ namespace ParserParserTests
 
         public void AppendAdjective(string adjective)
         {
-            if (AdjectiveList == null)
-                AdjectiveList = new List<string>();
+            AdjectiveList ??= [];
             AdjectiveList.Add(adjective);
         }
 
@@ -99,12 +98,12 @@ namespace ParserParserTests
 
         // Guards
 
-        public bool PluralNoun(object arg) => arg.ToString().EndsWith("s");
+        public bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
 
-        public bool SingularVerb(object arg) => arg.ToString().EndsWith("s")
+        public bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
                 || arg.ToString().EndsWith("ed");
 
-        public bool PluralVerb(object arg) => !arg.ToString().EndsWith("s");
+        public bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
 
         public bool Past(object arg) => arg.ToString().EndsWith("ed");
     }

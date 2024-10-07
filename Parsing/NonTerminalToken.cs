@@ -265,7 +265,7 @@ namespace Parsing
         {
             // First show the top level node for this NonterminalToken
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             Indent(sb, indent);
             if (preamble.Length >= 4)
                 sb.Append(preamble[0..^2] + "+-");

@@ -429,7 +429,7 @@ namespace BooleanLib
                 if (leafIndexProvider == null)
                     throw new ArgumentNullException(nameof(leafIndexProvider));
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new ();
 
                 // Find the normalised minimum set of leaf names
                 // that actually contribute to the expression
@@ -444,7 +444,7 @@ namespace BooleanLib
                 // which consists of the individual leaf names
                 // catenated in order, separated by underscores.
 
-                LeafIndexProvider exprProvider = new LeafIndexProvider();
+                LeafIndexProvider exprProvider = new ();
                 foreach (string leafName in leafNames)
                 {
                     exprProvider.FindLeafIndex(leafName);

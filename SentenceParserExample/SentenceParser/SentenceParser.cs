@@ -110,12 +110,12 @@ namespace SentenceParser
         // Guard conditions used on tokens within
         // the SentenceParser.g grammar
 
-        public bool PluralNoun(object arg) => arg.ToString().EndsWith("s");
+        public bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
 
-        public bool SingularVerb(object arg) => arg.ToString().EndsWith("s")
+        public bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
                 || arg.ToString().EndsWith("ed");
 
-        public bool PluralVerb(object arg) => !arg.ToString().EndsWith("s");
+        public bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
 
         public bool Past(object arg) => arg.ToString().EndsWith("ed");
     }

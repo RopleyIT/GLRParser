@@ -89,7 +89,7 @@ namespace Parsing
             (int depth, StackLink linkRequiredInPath)
         {
             StackLink[] path;
-            List<StackLink[]> foundPaths = new List<StackLink[]>();
+            List<StackLink[]> foundPaths = [];
             path = new StackLink[depth];
             WalkStack(depth - 1, foundPaths, path, linkRequiredInPath);
             return foundPaths;

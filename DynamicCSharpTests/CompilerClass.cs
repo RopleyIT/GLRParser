@@ -25,7 +25,7 @@ namespace DynamicCSharpTests
                     }
                 }";
 
-        private SyntaxTree CreateSyntaxTree()
+        private static SyntaxTree CreateSyntaxTree()
         {
             var compilationUnit = SF
                 .CompilationUnit()
@@ -131,7 +131,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem4";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             Assert.IsType<Compiler>(c);
         }
 
@@ -140,7 +140,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem4A";
-            c.AddAssemblyReferences(new string[] { "System", "System.IO", "System.XML" });
+            c.AddAssemblyReferences(["System", "System.IO", "System.XML"]);
             Assert.IsType<Compiler>(c);
         }
 
@@ -185,7 +185,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem8";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             c.Source = source;
             c.Compile();
             var cp = c.Compilation;
@@ -199,7 +199,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem9";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             c.Source = source;
             c.Compile();
             Assert.NotNull(c.Assembly);
@@ -212,7 +212,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem10";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             c.Source = source;
             c.Compile();
             Type type = c.Assembly.ExportedTypes.Where(t => t.Name == "Joe").FirstOrDefault();
@@ -229,7 +229,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem12";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             string tmpFile = Path.Combine(Path.GetTempPath(), "DynamicCSharpTest.cs");
             using (var outFile = new StreamWriter(tmpFile, false))
                 outFile.Write(source);
@@ -251,7 +251,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem13";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             c.SyntaxTree = CreateSyntaxTree();
             c.Compile();
             Type type = c.Assembly.ExportedTypes.Where(t => t.Name == "Henry").FirstOrDefault();
@@ -282,7 +282,7 @@ namespace DynamicCSharpTests
         {
             ICompiler c = Compiler.Create();
             c.AssemblyName = "Assem11";
-            c.AddReferences(new string[] { "System.Int32", "System.Double", "System.IO.Path" });
+            c.AddReferences(["System.Int32", "System.Double", "System.IO.Path"]);
             c.Source = badSource;
             c.Compile();
             Assert.True(c.HasErrors);

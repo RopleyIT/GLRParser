@@ -501,8 +501,8 @@ grammar(JourneyList)
         public void TestJCGrammar()
         {
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringWriter parserOutput = new StringWriter();
-            StringBuilder sb = new StringBuilder();
+            StringWriter parserOutput = new();
+            StringBuilder sb = new();
             p.DebugStream = new StringWriter(sb);
             // p.DebugStream = new DebugWriter();
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(jcGrammar), p.ParserTable.Tokens));
@@ -514,7 +514,7 @@ grammar(JourneyList)
             Assert.AreEqual(string.Empty, validationResult);
             _ = p.ConstructedGrammar.EstablishShiftReduceOrdersForItemSets();
             //Assert.AreEqual(string.Empty, validationResult);
-            GrammarOutput parserWriter = new GrammarOutput(parserOutput);
+            GrammarOutput parserWriter = new(parserOutput);
             parserWriter.RenderStateTables(p.ConstructedGrammar, false, false, false);
             //string firsts = p.ConstructedGrammar.RenderFirstSets();
             //string itemSets = p.ConstructedGrammar.RenderItemSetsAndGotos();
@@ -875,8 +875,8 @@ grammar(JourneyList)
         public void TestLRParserGrammar()
         {
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringWriter parserOutput = new StringWriter();
-            StringBuilder sb = new StringBuilder();
+            StringWriter parserOutput = new();
+            StringBuilder sb = new();
             p.DebugStream = new StringWriter(sb);
             // p.DebugStream = new DebugWriter();
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(parserGrammarText), p.ParserTable.Tokens));
@@ -887,7 +887,7 @@ grammar(JourneyList)
             string validationResult = p.ConstructedGrammar.CreateItemSetsAndGotoEntries(false);
             Assert.AreEqual(string.Empty, validationResult);
             p.ConstructedGrammar.EstablishShiftReduceOrdersForItemSets();
-            GrammarOutput parserWriter = new GrammarOutput(parserOutput);
+            GrammarOutput parserWriter = new(parserOutput);
             parserWriter.RenderStateTables(p.ConstructedGrammar, false, false, false);
             //string firsts = p.ConstructedGrammar.RenderFirstSets();
             //string itemSets = p.ConstructedGrammar.RenderItemSetsAndGotos();
@@ -922,9 +922,9 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringWriter parserOutput = new StringWriter();
+            StringWriter parserOutput = new();
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(inputGrammar), p.ParserTable.Tokens));
@@ -938,7 +938,7 @@ grammar(JourneyList)
             validationResult = p.ConstructedGrammar
                 .EstablishShiftReduceOrdersForItemSets();
             Assert.AreEqual(string.Empty, validationResult);
-            GrammarOutput parserWriter = new GrammarOutput(parserOutput);
+            GrammarOutput parserWriter = new(parserOutput);
             parserWriter.RenderStateTables(p.ConstructedGrammar, false, false, false);
             //string firsts = p.ConstructedGrammar.RenderFirstSets();
             //string itemSets = p.ConstructedGrammar.RenderItemSetsAndGotos();
@@ -962,7 +962,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -998,7 +998,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1035,7 +1035,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1080,7 +1080,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1124,7 +1124,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1170,7 +1170,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1220,7 +1220,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1256,7 +1256,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1298,7 +1298,7 @@ grammar(JourneyList)
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
             p.ErrorLevel = MessageLevel.WARN;
-            StringBuilder se = new StringBuilder();
+            StringBuilder se = new();
             //p.TraceLog = new StringWriter(sb);
             p.ErrStream = new StringWriter(se);
             bool result = p.Parse(new Tokeniser(new StringReader(grammar), p.ParserTable.Tokens));
@@ -1309,16 +1309,16 @@ grammar(JourneyList)
         [TestMethod]
         public void TestAsIdentifier()
         {
-            LeafIndexProvider lip = new LeafIndexProvider();
-            LeafExpr left = new LeafExpr("left", lip);
+            LeafIndexProvider lip = new();
+            LeafExpr left = new("left", lip);
             Assert.AreEqual("left", left.AsIdentifier(lip));
-            LeafExpr right = new LeafExpr("right", lip);
-            NotExpr notRight = new NotExpr(right);
+            LeafExpr right = new("right", lip);
+            NotExpr notRight = new(right);
             Assert.AreEqual("right_1", notRight.AsIdentifier(lip));
-            AndExpr andExpr = new AndExpr(left, notRight);
+            AndExpr andExpr = new(left, notRight);
             Assert.AreEqual("left_right_2", andExpr.AsIdentifier(lip));
-            LeafExpr mid = new LeafExpr("middle", lip);
-            OrExpr bigExpr = new OrExpr(mid, andExpr);
+            LeafExpr mid = new("middle", lip);
+            OrExpr bigExpr = new(mid, andExpr);
             Assert.AreEqual("left_right_middle_F2", bigExpr.AsIdentifier(lip));
         }
 
@@ -1452,7 +1452,7 @@ grammar(JourneyList)
         {
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(fsmGrammar), p.ParserTable.Tokens));
@@ -1466,9 +1466,9 @@ grammar(JourneyList)
         [TestMethod]
         public void CreateFSMSource()
         {
-            StringBuilder src = new StringBuilder();
-            StringWriter srcStream = new StringWriter(src);
-            FSMOutput fsmGenerator = new FSMOutput(srcStream);
+            StringBuilder src = new();
+            StringWriter srcStream = new(src);
+            FSMOutput fsmGenerator = new(srcStream);
             string err = fsmGenerator.BuildSource(fsmGrammar, false, out List<string> extRefs);
             Assert.IsTrue(string.IsNullOrEmpty(err));
             Assert.IsNotNull(extRefs);
@@ -1590,7 +1590,7 @@ grammar(JourneyList)
         {
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             //p.TraceLog = new StringWriter(sb);
             p.DebugStream = new StringWriter(sb);
             bool result = p.Parse(new Parsing.Tokeniser(new StringReader(tlGrammar), p.ParserTable.Tokens));
@@ -1604,18 +1604,18 @@ grammar(JourneyList)
         [TestMethod]
         public void TestGrammarItemSort()
         {
-            LeafIndexProvider lip = new LeafIndexProvider();
-            GrammarToken t1 = new GrammarToken(1, TokenType.Terminal, "TokenType1");
-            GrammarToken t2 = new GrammarToken(2, TokenType.Terminal, "TokenType2");
+            LeafIndexProvider lip = new();
+            GrammarToken t1 = new(1, TokenType.Terminal, "TokenType1");
+            GrammarToken t2 = new(2, TokenType.Terminal, "TokenType2");
             BoolExpr LAndNotR = new AndExpr(new LeafExpr("L", lip), new NotExpr(new LeafExpr("R", lip)));
             BoolExpr NotLAndR = new AndExpr(new LeafExpr("R", lip), new NotExpr(new LeafExpr("L", lip)));
             BoolExpr L = new LeafExpr("L", lip);
 
-            GrammarItemSet gis = new GrammarItemSet(new List<GrammarItem>());
-            List<GrammarItemSet> target = new List<GrammarItemSet>
-            {
+            GrammarItemSet gis = new([]);
+            List<GrammarItemSet> target =
+            [
                 gis
-            };
+            ];
             gis.Shifts.Add(new GrammarElement(t1, null), target);
             gis.Shifts.Add(new GrammarElement(t2, L), target);
             gis.Shifts.Add(new GrammarElement(t1, L), target);
@@ -1645,18 +1645,18 @@ grammar(JourneyList)
         [TestMethod]
         public void TestGrammarItemIntersection()
         {
-            LeafIndexProvider lip = new LeafIndexProvider();
-            GrammarToken t1 = new GrammarToken(1, TokenType.Terminal, "TokenType1");
-            GrammarToken t2 = new GrammarToken(2, TokenType.Terminal, "TokenType2");
+            LeafIndexProvider lip = new();
+            GrammarToken t1 = new(1, TokenType.Terminal, "TokenType1");
+            GrammarToken t2 = new(2, TokenType.Terminal, "TokenType2");
             BoolExpr LOrNotR = new OrExpr(new LeafExpr("L", lip), new NotExpr(new LeafExpr("R", lip)));
             BoolExpr NotLOrR = new OrExpr(new LeafExpr("R", lip), new NotExpr(new LeafExpr("L", lip)));
             BoolExpr L = new LeafExpr("L", lip);
 
-            GrammarItemSet gis = new GrammarItemSet(new List<GrammarItem>());
-            List<GrammarItemSet> target = new List<GrammarItemSet>
-            {
+            GrammarItemSet gis = new([]);
+            List<GrammarItemSet> target =
+            [
                 gis
-            };
+            ];
             gis.Shifts.Add(new GrammarElement(t1, null), target);
             gis.Shifts.Add(new GrammarElement(t2, L), target);
             gis.Shifts.Add(new GrammarElement(t1, L), target);

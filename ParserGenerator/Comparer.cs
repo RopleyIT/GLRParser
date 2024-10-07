@@ -30,22 +30,17 @@ namespace ParserGenerator
     /// </summary>
     /// <typeparam name="T">The type of the objects
     /// being compared for equality</typeparam>
+    /// <remarks>
+    /// Constructor
+    /// </remarks>
+    /// <param name="cmpDelegate">The delegate or
+    /// lambda expression being used as the comparer</param>
 
-    public class Comparer<T> : IEqualityComparer<T>
+    public class Comparer<T>(Func<T, T, bool> cmpDelegate) : IEqualityComparer<T>
     {
-        private readonly Func<T, T, bool> comparer;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="cmpDelegate">The delegate or
-        /// lambda expression being used as the comparer</param>
-
-        public Comparer(Func<T, T, bool> cmpDelegate)
-        {
-            comparer = cmpDelegate ?? throw new ArgumentNullException
+        private readonly Func<T, T, bool> comparer = cmpDelegate 
+            ?? throw new ArgumentNullException
                 ("cmpDelegate", "Need a comparer delegate");
-        }
 
         /// <summary>
         /// Implementation of the equality operation. Merely

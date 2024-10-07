@@ -27,8 +27,7 @@ namespace PedXController
             set
             {
                 colour = value;
-                if (PropertyChanged != null)
-                    PropertyChanged(this, EventArgs.Empty);
+                PropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

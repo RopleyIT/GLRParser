@@ -109,7 +109,7 @@ namespace CalculatorDemo
             calc.DebugStream = debugResults;
             calc.ErrStream = errorResults;
             CalculatorTokeniser tokeniser
-                = new CalculatorTokeniser(input, calc.Tokens);
+                = new (input, calc.Tokens);
             bool success = calc.Parse(tokeniser);
 
             if (success && calc.ParserResults.Length == 1)

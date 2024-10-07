@@ -64,7 +64,7 @@ namespace GLRParserTests
             if (terminals != null)
                 tokenValue = terminals;
             else
-                throw new ArgumentNullException("terminals", "Token name/value map null");
+                throw new ArgumentNullException(nameof(terminals), "Token name/value map null");
 
             // Make sure there is a valid input stream for source tokens
 
@@ -79,7 +79,7 @@ namespace GLRParserTests
 
             // Build a complete list of input tokens before parsing
 
-            tokenStream = new List<IToken>();
+            tokenStream = [];
             IToken tok;
             while ((tok = NextToken()).Type != tokenValue["EOF"])
                 tokenStream.Add(tok);

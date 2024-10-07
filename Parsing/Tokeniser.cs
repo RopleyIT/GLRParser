@@ -75,23 +75,23 @@ namespace Parsing
 
             // Initialise the single character token table
 
-            singleCharTokens = new ParserToken[]
-            {
-                new ParserToken(tokenValue["LBRACE"], "{", 0),
-                new ParserToken(tokenValue["RBRACE"], "}", 0),
-                new ParserToken(tokenValue["LPAREN"], "(", 0),
-                new ParserToken(tokenValue["RPAREN"], ")", 0),
-                new ParserToken(tokenValue["COMMA"], ",", 0),
-                new ParserToken(tokenValue["COLON"], ":", 0),
-                new ParserToken(tokenValue["OR"], "|", 0),
-                new ParserToken(tokenValue["SEMI"], ";", 0),
-                new ParserToken(tokenValue["LBRACK"], "[", 0),
-                new ParserToken(tokenValue["RBRACK"], "]", 0),
-                new ParserToken(tokenValue["AND"], "&", 0),
-                new ParserToken(tokenValue["NOT"], "!", 0),
-                new ParserToken(tokenValue["EQUALS"], "=", 0),
-                new ParserToken(tokenValue["LT"], "<", 0)
-            };
+            singleCharTokens =
+            [
+                new (tokenValue["LBRACE"], "{", 0),
+                new (tokenValue["RBRACE"], "}", 0),
+                new (tokenValue["LPAREN"], "(", 0),
+                new (tokenValue["RPAREN"], ")", 0),
+                new (tokenValue["COMMA"], ",", 0),
+                new (tokenValue["COLON"], ":", 0),
+                new (tokenValue["OR"], "|", 0),
+                new (tokenValue["SEMI"], ";", 0),
+                new (tokenValue["LBRACK"], "[", 0),
+                new (tokenValue["RBRACK"], "]", 0),
+                new (tokenValue["AND"], "&", 0),
+                new (tokenValue["NOT"], "!", 0),
+                new (tokenValue["EQUALS"], "=", 0),
+                new (tokenValue["LT"], "<", 0)
+            ];
 
             // Read the entire grammar input string
 
@@ -101,7 +101,7 @@ namespace Parsing
 
             // Build a complete list of input tokens before parsing
 
-            tokenStream = new List<IToken>();
+            tokenStream = [];
             IToken tok;
             while ((tok = NextToken()).Type != tokenValue["EOF"])
                 tokenStream.Add(tok);
@@ -318,7 +318,7 @@ namespace Parsing
         {
             // Where the type string will be captured
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             // Counts the number of seen less-than characters that have
             // yet to be matched with a greater-than. When this
@@ -407,7 +407,7 @@ namespace Parsing
         {
             // Where the code block string will be captured
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             // State variable used while parsing the code fragment
 

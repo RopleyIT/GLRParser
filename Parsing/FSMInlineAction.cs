@@ -80,7 +80,7 @@ namespace Parsing
 
         public FSMInlineAction(IEnumerable<string> methodNames)
         {
-            if (methodNames == null || methodNames.Count() <= 0)
+            if (methodNames == null || !methodNames.Any())
                 throw new ArgumentException("A non-empty list of method names must be provided");
 
             if (methodNames.Count() > 1)
@@ -121,8 +121,7 @@ namespace Parsing
 
             // Walk the list of inline actions, binding each
 
-            if (Next != null)
-                Next.Bind(fsmDerivedClass);
+            Next?.Bind(fsmDerivedClass);
         }
     }
 }

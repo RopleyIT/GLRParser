@@ -56,7 +56,7 @@ namespace Parsing
 
         public GuardEvaluatorFactory(Grammar g)
         {
-            Guards = new List<IGuardEvaluator>();
+            Guards = [];
             grammar = g ?? throw new ArgumentNullException(nameof(g));
 
             // Create a new array index list for the guard functions,
@@ -114,7 +114,7 @@ namespace Parsing
         /// <returns>The evaluator tree corresponding to the
         /// executable guard expression</returns>
 
-        private IGuardEvaluator BuildBoolEvaluator(BoolExpr be)
+        private static IGuardEvaluator BuildBoolEvaluator(BoolExpr be)
         {
             // Try the node as a leaf element
 

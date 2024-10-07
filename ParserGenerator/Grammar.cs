@@ -242,22 +242,22 @@ namespace ParserGenerator
 
         public Grammar()
         {
-            Options = new Dictionary<string, object>();
-            Terminals = new List<GrammarToken>();
-            Nonterminals = new List<GrammarToken>();
-            MergeActions = new Dictionary<string, GrammarGuardOrAction>();
-            Guards = new List<GrammarToken>();
-            GuardBodies = new List<GrammarGuardOrAction>();
+            Options = [];
+            Terminals = [];
+            Nonterminals = [];
+            MergeActions = [];
+            Guards = [];
+            GuardBodies = [];
             BooleanExpressionCache = new ExpressionCache();
-            Productions = new List<GrammarProduction>();
-            ItemSets = new List<GrammarItemSet>();
+            Productions = [];
+            ItemSets = [];
             EmptyElement =
                 new GrammarElement(new GrammarToken
                     (EmptyTokenValue, TokenType.Terminal, string.Empty), null);
 
             // Simple state machine setup
 
-            MachineStates = new List<State>();
+            MachineStates = [];
             StartingState = null;
         }
 
@@ -311,8 +311,8 @@ namespace ParserGenerator
             // the list of terminal tokens recognised by the
             // parser
 
-            GrammarToken endingToken = new GrammarToken
-                (EOFTokenValue, TokenType.Terminal, "EOF");
+            GrammarToken endingToken 
+                = new(EOFTokenValue, TokenType.Terminal, "EOF");
             EndingElement = new GrammarElement
                 (endingToken, null);
             Terminals.Add(endingToken);
@@ -329,7 +329,7 @@ namespace ParserGenerator
             // the list of terminal tokens recognised by the
             // parser
 
-            GrammarToken startingToken = new GrammarToken
+            GrammarToken startingToken = new
                 (SOFTokenValue, TokenType.Terminal, "SOF");
             StartingElement = new GrammarElement
                 (startingToken, null);
@@ -381,11 +381,11 @@ namespace ParserGenerator
             // argument to the grammar(rootToken)
             // part of the input grammar.
 
-            List<GrammarElement> startGel = new List<GrammarElement>(2)
-            {
+            List<GrammarElement> startGel =
+            [
                 StartingElement,
                 new GrammarElement(StartingNonterminal, null)
-            };
+            ];
             RootProduction = new GrammarProduction(this, 0, startGel)
             {
                 LHS = new GrammarToken(MinNonterminalValue, TokenType.Nonterminal, "_Start")
@@ -472,10 +472,10 @@ namespace ParserGenerator
 
             // Add the empty element to the first set
 
-            List<GrammarElement> termList = new List<GrammarElement>(1)
-            {
+            List<GrammarElement> termList =
+            [
                 EmptyElement
-            };
+            ];
             FirstSets.Add(string.Empty, termList);
 
             // Initialise the list of non-terminals tokens
@@ -483,7 +483,7 @@ namespace ParserGenerator
             // will gradually fill these with elements.
 
             foreach (GrammarToken t in Nonterminals)
-                FirstSets.Add(t.Text, new List<GrammarElement>());
+                FirstSets.Add(t.Text, []);
 
             // Repeatedly update the first sets until none of the
             // sets changes in an iteration. Then we know we are done.
@@ -588,8 +588,8 @@ namespace ParserGenerator
                 throw new ArgumentNullException
                     (nameof(gel), "Need a valid grammar element list");
 
-            List<GrammarElement> result = new List<GrammarElement>
-            {
+            List<GrammarElement> result =
+            [
 
                 // An empty production has the empty element as its
                 // only member in the first set. This is removed by
@@ -598,7 +598,7 @@ namespace ParserGenerator
                 // first sets.
 
                 EmptyElement
-            };
+            ];
             foreach (GrammarElement ge in gel)
             {
                 IList<GrammarElement> firstList = First(ge);
@@ -626,10 +626,10 @@ namespace ParserGenerator
                     (nameof(ge), "Need a valid grammar element object");
 
             if (ge.Token.TokenType == TokenType.Terminal)
-                return new List<GrammarElement>(1)
-                {
+                return
+                [
                     ge
-                };
+                ];
             else if (FirstSets.TryGetValue(ge.Token.Text, out List<GrammarElement> result))
                 return result;
             else
@@ -649,7 +649,7 @@ namespace ParserGenerator
             if (gel != null && ContainsEmpty(gel))
             {
                 List<GrammarElement> result
-                    = new List<GrammarElement>(gel.Count);
+                    = new(gel.Count);
                 foreach (GrammarElement gt in gel)
                     if (!string.IsNullOrEmpty(gt.Token.Text))
                         result.Add(gt);
@@ -676,8 +676,7 @@ namespace ParserGenerator
 
         public string RenderFirstSets()
         {
-            StringBuilder sb = new StringBuilder
-                ("\r\nNON-TERMINAL FIRST SETS\r\n");
+            StringBuilder sb = new("\r\nNON-TERMINAL FIRST SETS\r\n");
             foreach (string key in FirstSets.Keys)
             {
                 if (string.IsNullOrEmpty(key))
@@ -700,8 +699,7 @@ namespace ParserGenerator
 
         public string RenderItemSetsAndGotos()
         {
-            StringBuilder sb = new StringBuilder
-                ("\r\nSHIFTS AND REDUCTIONS\r\n");
+            StringBuilder sb = new("\r\nSHIFTS AND REDUCTIONS\r\n");
             foreach (GrammarItemSet gis in ItemSets)
                 sb.AppendLine(gis.ToString(true));
             return sb.ToString();
@@ -720,8 +718,7 @@ namespace ParserGenerator
 
         public string RenderProductions()
         {
-            StringBuilder sb = new StringBuilder
-                ("RULES\r\n");
+            StringBuilder sb = new("RULES\r\n");
             IOrderedEnumerable<GrammarProduction> gpl
                 = Productions.OrderBy(p => p.ProductionNumber);
             foreach (GrammarProduction gp in gpl)
@@ -762,10 +759,10 @@ namespace ParserGenerator
             if (startToken == null)
                 return "Can't create item sets before initializing and validating grammar";
 
-            List<GrammarItem> startItemList = new List<GrammarItem>
-            {
+            List<GrammarItem> startItemList =
+            [
                 new GrammarItem(RootProduction, 0, EndingElement)
-            };
+            ];
             ItemSets.Add(new GrammarItemSet(startItemList));
 
             // Prepare the collection of first sets for the grammar tokens
@@ -862,7 +859,7 @@ namespace ParserGenerator
                 // attached to them, we have to keep rewriting
                 // rules.
 
-                if (gp is object)
+                if (gp is not null)
                 {
                     // Find the guarded non-terminal element,
                     // then create a new set of productions
@@ -976,7 +973,7 @@ namespace ParserGenerator
 
                     if (tokφ != null)
                     {
-                        List<GrammarElement> newElems = new List<GrammarElement>();
+                        List<GrammarElement> newElems = [];
                         for (int i = 0; i < p.RHS.Count; i++)
                         {
                             if (i == elIndex)
@@ -1005,7 +1002,7 @@ namespace ParserGenerator
 
                     if (tokε != null)
                     {
-                        List<GrammarElement> newElems = new List<GrammarElement>();
+                        List<GrammarElement> newElems = [];
                         for (int i = 0; i < p.RHS.Count; i++)
                         {
                             if (i == elIndex - 1)
@@ -1069,7 +1066,7 @@ namespace ParserGenerator
                             // to be found and have new rules added for
                             // the carry back from this rule.
 
-                            GrammarElement replacee = new GrammarElement(p.LHS, null);
+                            GrammarElement replacee = new(p.LHS, null);
 
                             // Now propagate the rewriting to any parent rules
 
@@ -1145,7 +1142,7 @@ namespace ParserGenerator
                 // over all except the last element in the production into the
                 // new list of elements for the new rule.
 
-                List<GrammarElement> elements = new List<GrammarElement>(p.RHS.Count);
+                List<GrammarElement> elements = new(p.RHS.Count);
                 for (int i = 0; i < p.RHS.Count - 1; i++)
                     elements.Add(p.RHS[i]);
 
@@ -1289,7 +1286,7 @@ namespace ParserGenerator
                 // for the closure rules. We shall first calculate
                 // FIRST(δ).
 
-                List<GrammarElement> δ = new List<GrammarElement>();
+                List<GrammarElement> δ = [];
                 for (int i = pos + 1; i < rhs.Count; i++)
                     δ.Add(rhs[i]);
 
@@ -1352,7 +1349,7 @@ namespace ParserGenerator
             // Duplicate the origin list so that we can remove items in
             // groups corresponding to the same preamble token sequences
 
-            List<GrammarItem> org = new List<GrammarItem>(origin.Items);
+            List<GrammarItem> org = new(origin.Items);
 
             while (org.Count > 0)
             {
@@ -1397,10 +1394,9 @@ namespace ParserGenerator
                         origin.Reductions.Add
                         (
                             org[0].LookAheadToken,
-                            new List<GrammarProduction>
-                            {
+                            [
                                 org[0].Production
-                            }
+                            ]
                         );
                     else
                         reductionProductions.Add(org[0].Production);
@@ -1430,7 +1426,7 @@ namespace ParserGenerator
                     // time around the while loop we find a different
                     // next token, and hence a different target item set.
 
-                    List<GrammarItem> shiftedItems = new List<GrammarItem>();
+                    List<GrammarItem> shiftedItems = [];
                     foreach (GrammarItem gi in itemGroup)
                     {
                         org.Remove(gi);
@@ -1478,7 +1474,7 @@ namespace ParserGenerator
 
                     origin.Shifts.TryGetValue(ge, out shiftSets);
                     if (shiftSets == null)
-                        origin.Shifts.Add(ge, new List<GrammarItemSet> { foundSet });
+                        origin.Shifts.Add(ge, [foundSet]);
                     else
                         shiftSets.Add(foundSet);
                 }
@@ -1581,7 +1577,7 @@ namespace ParserGenerator
 
         public string EstablishShiftReduceOrdersForItemSets()
         {
-            StringBuilder errResult = new StringBuilder();
+            StringBuilder errResult = new();
             foreach (GrammarItemSet itemSet in ItemSets)
                 errResult.Append(itemSet.ComputeShiftReduceOrder());
             return errResult.ToString();
@@ -1659,10 +1655,9 @@ namespace ParserGenerator
                     gdst.Shifts.Add
                     (
                         ge,
-                        new List<GrammarItemSet>
-                        {
+                        [
                             gsrc.Shifts[ge][0]
-                        }
+                        ]
                     );
             }
 
@@ -1676,10 +1671,9 @@ namespace ParserGenerator
                     gdst.Reductions.Add
                     (
                         gi,
-                        new List<GrammarProduction>
-                        {
+                        [
                             gsrc.Reductions[gi][0]
-                        }
+                        ]
                     );
             }
         }

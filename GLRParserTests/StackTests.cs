@@ -38,13 +38,13 @@ namespace GLRParserTests
         {
             // Set up a depth 4 stack with several paths
 
-            StackNode node1 = new StackNode
+            StackNode node1 = new()
             {
                 State = 100,
                 ReferenceCount = 2,
                 Token = new ParserToken(200)
             };
-            StackNode node2 = new StackNode
+            StackNode node2 = new()
             {
                 State = 101,
                 ReferenceCount = 1,

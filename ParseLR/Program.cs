@@ -94,10 +94,10 @@ namespace ParseLR
 
             // The four input/output channels used by the parser
 
-            TextReader inputStream = null;
-            TextWriter outputStream = null;
-            TextWriter debugStream = null;
-            TextWriter tableStream = null;
+            StreamReader? inputStream = null;
+            StreamWriter? outputStream = null;
+            StreamWriter? debugStream = null;
+            StreamWriter? tableStream = null;
 
             try
             {
@@ -170,14 +170,10 @@ namespace ParseLR
                 // Ensure all input and output files are closed,
                 // whether there was an exception thrown or not
 
-                if (outputStream != null)
-                    outputStream.Close();
-                if (inputStream != null)
-                    inputStream.Close();
-                if (debugStream != null)
-                    debugStream.Close();
-                if (tableStream != null)
-                    tableStream.Close();
+                outputStream?.Close();
+                inputStream?.Close();
+                debugStream?.Close();
+                tableStream?.Close();
             }
         }
 

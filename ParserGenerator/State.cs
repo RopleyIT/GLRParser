@@ -26,8 +26,14 @@ namespace ParserGenerator
     /// <summary>
     /// One state within the simple state machine recogniser
     /// </summary>
+    /// <remarks>
+    /// Create an instance of a state in a state machine
+    /// </remarks>
+    /// <param name="stateName">The name of the new state</param>
+    /// <param name="entryCode">An entry action function</param>
+    /// <param name="exitCode">An exit action function</param>
 
-    public class State
+    public class State(GrammarToken stateName, GrammarGuardOrAction entryCode, GrammarGuardOrAction exitCode)
     {
         /// <summary>
         /// The name of the current state. Should be a member
@@ -38,7 +44,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = stateName;
 
         /// <summary>
         /// The list of possible transitions that may cause
@@ -49,7 +55,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = [];
 
         /// <summary>
         /// Optional inline code to be executed
@@ -61,7 +67,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = entryCode;
 
         /// <summary>
         /// Optional inline code to be executed
@@ -73,21 +79,6 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// Create an instance of a state in a state machine
-        /// </summary>
-        /// <param name="stateName">The name of the new state</param>
-        /// <param name="entryCode">An entry action function</param>
-        /// <param name="exitCode">An exit action function</param>
-
-        public State(GrammarToken stateName, GrammarGuardOrAction entryCode, GrammarGuardOrAction exitCode)
-        {
-            StateName = stateName;
-            Transitions = new List<StateTransition>();
-            EntryCode = entryCode;
-            ExitCode = exitCode;
-        }
+        } = exitCode;
     }
 }

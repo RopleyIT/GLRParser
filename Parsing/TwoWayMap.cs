@@ -41,8 +41,8 @@ namespace Parsing
 
         public TwoWayMap()
         {
-            forward = new Dictionary<TK, TV>();
-            reverse = new Dictionary<TV, TK>();
+            forward = [];
+            reverse = [];
         }
 
         /// <summary>

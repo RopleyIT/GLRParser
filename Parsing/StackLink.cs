@@ -176,8 +176,7 @@ namespace Parsing
 
             // Now try the sibling alternative paths
 
-            if (Next != null)
-                Next.WalkStack
+            Next?.WalkStack
                     (depth, foundPaths, path, linkRequiredInPath);
         }
 

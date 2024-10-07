@@ -110,12 +110,12 @@ namespace Parsing
 
             if (grammar.Options != null)
             {
-                if (grammar.Options.ContainsKey("usings"))
-                    usings = grammar.Options["usings"] as List<string>;
-                if (grammar.Options.ContainsKey("namespace"))
-                    nameSpace = grammar.Options["namespace"].ToString();
-                if (grammar.Options.ContainsKey("parserclass"))
-                    appSpecificParserClassName = grammar.Options["parserclass"].ToString();
+                if (grammar.Options.TryGetValue("usings", out object value))
+                    usings = value as List<string>;
+                if (grammar.Options.TryGetValue("namespace", out value))
+                    nameSpace = value.ToString();
+                if (grammar.Options.TryGetValue("parserclass", out value))
+                    appSpecificParserClassName = value.ToString();
             }
 
             // If the user has set parser-generated
@@ -572,9 +572,9 @@ namespace Parsing
             // so that we can recover the text a line at
             // a time easily.
 
-            using TextReader tr = new StringReader(s);
+            using StringReader tr = new(s);
             string line;
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             while ((line = tr.ReadLine()) != null)
             {
                 // At the end of every complete line
@@ -603,9 +603,9 @@ namespace Parsing
             return sb.ToString();
         }
 
-        private readonly StringBuilder actionProcs = new StringBuilder();
-        private readonly StringBuilder guardProcs = new StringBuilder();
-        private readonly List<string> actionProcsRendered = new List<string>();
+        private readonly StringBuilder actionProcs = new();
+        private readonly StringBuilder guardProcs = new();
+        private readonly List<string> actionProcsRendered = [];
 
         private void RenderInlineMergeAction(string tokenName, GrammarGuardOrAction gga)
         {
@@ -689,7 +689,7 @@ namespace Parsing
                     else
                         code = Regex.Replace(code, @"\$\$", "arg0");
 
-                    DollarParameterReplacer dpr = new DollarParameterReplacer(prod, forceWeakTyping);
+                    DollarParameterReplacer dpr = new(prod, forceWeakTyping);
                     code = Regex.Replace(code, @"\$([0-9]+)", dpr.ReplacementDollarParameter);
 
                     // Gather the list of productions that use this
@@ -743,14 +743,14 @@ namespace Parsing
             if (indentForTryFinally)
                 primaryIndent += "    ";
 
-            StringBuilder sb = new StringBuilder();
-            List<string> lines = new List<string>();
+            StringBuilder sb = new();
+            List<string> lines = [];
 
             // First find out what the minimum shared
             // indentation is for the code fragment
 
             int minLeadingSpaces = -1;
-            using (TextReader tr = new StringReader(code))
+            using (StringReader tr = new(code))
             {
                 string ipLine;
                 while ((ipLine = tr.ReadLine()) != null)
@@ -818,7 +818,7 @@ namespace Parsing
                 if (i >= line.Length)
                     sb.AppendLine();
                 else
-                    sb.AppendLine(primaryIndent + line.Substring(i));
+                    sb.AppendLine(string.Concat(primaryIndent, line.AsSpan(i)));
             }
             return sb.ToString();
         }

@@ -50,7 +50,7 @@ namespace CalculatorDemo
 
             // Convert the input string into a list of tokens
 
-            tokenStream = new List<IToken>();
+            tokenStream = [];
             IToken tok;
             while ((tok = NextToken()).Type != tokenValue["EOF"])
                 tokenStream.Add(tok);

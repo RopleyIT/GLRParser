@@ -38,8 +38,15 @@ namespace ParserGenerator
     /// underscore represents where we have got
     /// to so far in the parse of the grammar.)
     /// </summary>
+    /// <remarks>
+    /// Constructor. Initialises the new item set
+    /// with a predetermined core of items
+    /// </remarks>
+    /// <param name="setNum">A unique number for this set</param>
+    /// <param name="coreItems">The list of grammar items
+    /// passed in as the new core for this item set</param>
 
-    public class GrammarItemSet
+    public class GrammarItemSet(List<GrammarItem> coreItems)
     {
         /// <summary>
         /// Unique administrative number for this item set
@@ -49,7 +56,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = 0;
 
         /// <summary>
         /// The collection of items in this set
@@ -59,7 +66,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = coreItems;
 
         /// <summary>
         /// The GOTO table for the parser. When in a particular
@@ -73,7 +80,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = [];
 
         /// <summary>
         /// When a complete rule has been recognised, this
@@ -88,23 +95,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
-
-        /// <summary>
-        /// Constructor. Initialises the new item set
-        /// with a predetermined core of items
-        /// </summary>
-        /// <param name="setNum">A unique number for this set</param>
-        /// <param name="coreItems">The list of grammar items
-        /// passed in as the new core for this item set</param>
-
-        public GrammarItemSet(List<GrammarItem> coreItems)
-        {
-            SetNumber = 0;
-            Items = coreItems;
-            Shifts = new Dictionary<GrammarElement, List<GrammarItemSet>>();
-            Reductions = new Dictionary<GrammarElement, List<GrammarProduction>>();
-        }
+        } = [];
 
         /// <summary>
         /// Find out if the list of grammar items in this
@@ -131,7 +122,7 @@ namespace ParserGenerator
 
         public string ToString(bool verbose)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             sb.AppendFormat("State S{0}{1}\r\n", SetNumber, (verbose ? " CORE ITEMS:" : ""));
             bool hasClosureItems = Items.Any(item => !item.Core);
 
@@ -284,7 +275,7 @@ namespace ParserGenerator
             // The final location for the transitions in
             // their correct state machine priority order
 
-            TransitionsInOrder = new List<GrammarTransition>();
+            TransitionsInOrder = [];
 
             // The list of any pairs of transitions that have
             // ambiguous guard conditions that the parser cannot
@@ -292,7 +283,7 @@ namespace ParserGenerator
             // in a warning message on the output error stream
             // from the parser generator.
 
-            IntersectingPairs = new List<KeyValuePair<GrammarTransition, GrammarTransition>>();
+            IntersectingPairs = [];
 
             IEnumerable<IGrouping<int, GrammarTransition>> tokenGroups =
                 unorderedTransitions.GroupBy(gt => gt.Element.Token.TokenNumber);
@@ -338,7 +329,7 @@ namespace ParserGenerator
 
             // Prepare the returned error message
 
-            StringBuilder errMessage = new StringBuilder();
+            StringBuilder errMessage = new();
             foreach (KeyValuePair<GrammarTransition, GrammarTransition> gePair in IntersectingPairs)
             {
                 errMessage.Append(
@@ -362,7 +353,7 @@ namespace ParserGenerator
         private List<GrammarTransition> CompileUnorderedTransitionList()
         {
             List<GrammarTransition> unorderedTransitions
-                = new List<GrammarTransition>();
+                = [];
 
             // Add shifts into the list of transitions
 

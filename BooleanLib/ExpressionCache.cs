@@ -58,7 +58,7 @@ namespace BooleanLib
 
         public ExpressionCache()
         {
-            expressionList = new List<BoolExpr>();
+            expressionList = [];
             IndexProvider = new LeafIndexProvider();
         }
 

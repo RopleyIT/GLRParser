@@ -75,7 +75,7 @@ namespace ParserParserTests
         {
             string testData = "{{{\"{\\\"{\"'{''\\'''{'}}}}AfterString";
             TextReader tr = new StringReader(testData);
-            Tokeniser tk = new Tokeniser(tr, TokenNames);
+            Tokeniser tk = new(tr, TokenNames);
 
             IEnumerator<IToken> tokIter = tk.GetEnumerator();
             tokIter.MoveNext();
@@ -96,7 +96,7 @@ namespace ParserParserTests
                 "{{\"\\t\"}}";
 
             TextReader tr = new StringReader(testData);
-            Tokeniser tk = new Tokeniser(tr, TokenNames);
+            Tokeniser tk = new(tr, TokenNames);
 
             IEnumerator<IToken> tokIter = tk.GetEnumerator();
             tokIter.MoveNext();
@@ -115,7 +115,7 @@ namespace ParserParserTests
         {
             string testData = "{{{//{\r\n}/*{\r\n{**/}}AfterString";
             TextReader tr = new StringReader(testData);
-            Tokeniser tk = new Tokeniser(tr, TokenNames);
+            Tokeniser tk = new(tr, TokenNames);
             IEnumerator<IToken> tokIter = tk.GetEnumerator();
             tokIter.MoveNext();
             IToken t = tokIter.Current;
@@ -141,7 +141,7 @@ namespace ParserParserTests
                 }
                 ";
             TextReader tr = new StringReader(testData);
-            Tokeniser tk = new Tokeniser(tr, TokenNames);
+            Tokeniser tk = new(tr, TokenNames);
             IEnumerator<IToken> tokIter = tk.GetEnumerator();
             tokIter.MoveNext();
             IToken t = tokIter.Current;
@@ -160,7 +160,7 @@ namespace ParserParserTests
             string testData = "\r\nevents\r\n{\tFRED,\tJ0e\r\n}"
                 + "\r\nrules{topRule : FRED {\r\ncode;\r\n}\r\n;}";
             TextReader tr = new StringReader(testData);
-            Tokeniser tk = new Tokeniser(tr, TokenNames);
+            Tokeniser tk = new(tr, TokenNames);
             IEnumerator<IToken> tokIter = tk.GetEnumerator();
             tokIter.MoveNext();
             IToken t = tokIter.Current;

@@ -38,12 +38,11 @@ namespace DynamicCSharp
             this.assemblyResolver =
                 new CompositeCompilationAssemblyResolver
                 (
-                    new ICompilationAssemblyResolver[]
-                    {
+                    [
                         new AppBaseCompilationAssemblyResolver(Path.GetDirectoryName(path)),
                         new ReferenceAssemblyPathResolver(),
                         new PackageCompilationAssemblyResolver()
-                    }
+                    ]
                 );
 
             this.loadContext = AssemblyLoadContext.GetLoadContext(this.Assembly);

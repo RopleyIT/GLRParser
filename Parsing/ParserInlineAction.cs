@@ -28,8 +28,14 @@ namespace Parsing
     /// attached to a rule reduction. Also identifies which tokens
     /// that are arguments to the production should be passed
     /// </summary>
+    /// <remarks>
+    /// Constructor for a single inline action
+    /// </remarks>
+    /// <param name="methodName">The name of the action method
+    /// within a class that will later be defined when Bind
+    /// is invoked</param>
 
-    public class ParserInlineAction
+    public class ParserInlineAction(string method)
     {
         /// <summary>
         /// The name of the action function within the parser
@@ -41,7 +47,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = method;
 
         /// <summary>
         /// The delegate to the actual method to be called
@@ -51,7 +57,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = null;
 
         /// <summary>
         /// Render object in a human readable form
@@ -59,19 +65,6 @@ namespace Parsing
         /// <returns>A readable version of the inline action</returns>
 
         public override string ToString() => MethodName + "(object[] args)";
-
-        /// <summary>
-        /// Constructor for a single inline action
-        /// </summary>
-        /// <param name="methodName">The name of the action method
-        /// within a class that will later be defined when Bind
-        /// is invoked</param>
-
-        public ParserInlineAction(string method)
-        {
-            Function = null;
-            MethodName = method;
-        }
 
         /// <summary>
         /// Implement run-time binding of the inline action functions,

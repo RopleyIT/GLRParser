@@ -59,8 +59,8 @@ namespace GLRParserTests
             "Failed to create parser:\r\nShift/reduce conflict")]
         public void TestEEiForConflicts()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<EEiConflictedParser>.InitializeFromGrammar
@@ -100,8 +100,8 @@ namespace GLRParserTests
         [TestMethod]
         public void TestEEiGLRParserForNoConflicts()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<EEiGLRParser>.InitializeFromGrammar
@@ -201,8 +201,8 @@ namespace GLRParserTests
         [TestMethod]
         public void TestEEiGLRParserForReferences()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<EEiGLRParser>.InitializeFromGrammar
@@ -255,8 +255,8 @@ namespace GLRParserTests
         [TestMethod]
         public void TestEEiGLRMergeTimes()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<EEiGLRParser>.InitializeFromGrammar
@@ -329,8 +329,8 @@ namespace GLRParserTests
         [TestMethod]
         public void TestEEiGLRMergePlus()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<EEiGLRParser>.InitializeFromGrammar
@@ -397,8 +397,8 @@ namespace GLRParserTests
         [TestMethod]
         public void TestEEiGLRMergeNeither()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<EEiGLRParser>.InitializeFromGrammar
@@ -497,9 +497,9 @@ namespace GLRParserTests
         [TestMethod]
         public void TestOfflineGLRParserGeneration()
         {
-            StringBuilder output = new StringBuilder();
-            using StringReader src = new StringReader(offlineSource);
-            using StringWriter dst = new StringWriter(output);
+            StringBuilder output = new();
+            using StringReader src = new(offlineSource);
+            using StringWriter dst = new(output);
             string creationResult = ParserFactory.CreateOfflineParser
                 (src, dst, null, null, false, false, true, out List<string> extRefs);
 
@@ -608,8 +608,8 @@ namespace GLRParserTests
         [TestMethod]
         public void TestGLRMultiplicityInlineParser()
         {
-            StringBuilder tableString = new StringBuilder();
-            StringBuilder srcString = new StringBuilder();
+            StringBuilder tableString = new();
+            StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
             ParserFactory<InlineGLRTestParser>.InitializeFromGrammar
@@ -639,7 +639,7 @@ namespace GLRParserTests
             // Create the input tokeniser, connecting it to the
             // list of terminal token values from the parser
 
-            GLRTestTokeniser tt = new GLRTestTokeniser(new StringReader(grammarInput), itp.Tokens);
+            GLRTestTokeniser tt = new(new StringReader(grammarInput), itp.Tokens);
 
             // Now execute the parse
 
@@ -746,7 +746,7 @@ namespace GLRParserTests
                 alternatives[0] = null;
         }
 
-        public void EIsEOpEPrefersNeither(NonterminalToken[] alternatives)
+        public static void EIsEOpEPrefersNeither(NonterminalToken[] alternatives)
         {
             if (alternatives == null || alternatives.Length != 3)
                 throw new ArgumentException("Merge function called with invalid args");

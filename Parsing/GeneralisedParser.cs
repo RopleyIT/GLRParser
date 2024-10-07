@@ -130,7 +130,7 @@ namespace Parsing
                 linkFreeList = new FreeList<StackLink>
                     (NodeCapacity + (NodeCapacity >> ExtraLinkFraction));
             }
-            StackTops = new List<StackNode>();
+            StackTops = [];
             paths = new Queue<GeneralisedPath>();
             ParserResults = null;
             ErrorLevel = MessageLevel.WARN;
@@ -189,16 +189,14 @@ namespace Parsing
         public void MessageWrite
             (MessageLevel errorLevel, string format, params object[] args)
         {
-            if (DebugStream != null)
-                DebugStream.Write(format, args);
+            DebugStream?.Write(format, args);
             if ((int)errorLevel <= (int)ErrorLevel && ErrStream != null)
                 ErrStream.Write(format, args);
         }
 
         public void MessageWrite(MessageLevel errorLevel, string msg)
         {
-            if (DebugStream != null)
-                DebugStream.Write(msg);
+            DebugStream?.Write(msg);
             if ((int)errorLevel <= (int)ErrorLevel && ErrStream != null)
                 ErrStream.Write(msg);
         }
@@ -260,7 +258,7 @@ namespace Parsing
 
                 // Wipe out previous runs of the parser
 
-                StackTops = new List<StackNode>();
+                StackTops = [];
 
                 // Symbols used to terminate the parse.
                 // Note that the use of short.MaxValue
@@ -454,7 +452,7 @@ namespace Parsing
                 // parse trees from their non terminal
                 // token objects.
 
-                List<IToken> results = new List<IToken>();
+                List<IToken> results = [];
                 foreach (StackNode sn in StackTops.Where(n => n.State == short.MaxValue))
                     for (StackLink sl = sn; sl != null; sl = sl.Next)
                     {
@@ -462,7 +460,7 @@ namespace Parsing
                         if (rootToken != null)
                             results.Add(rootToken);
                     }
-                ParserResults = results.ToArray();
+                ParserResults = [.. results];
 
                 // Release any nodes and links from
                 // the stacks back onto the free list
@@ -487,7 +485,7 @@ namespace Parsing
             // token onto the top of all stacks that this is
             // a valid shift symbol for.
 
-            List<StackNode> newStackTops = new List<StackNode>();
+            List<StackNode> newStackTops = [];
 
             // Now perform any shifts of input tokens that
             // are permitted for the current stack top states.
@@ -641,7 +639,7 @@ namespace Parsing
         /// <param name="node">The top of stack node
         /// that is to be freed.</param>
 
-        public void ReleasePath(StackNode node)
+        public static void ReleasePath(StackNode node)
         {
             // Deal with the edge of the tree.
             // In theory this shouldn't happen.
@@ -763,8 +761,7 @@ namespace Parsing
                 select sl.Token;
 
             NonterminalToken reductionToken
-                = new NonterminalToken
-                    (gp.Production, this, pathTokens);
+                = new(gp.Production, this, pathTokens);
 
             // Look up the non-terminal token that determines
             // what state to push back onto the stack. Now we

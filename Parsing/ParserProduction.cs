@@ -26,8 +26,33 @@ namespace Parsing
     /// Represents one of the grammar rules that can
     /// be reduced while parsing the input
     /// </summary>
+    /// <remarks>
+    /// Construct a parser production
+    /// </remarks>
+    /// <param name="tokenCount">Number of element on 
+    /// the parser stack to be popped, that will have 
+    /// their values passed to the reduction action 
+    /// function if it exists</param>
+    /// <param name="ptt">The non-terminal token type
+    /// that the rule reduces to</param>
+    /// <param name="action">List of inline delegates
+    /// to be executed when this reduction occurs</param>
+    /// <param name="productionRule">Debug string
+    /// that explains which production is reducing</param>
+    /// <param name="productionNumber">The unique integer
+    /// code associated with this production. Used for
+    /// reporting.</param>
+    /// <param name="ruleNumber">The zero-based index
+    /// into the grammar of the set of rules that share
+    /// the same LHS token.</param>
 
-    public class ParserProduction
+    public class ParserProduction(
+        short productionNumber,
+        short ruleNumber,
+        string productionRule,
+        int tokenCount, int ptt,
+        ParserInlineAction action
+        )
     {
         /// <summary>
         /// The unique numeric ID for the production.
@@ -40,7 +65,7 @@ namespace Parsing
         {
             get;
             set;
-        }
+        } = productionNumber;
 
         /// <summary>
         /// The index of this production into
@@ -57,7 +82,7 @@ namespace Parsing
         {
             get;
             set;
-        }
+        } = ruleNumber;
 
         /// <summary>
         /// The number of tokens on the RHS of the
@@ -69,7 +94,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = (byte)tokenCount;
 
 
         /// <summary>
@@ -82,7 +107,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = ptt;
 
         /// <summary>
         /// If used, an action function to be called
@@ -97,14 +122,14 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = action;
 
         /// <summary>
         /// In verbose reporting, contains a string
         /// representation of the rule being reduced
         /// </summary>
 
-        private readonly string productionString;
+        private readonly string productionString = productionRule;
 
         /// <summary>
         /// Render the object as a string
@@ -161,42 +186,5 @@ namespace Parsing
             int tokenCount, int ptt)
             : this(productionNumber, ruleNumber, productionRule, tokenCount, ptt, null)
         { }
-
-        /// <summary>
-        /// Construct a parser production
-        /// </summary>
-        /// <param name="tokenCount">Number of element on 
-        /// the parser stack to be popped, that will have 
-        /// their values passed to the reduction action 
-        /// function if it exists</param>
-        /// <param name="ptt">The non-terminal token type
-        /// that the rule reduces to</param>
-        /// <param name="action">List of inline delegates
-        /// to be executed when this reduction occurs</param>
-        /// <param name="productionRule">Debug string
-        /// that explains which production is reducing</param>
-        /// <param name="productionNumber">The unique integer
-        /// code associated with this production. Used for
-        /// reporting.</param>
-        /// <param name="ruleNumber">The zero-based index
-        /// into the grammar of the set of rules that share
-        /// the same LHS token.</param>
-
-        public ParserProduction
-        (
-            short productionNumber,
-            short ruleNumber,
-            string productionRule,
-            int tokenCount, int ptt,
-            ParserInlineAction action
-        )
-        {
-            Number = productionNumber;
-            RuleNumber = ruleNumber;
-            TokenCount = (byte)tokenCount;
-            NonterminalType = ptt;
-            productionString = productionRule;
-            InlineAction = action;
-        }
     }
 }

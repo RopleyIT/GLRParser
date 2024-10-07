@@ -41,7 +41,7 @@ namespace Parsing
             set;
         }
 
-        private static readonly Regex briefStateRx = new Regex
+        private static readonly Regex briefStateRx = new
             (@"State (S\d+) CORE ITEMS:\r\n(.*)");
 
         /// <summary>
@@ -64,10 +64,10 @@ namespace Parsing
                         string body = m.Groups[2].Value;
                         int cutIdx = body.IndexOf("CLOSURE ITEMS");
                         if (cutIdx >= 0)
-                            body = body.Substring(0, cutIdx);
+                            body = body[..cutIdx];
                         cutIdx = body.IndexOf("{\r\n");
                         if (cutIdx >= 0)
-                            body = body.Substring(0, cutIdx);
+                            body = body[..cutIdx];
                         return m.Groups[1].Value + ":\r\n" + body;
                     }
                     else

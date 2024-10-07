@@ -87,7 +87,7 @@ namespace Parsing
 
         public string BuildSource(TextReader inStr, bool ignoreErrorEvents, out List<string> assemblyRefs)
         {
-            assemblyRefs = new List<string>();
+            assemblyRefs = [];
             try
             {
                 if (outStr == null)
@@ -96,7 +96,7 @@ namespace Parsing
                 // Use an LR parser to read the grammar description
 
                 LRParser p = ParserFactory<LRParser>.CreateInstance();
-                StringBuilder errBuilder = new StringBuilder();
+                StringBuilder errBuilder = new();
                 p.ErrStream = new StringWriter(errBuilder);
                 bool successful = p.Parse
                 (
@@ -127,7 +127,7 @@ namespace Parsing
 
                 // Create a token nume value lookup table
 
-                TwoWayMap<string, int> tokenMap = new TwoWayMap<string, int>();
+                TwoWayMap<string, int> tokenMap = new();
 
                 // Capture the input event types into the token map
 
@@ -148,12 +148,12 @@ namespace Parsing
 
                 if (grammar.Options != null)
                 {
-                    if (grammar.Options.ContainsKey("usings"))
-                        usings = grammar.Options["usings"] as List<string>;
-                    if (grammar.Options.ContainsKey("namespace"))
-                        nameSpace = grammar.Options["namespace"].ToString();
-                    if (grammar.Options.ContainsKey("fsmclass"))
-                        usersFSMClassName = grammar.Options["fsmclass"].ToString();
+                    if (grammar.Options.TryGetValue("usings", out object value))
+                        usings = value as List<string>;
+                    if (grammar.Options.TryGetValue("namespace", out value))
+                        nameSpace = value.ToString();
+                    if (grammar.Options.TryGetValue("fsmclass", out value))
+                        usersFSMClassName = value.ToString();
                 }
 
                 // Form the list of externally referenced assemblies

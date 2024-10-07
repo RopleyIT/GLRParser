@@ -94,7 +94,7 @@ namespace BooleanLib
         public List<string> LeafNamesFromMask(long mask)
         {
             ulong umask = (ulong)mask;
-            List<string> names = new List<string>();
+            List<string> names = [];
             for (int i = 0; umask != 0; i++)
             {
                 if ((umask & 1) != 0)

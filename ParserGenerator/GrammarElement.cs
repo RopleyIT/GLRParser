@@ -26,8 +26,14 @@ namespace ParserGenerator
     /// <summary>
     /// Represents one element in the RHS of a production
     /// </summary>
+    /// <remarks>
+    /// Constructor for a new element
+    /// </remarks>
+    /// <param name="tok">The token in this element</param>
+    /// <param name="guard">Any guard condition associated with the element. Set
+    /// to null if no guard applies.</param>
 
-    public class GrammarElement
+    public class GrammarElement(GrammarToken tok, BoolExpr guard)
     {
         /// <summary>
         /// The terminal or non-terminal token at this point
@@ -38,7 +44,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = tok;
 
         /// <summary>
         /// A guard condition set on this element, if
@@ -49,20 +55,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
-
-        /// <summary>
-        /// Constructor for a new element
-        /// </summary>
-        /// <param name="tok">The token in this element</param>
-        /// <param name="guard">Any guard condition associated with the element. Set
-        /// to null if no guard applies.</param>
-
-        public GrammarElement(GrammarToken tok, BoolExpr guard)
-        {
-            Token = tok;
-            Guard = guard;
-        }
+        } = guard;
 
         /// <summary>
         /// Ensure that identical elements get identical hash codes.
@@ -80,7 +73,7 @@ namespace ParserGenerator
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GrammarElement ge))
+            if (obj is not GrammarElement ge)
                 return false;
 
             return ge.Token == Token

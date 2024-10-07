@@ -72,8 +72,7 @@ namespace Parsing
 
         public void MessageWrite(bool isError, string format, params object[] args)
         {
-            if (DebugStream != null)
-                DebugStream.Write(format, args);
+            DebugStream?.Write(format, args);
             if (isError && ErrStream != null)
                 ErrStream.Write(format, args);
         }

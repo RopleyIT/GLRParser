@@ -131,8 +131,7 @@ namespace Parsing
         public void MessageWrite
             (MessageLevel errorLevel, string format, params object[] args)
         {
-            if (DebugStream != null)
-                DebugStream.Write(format, args);
+            DebugStream?.Write(format, args);
             if ((int)errorLevel <= (int)ErrorLevel && ErrStream != null)
                 ErrStream.Write(format, args);
         }
@@ -399,7 +398,7 @@ namespace Parsing
 
         private bool PopStackUntilErrorTokenShifted()
         {
-            ParserToken errToken = new ParserToken(Grammar.ErrorTokenValue, null, 0);
+            ParserToken errToken = new(Grammar.ErrorTokenValue, null, 0);
             parserStateStack.Pop();
             while (!ParseComplete)
             {

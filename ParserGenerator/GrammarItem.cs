@@ -159,7 +159,7 @@ namespace ParserGenerator
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GrammarItem ge))
+            if (obj is not GrammarItem ge)
                 return false;
             else
                 return Production == ge.Production

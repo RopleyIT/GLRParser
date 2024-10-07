@@ -128,7 +128,7 @@ namespace Parsing
         {
             for (int i = 0; i < growth; i++)
             {
-                T t = new T
+                T t = new()
                 {
                     NextFree = freeList
                 };

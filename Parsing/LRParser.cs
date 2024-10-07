@@ -342,7 +342,7 @@ namespace Parsing
 
             // Add the identifier to the list of action names supported
 
-            GrammarToken gt = new GrammarToken
+            GrammarToken gt = new
             (
                 value,
                 ParserGenerator.TokenType.Terminal,
@@ -386,12 +386,12 @@ namespace Parsing
         /// </summary>
 
         private static readonly string[] mulPrefixes =
-        {
+        [
             "",
             "zeroOrOne_",
             "oneToMany_",
             "zeroToMany_"
-        };
+        ];
 
         /// <summary>
         /// For a given token accompanied by a multiplicity symbol in the grammar,
@@ -421,12 +421,8 @@ namespace Parsing
             // Is this the name of a terminal token?
 
             GrammarToken tok = ConstructedGrammar.Terminals
-                .FirstOrDefault(t => t.Text == tokStr);
-
-            // If not, see if it is a non-terminal token
-
-            if (tok == null)
-                tok = ConstructedGrammar.Nonterminals
+                .FirstOrDefault(t => t.Text == tokStr) 
+                ?? ConstructedGrammar.Nonterminals
                     .FirstOrDefault(t => t.Text == tokStr);
 
             // This token has never been seen before, so is
@@ -450,7 +446,7 @@ namespace Parsing
 
             // Create the rule element 
 
-            GrammarElement tokElement = new GrammarElement(tok, tokGuard);
+            GrammarElement tokElement = new(tok, tokGuard);
 
             // Simple identifier-guard pairs represent non-multiplicity
             // elements, so we can just return at this point
@@ -554,8 +550,8 @@ namespace Parsing
 
             // Create the empty rule production
 
-            GrammarProduction p = new GrammarProduction
-                (ConstructedGrammar, 0, new List<GrammarElement>(0), ggaEmptyList);
+            GrammarProduction p = new
+                (ConstructedGrammar, 0, [], ggaEmptyList);
             AppendGrammarProduction(lhsToken, p);
         }
 
@@ -585,8 +581,8 @@ namespace Parsing
 
             // Create the first item in list production
 
-            List<GrammarElement> gel = new List<GrammarElement> { rhsElement };
-            GrammarProduction p = new GrammarProduction
+            List<GrammarElement> gel = [rhsElement];
+            GrammarProduction p = new
                 (ConstructedGrammar, 0, gel, ggaEarliestNonterminalInList);
             AppendGrammarProduction(lhsToken, p);
         }
@@ -616,12 +612,12 @@ namespace Parsing
 
             // Now create the production
 
-            List<GrammarElement> gel = new List<GrammarElement>(2)
-            {
+            List<GrammarElement> gel =
+            [
                 new GrammarElement(lhsToken, null),
                 rhsElement
-            };
-            GrammarProduction p = new GrammarProduction
+            ];
+            GrammarProduction p = new
                 (ConstructedGrammar, 0, gel, ggaLatestNonterminalInList);
             AppendGrammarProduction(lhsToken, p);
         }

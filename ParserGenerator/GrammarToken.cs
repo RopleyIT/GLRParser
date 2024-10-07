@@ -103,16 +103,13 @@ namespace ParserGenerator
                 if (baseToken != null && !string.IsNullOrEmpty(baseToken.ValueType))
                     mType = baseToken.ValueType;
 
-                switch (Multiplicity)
+                return Multiplicity switch
                 {
-                    default: // Exactly one
-                        return baseType;
-                    case ParserGenerator.Multiplicity.ZeroOrOne:
-                        return $"IOptional<{mType}>";
-                    case ParserGenerator.Multiplicity.ZeroToMany:
-                    case ParserGenerator.Multiplicity.OneToMany:
-                        return $"IList<{mType}>";
-                }
+                    ParserGenerator.Multiplicity.ZeroOrOne => $"IOptional<{mType}>",
+                    ParserGenerator.Multiplicity.ZeroToMany or ParserGenerator.Multiplicity.OneToMany => $"IList<{mType}>",
+                    // Exactly one
+                    _ => baseType,
+                };
             }
             set
             {
@@ -258,7 +255,7 @@ namespace ParserGenerator
 
         public override bool Equals(object obj)
         {
-            if (!(obj is GrammarToken gt))
+            if (obj is not GrammarToken gt)
                 return false;
 
             return gt.TokenType == TokenType

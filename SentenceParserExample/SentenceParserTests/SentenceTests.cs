@@ -11,7 +11,7 @@ namespace SentenceParserTests
             string sentence =
                 "The hairy rabbit noisily licks a pink human.";
             InlineSentenceParser theParser
-                = new InlineSentenceParser();
+                = new ();
             SentenceParser.SentenceParser parserInstance
                 = theParser.ParseSentence(sentence);
             Assert.True(string.IsNullOrEmpty(parserInstance.Errors));

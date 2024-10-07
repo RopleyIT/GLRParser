@@ -30,13 +30,13 @@ namespace ParserParserTests
         [TestMethod]
         public void CompareElements()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lbe = SetupFourVarXor(bef, 'A');
             BoolExpr rbe = SetupFourVarXor(bef, 'A');
-            GrammarToken lgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarToken rgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarElement le = new GrammarElement(lgt, lbe);
-            GrammarElement re = new GrammarElement(rgt, rbe);
+            GrammarToken lgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarToken rgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarElement le = new(lgt, lbe);
+            GrammarElement re = new(rgt, rbe);
             Assert.IsTrue(le == re);
             Assert.IsTrue(re == le);
             Assert.IsTrue(le.Equals(re));
@@ -46,10 +46,10 @@ namespace ParserParserTests
         [TestMethod]
         public void CompareElementsOneNull()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lbe = SetupFourVarXor(bef, 'A');
-            GrammarToken lgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarElement le = new GrammarElement(lgt, lbe);
+            GrammarToken lgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarElement le = new(lgt, lbe);
             GrammarElement re = null;
             Assert.IsFalse(le == re);
             Assert.IsFalse(re == le);
@@ -68,13 +68,13 @@ namespace ParserParserTests
         [TestMethod]
         public void CompareElementsDiffBE()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lbe = SetupFourVarXor(bef, 'A');
             BoolExpr rbe = SetupFourVarXor(bef, 'B');
-            GrammarToken lgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarToken rgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarElement le = new GrammarElement(lgt, lbe);
-            GrammarElement re = new GrammarElement(rgt, rbe);
+            GrammarToken lgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarToken rgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarElement le = new(lgt, lbe);
+            GrammarElement re = new(rgt, rbe);
             Assert.IsFalse(le == re);
             Assert.IsFalse(re == le);
             Assert.IsFalse(le.Equals(re));
@@ -84,13 +84,13 @@ namespace ParserParserTests
         [TestMethod]
         public void CompareElementsOneNullBE()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lbe = SetupFourVarXor(bef, 'A');
             BoolExpr rbe = null;
-            GrammarToken lgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarToken rgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarElement le = new GrammarElement(lgt, lbe);
-            GrammarElement re = new GrammarElement(rgt, rbe);
+            GrammarToken lgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarToken rgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarElement le = new(lgt, lbe);
+            GrammarElement re = new(rgt, rbe);
             Assert.IsFalse(le == re);
             Assert.IsFalse(re == le);
             Assert.IsFalse(le.Equals(re));
@@ -102,10 +102,10 @@ namespace ParserParserTests
             _ = new LeafIndexProvider();
             BoolExpr lbe = null;
             BoolExpr rbe = null;
-            GrammarToken lgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarToken rgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
-            GrammarElement le = new GrammarElement(lgt, lbe);
-            GrammarElement re = new GrammarElement(rgt, rbe);
+            GrammarToken lgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarToken rgt = new(3, TokenType.Terminal, "NAME", "string");
+            GrammarElement le = new(lgt, lbe);
+            GrammarElement re = new(rgt, rbe);
             Assert.IsTrue(le == re);
             Assert.IsTrue(re == le);
             Assert.IsTrue(le.Equals(re));
@@ -115,13 +115,13 @@ namespace ParserParserTests
         [TestMethod]
         public void CompareElementsOneNullTok()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lbe = SetupFourVarXor(bef, 'A');
             BoolExpr rbe = SetupFourVarXor(bef, 'A');
-            GrammarToken lgt = new GrammarToken(3, TokenType.Terminal, "NAME", "string");
+            GrammarToken lgt = new(3, TokenType.Terminal, "NAME", "string");
             GrammarToken rgt = null;
-            GrammarElement le = new GrammarElement(lgt, lbe);
-            GrammarElement re = new GrammarElement(rgt, rbe);
+            GrammarElement le = new(lgt, lbe);
+            GrammarElement re = new(rgt, rbe);
             Assert.IsFalse(le == re);
             Assert.IsFalse(re == le);
             Assert.IsFalse(le.Equals(re));
@@ -131,13 +131,13 @@ namespace ParserParserTests
         [TestMethod]
         public void CompareElementsBothNullTok()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lbe = SetupFourVarXor(bef, 'A');
             BoolExpr rbe = SetupFourVarXor(bef, 'A');
             GrammarToken lgt = null;
             GrammarToken rgt = null;
-            GrammarElement le = new GrammarElement(lgt, lbe);
-            GrammarElement re = new GrammarElement(rgt, rbe);
+            GrammarElement le = new(lgt, lbe);
+            GrammarElement re = new(rgt, rbe);
             Assert.IsTrue(le == re);
             Assert.IsTrue(re == le);
             Assert.IsTrue(le.Equals(re));

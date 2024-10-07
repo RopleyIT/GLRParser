@@ -22,7 +22,7 @@
 
 namespace BooleanLib
 {
-    public class NotExpr : BoolExpr
+    public class NotExpr(BoolExpr arg) : BoolExpr
     {
         /// <summary>
         /// Access the child node of this NOT operator
@@ -32,9 +32,7 @@ namespace BooleanLib
         {
             get;
             private set;
-        }
-
-        public NotExpr(BoolExpr arg) => Argument = arg;
+        } = arg;
 
         /// <summary>
         /// Return the block of 64 bits from the truth table

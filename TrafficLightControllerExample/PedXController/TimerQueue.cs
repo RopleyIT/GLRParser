@@ -20,7 +20,7 @@ namespace PedXController
             // list and a non-ticking timer
 
             lockObject = new object();
-            workItems = new List<TimedWorkItem>();
+            workItems = [];
             queueTimer = new Timer(TimerTicks);
         }
 
@@ -76,7 +76,7 @@ namespace PedXController
             // Add the item into the list at the right offset into the list.
             // Tune the timer's next tick time, as the list has changed.
 
-            TimedWorkItem twi = new TimedWorkItem(time, action);
+            TimedWorkItem twi = new(time, action);
             Monitor.Enter(lockObject);
             workItems.Add(twi);
             workItems.Sort((tw1, tw2) => Math.Sign(tw1.When.Ticks - tw2.When.Ticks));

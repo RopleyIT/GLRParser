@@ -69,8 +69,8 @@ namespace SentenceParser
                 grammarFileLocation = Path.GetDirectoryName(grammarFileLocation);
                 grammarFileLocation = Path.Combine(grammarFileLocation, "SentenceParser.g");
 
-                using StreamReader grammarStream = new StreamReader(grammarFileLocation);
-                StringBuilder tableString = new StringBuilder();
+                using StreamReader grammarStream = new(grammarFileLocation);
+                StringBuilder tableString = new();
                 TextWriter tabOut = new StringWriter(tableString);
                 try
                 {
@@ -110,8 +110,7 @@ namespace SentenceParser
             // Create the input tokeniser, connecting it to the
             // list of terminal token values from the parser
 
-            SentenceTokeniser tt = new SentenceTokeniser
-                (new StringReader(sentence), sentenceParser.Tokens);
+            SentenceTokeniser tt = new(new StringReader(sentence), sentenceParser.Tokens);
 
             // Now execute the parse. The return value is not
             // used, as the caller looks at the Errors property

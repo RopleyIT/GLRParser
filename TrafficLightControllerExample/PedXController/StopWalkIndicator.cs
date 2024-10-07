@@ -15,8 +15,7 @@ namespace PedXController
             set
             {
                 buttonPressed = value;
-                if (PropertyChanged != null)
-                    PropertyChanged(this, EventArgs.Empty);
+                PropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -27,8 +26,7 @@ namespace PedXController
             set
             {
                 canWalk = value;
-                if (PropertyChanged != null)
-                    PropertyChanged(this, EventArgs.Empty);
+                PropertyChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 

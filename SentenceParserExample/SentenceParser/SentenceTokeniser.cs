@@ -70,7 +70,7 @@ namespace SentenceParser
 
             // Build a complete list of input tokens before parsing
 
-            tokenStream = new List<IToken>();
+            tokenStream = [];
             IToken tok;
             while ((tok = NextToken()).Type != tokenValue["EOF"])
                 tokenStream.Add(tok);
@@ -213,16 +213,16 @@ namespace SentenceParser
         /// pointer. False if not found, without altering
         /// input stream.</returns>
 
-        private bool EatChar(char c)
-        {
-            if (input[nextCharPos] == c)
-            {
-                nextCharPos++;
-                return true;
-            }
-            else
-                return false;
-        }
+        //private bool EatChar(char c)
+        //{
+        //    if (input[nextCharPos] == c)
+        //    {
+        //        nextCharPos++;
+        //        return true;
+        //    }
+        //    else
+        //        return false;
+        //}
 
         /// <summary>
         /// Return a strongly-typed enumerator over the

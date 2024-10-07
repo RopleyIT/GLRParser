@@ -44,7 +44,7 @@ namespace Parsing
             production = gp ?? throw new ArgumentException
                     ("Null grammar production passed into DollarParameterReplacer");
             declarations = new StringBuilder();
-            argIndexes = new List<int>() { 0 };
+            argIndexes = [0];
             forceWeakTyping = forceWeak;
 
             // Set up the declaration for the return slot args[0]
@@ -68,7 +68,7 @@ namespace Parsing
             if (m == null)
                 throw new ArgumentException
                     ("ReplacementDollarParameter needs a non-null Match parameter");
-            if (int.TryParse(m.Value.Substring(1), out int dollarParamValue)
+            if (int.TryParse(m.Value.AsSpan(1), out int dollarParamValue)
                 && dollarParamValue >= 0
                 && dollarParamValue < production.RHS.Count)
             {

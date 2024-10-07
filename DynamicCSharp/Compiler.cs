@@ -87,10 +87,8 @@ namespace DynamicCSharp
             if (t == null)
                 throw new ArgumentException("Adding reference to null type");
 
-            var mdRef = MetadataReference.CreateFromFile(t.GetTypeInfo().Assembly.Location);
-            if (mdRef == null)
-                throw new ArgumentException("Metadata reference not found");
-
+            var mdRef = MetadataReference.CreateFromFile(t.GetTypeInfo().Assembly.Location) 
+                    ?? throw new ArgumentException("Metadata reference not found");
             metaDataReferences.Add(mdRef);
         }
 
@@ -140,8 +138,7 @@ namespace DynamicCSharp
             // First search for the assembly among the list of trusted
             // assemblies alrady known about by the .NET core installation
 
-            if (trustedAssemblyPaths == null)
-                trustedAssemblyPaths =
+            trustedAssemblyPaths ??=
                     ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES"))
                     .Split(Path.PathSeparator);
             string assemblyPath = trustedAssemblyPaths
@@ -155,9 +152,8 @@ namespace DynamicCSharp
 
             if (string.IsNullOrEmpty(assemblyPath))
                 throw new ArgumentException("Assembly path not found in trusted assmeblies");
-            var mdRef = MetadataReference.CreateFromFile(assemblyPath);
-            if (mdRef == null)
-                throw new ArgumentException("Metadata reference not found");
+            var mdRef = MetadataReference.CreateFromFile(assemblyPath) 
+                ?? throw new ArgumentException("Metadata reference not found");
             metaDataReferences.Add(mdRef);
         }
 
@@ -228,8 +224,7 @@ namespace DynamicCSharp
             }
         }
 
-        private readonly List<MetadataReference> metaDataReferences
-            = new List<MetadataReference>();
+        private readonly List<MetadataReference> metaDataReferences = [];
 
         // Make the constructor private to force all creation to
         // go via the factory method. This in turn ensures users

@@ -28,8 +28,18 @@ namespace ParserGenerator
     /// <summary>
     /// Captures one grammar rule within an input grammar
     /// </summary>
+    /// <remarks>
+    /// Constructor. Given a non-terminal
+    /// for which we wish to create a production,
+    /// create an empty grammar production for that
+    /// non-terminal token.
+    /// </remarks>
+    /// <param name="prodNum">Unique number for this production instance</param>
+    /// <param name="rhs">The list of tokens
+    /// for which we are defining a production</param>
+    /// <param name="parent">The grammar that owns this production</param>
 
-    public class GrammarProduction
+    public class GrammarProduction(Grammar parent, int prodNum, IList<GrammarElement> rhs)
     {
         /// <summary>
         /// The parent grammar that this production belongs to
@@ -39,7 +49,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = parent;
 
         /// <summary>
         /// Unique administrative number for this production
@@ -49,7 +59,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = prodNum;
 
         /// <summary>
         /// Used to give a unique low integer number within the set
@@ -99,8 +109,7 @@ namespace ParserGenerator
             {
                 if (asId == 0)
                 {
-                    if (productionIdentities == null)
-                        productionIdentities = new Dictionary<string, int>();
+                    productionIdentities ??= [];
                     string idString = AsIdentifier();
                     if (!productionIdentities.TryGetValue(idString, out asId))
                     {
@@ -120,7 +129,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = null;
 
         /// <summary>
         /// The list of elements that appear
@@ -131,7 +140,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = rhs;
 
         /// <summary>
         /// Guard condition to be carried back to a predecessor
@@ -143,7 +152,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = null;
 
         /// <summary>
         /// Optional inline code to be executed
@@ -155,7 +164,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = null;
 
         /// <summary>
         /// Check that no $N argument has a value of N outside the number
@@ -208,27 +217,6 @@ namespace ParserGenerator
 
         public GrammarProduction(Grammar parent, int prodNum, IList<GrammarElement> rhs, GrammarGuardOrAction a)
             : this(parent, prodNum, rhs) => Code = a;
-
-        /// <summary>
-        /// Constructor. Given a non-terminal
-        /// for which we wish to create a production,
-        /// create an empty grammar production for that
-        /// non-terminal token.
-        /// </summary>
-        /// <param name="prodNum">Unique number for this production instance</param>
-        /// <param name="rhs">The list of tokens
-        /// for which we are defining a production</param>
-        /// <param name="parent">The grammar that owns this production</param>
-
-        public GrammarProduction(Grammar parent, int prodNum, IList<GrammarElement> rhs)
-        {
-            Parent = parent;
-            ProductionNumber = prodNum;
-            LHS = null;
-            RHS = rhs;
-            Code = null;
-            CarryBack = null;
-        }
 
         /// <summary>
         /// Generate a hash value from the list of tokens in the rule
@@ -351,7 +339,7 @@ namespace ParserGenerator
         {
             if (asIdentifier == null)
             {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder sb = new();
                 if (LHS != null)
                     sb.Append(LHS.Text);
                 else
@@ -380,7 +368,7 @@ namespace ParserGenerator
 
         public string ToString(int pos)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             if (LHS != null)
                 sb.Append(LHS.Text);
             else

@@ -29,11 +29,11 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestManyFalsesAtBottomOfTruthTable()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
-            LeafExpr wmjt = new LeafExpr("WMJT", bef);
+            LeafIndexProvider bef = new();
+            LeafExpr wmjt = new("WMJT", bef);
             for (int i = 1; i < 11; i++)
                 _ = new LeafExpr($"Unused{i}", bef);
-            LeafExpr icjhth = new LeafExpr("ICJHTH", bef);
+            LeafExpr icjhth = new("ICJHTH", bef);
             BoolExpr expr = new AndExpr(new NotExpr(wmjt), icjhth);
             long minimisedLeaves = expr.MinimisedLeaves();
             Assert.AreEqual(0x801L, minimisedLeaves);
@@ -42,7 +42,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestLowComparison()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr expr = SetupFourVarXor(bef, 'S');
             BoolExpr cmpx = new AndExpr(new LeafExpr("S", bef), expr);
             BooleanComparison cmpResult = cmpx.CompareExpressions(expr);
@@ -64,7 +64,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestHighComparison()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr expr;
             for (int i = 0; i < 6; i++)
                 _ = new LeafExpr($"unused{i}", bef);
@@ -89,7 +89,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestMixedComparison()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr expr;
             for (int i = 0; i < 4; i++)
                 _ = new LeafExpr($"unused{i}", bef);
@@ -114,7 +114,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestExpressionCreation()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr expr = SetupFourVarXor(bef, 'S');
 
             // Check the leaves that have been identified
@@ -126,7 +126,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestHighLeavesExpressionCreation()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             for (int i = 0; i < 6; i++)
                 _ = new LeafExpr($"Unused{i}", bef);
             BoolExpr expr = SetupFourVarXor(bef, 'W');
@@ -155,10 +155,10 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestMixedLeavesExpressionCreation()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             BoolExpr rexpr = SetupFourVarXor(bef, 'W');
-            BoolExpr expr = new OrExpr
+            OrExpr expr = new 
             (
                 new AndExpr(new NotExpr(lexpr), rexpr),
                 new AndExpr(lexpr, new NotExpr(rexpr))
@@ -178,7 +178,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestHighLeafMinimisation()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             BoolExpr rexpr = SetupFourVarXor(bef, 'W');
             BoolExpr leftLeaf = new LeafExpr("A", bef);
@@ -192,8 +192,8 @@ namespace BooleanLibTest
             // Now create the expression (A|B)|(~A&~B)&xorExpr,
             // which should have the value xorExpr when minimised
 
-            BoolExpr orExpr = new OrExpr(leftLeaf, rightLeaf);
-            BoolExpr andExpr = new AndExpr
+            OrExpr orExpr = new (leftLeaf, rightLeaf);
+            AndExpr andExpr = new 
                 (new NotExpr(leftLeaf), new NotExpr(rightLeaf));
             orExpr = new OrExpr(andExpr, orExpr);
             andExpr = new AndExpr(xorExpr, orExpr);
@@ -213,7 +213,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestLowLeafMinimisation()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr leftLeaf = new LeafExpr("A", bef);
             BoolExpr rightLeaf = new LeafExpr("B", bef);
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
@@ -227,8 +227,8 @@ namespace BooleanLibTest
             // Now create the expression (A|B)|(~A&~B)&xorExpr,
             // which should have the value xorExpr when minimised
 
-            BoolExpr orExpr = new OrExpr(leftLeaf, rightLeaf);
-            BoolExpr andExpr = new AndExpr
+            OrExpr orExpr = new (leftLeaf, rightLeaf);
+            AndExpr andExpr = new 
                 (new NotExpr(leftLeaf), new NotExpr(rightLeaf));
             orExpr = new OrExpr(andExpr, orExpr);
             andExpr = new AndExpr(xorExpr, orExpr);
@@ -248,7 +248,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestMixedLeafMinimisation()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             BoolExpr leftLeaf = new LeafExpr("A", bef);
             BoolExpr rexpr = SetupFourVarXor(bef, 'W');
@@ -277,7 +277,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestAsIdentifier()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             string identifier = lexpr.AsIdentifier(bef);
             Assert.AreEqual("S_T_U_V_6996", identifier);
@@ -286,7 +286,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestMinimisedIdentifier()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             BoolExpr leftLeaf = new LeafExpr("A", bef);
             BoolExpr rexpr = SetupFourVarXor(bef, 'W');
@@ -300,8 +300,8 @@ namespace BooleanLibTest
             // Now create the expression (A|B)|(~A&~B)&xorExpr,
             // which should have the value xorExpr when minimised
 
-            BoolExpr orExpr = new OrExpr(leftLeaf, rightLeaf);
-            BoolExpr andExpr = new AndExpr
+            OrExpr orExpr = new (leftLeaf, rightLeaf);
+            AndExpr andExpr = new 
                 (new NotExpr(leftLeaf), new NotExpr(rightLeaf));
             orExpr = new OrExpr(andExpr, orExpr);
             andExpr = new AndExpr(xorExpr, orExpr);
@@ -315,7 +315,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestComparer()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             _ = new LeafExpr("A", bef);
             BoolExpr rexpr = SetupFourVarXor(bef, 'S');
@@ -327,7 +327,7 @@ namespace BooleanLibTest
         [TestMethod]
         public void TestComparerOneNull()
         {
-            LeafIndexProvider bef = new LeafIndexProvider();
+            LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             BoolExpr rexpr = null;
             Assert.IsFalse(lexpr == rexpr);

@@ -28,8 +28,15 @@ namespace ParserGenerator
     /// and any attached code fragment that will become
     /// the body of the guard function.
     /// </summary>
+    /// <remarks>
+    /// Constructor
+    /// </remarks>
+    /// <param name="name">The name the function will have</param>
+    /// <param name="code">The code for the guard function</param>
+    /// <param name="guardType">The data type for the argument passed
+    /// to a guard function</param>
 
-    public class GrammarGuardOrAction
+    public class GrammarGuardOrAction(string name, string code = null, string guardType = null)
     {
         /// <summary>
         /// The name of the guard or action function
@@ -39,7 +46,7 @@ namespace ParserGenerator
         {
             get;
             set;
-        }
+        } = name;
 
         /// <summary>
         /// The code fragment that is the implementation
@@ -50,7 +57,7 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
+        } = code;
 
         /// <summary>
         /// Validate the $ arguments on the grammar rule to ensure
@@ -94,21 +101,6 @@ namespace ParserGenerator
         {
             get;
             private set;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="name">The name the function will have</param>
-        /// <param name="code">The code for the guard function</param>
-        /// <param name="guardType">The data type for the argument passed
-        /// to a guard function</param>
-
-        public GrammarGuardOrAction(string name, string code = null, string guardType = null)
-        {
-            Name = name;
-            Code = code;
-            GuardType = guardType;
-        }
+        } = guardType;
     }
 }

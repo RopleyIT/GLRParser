@@ -6,8 +6,13 @@ namespace Parsing
     /// A run-time representation of a merge handler
     /// as used in GLR parsing
     /// </summary>
+    /// <remarks>
+    /// Constructor
+    /// </remarks>
+    /// <param name="methodName">The name of the method
+    /// within the parser class that will be bound to.</param>
 
-    public class ParserMergeAction
+    public class ParserMergeAction(string methodName)
     {
 
         /// <summary>
@@ -20,7 +25,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = methodName;
 
         /// <summary>
         /// The delegate to the actual method to be called
@@ -30,19 +35,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="methodName">The name of the method
-        /// within the parser class that will be bound to.</param>
-
-        public ParserMergeAction(string methodName)
-        {
-            Function = null;
-            MethodName = methodName;
-        }
+        } = null;
 
         /// <summary>
         /// Implement run-time binding of the inline merge functions,

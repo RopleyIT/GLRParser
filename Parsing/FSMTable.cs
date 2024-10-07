@@ -29,27 +29,19 @@ namespace Parsing
     /// Note that one instance of this class can be shared across a
     /// number of parallel state machine instances.
     /// </summary>
+    /// <remarks>
+    /// Constructor. Initialises the state table and guard evaluators.
+    /// </remarks>
+    /// <param name="states">The behavioural description of
+    /// the finite state machine.</param>
+    /// <param name="guards">The list of guard evaluators
+    /// used as conditions on events.</param>
+    /// <param name="tokens">The lookup table that
+    /// associates names with integer values</param>
 
-    public class FSMTable
+    public class FSMTable(FSMState[] states,
+        TwoWayMap<string, int> tokens, bool ignoreErrors)
     {
-        /// <summary>
-        /// Constructor. Initialises the state table and guard evaluators.
-        /// </summary>
-        /// <param name="states">The behavioural description of
-        /// the finite state machine.</param>
-        /// <param name="guards">The list of guard evaluators
-        /// used as conditions on events.</param>
-        /// <param name="tokens">The lookup table that
-        /// associates names with integer values</param>
-
-        public FSMTable(FSMState[] states,
-            TwoWayMap<string, int> tokens, bool ignoreErrors)
-        {
-            States = states;
-            Tokens = tokens;
-            Bound = false;
-            ErrorRecoveryEnabled = ignoreErrors;
-        }
 
         /// <summary>
         /// The state transition table
@@ -59,7 +51,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = states;
 
         /// <summary>
         /// Indicates whether the state machine is expected to
@@ -71,7 +63,7 @@ namespace Parsing
         {
             get;
             set;
-        }
+        } = ignoreErrors;
 
         /// <summary>
         /// Lookup table for names of tokens as used
@@ -85,7 +77,7 @@ namespace Parsing
         {
             get;
             set;
-        }
+        } = tokens;
 
         /// <summary>
         /// Indicates whether the run-time binding operation
@@ -99,7 +91,7 @@ namespace Parsing
         {
             get;
             set;
-        }
+        } = false;
 
         /// <summary>
         /// At run-time, convert all the guard and action method names
@@ -119,19 +111,15 @@ namespace Parsing
             {
                 // Bind the entry and exit actions
 
-                if (state.EntryActions != null)
-                    state.EntryActions.Bind(fsmType);
-                if (state.ExitActions != null)
-                    state.ExitActions.Bind(fsmType);
+                state.EntryActions?.Bind(fsmType);
+                state.ExitActions?.Bind(fsmType);
 
                 // Now bind the guards and transition actions
 
                 foreach (FSMTransition col in state.Transitions)
                 {
-                    if (col.Condition != null)
-                        col.Condition.Bind(fsmType, false);
-                    if (col.InlineActions != null)
-                        col.InlineActions.Bind(fsmType);
+                    col.Condition?.Bind(fsmType, false);
+                    col.InlineActions?.Bind(fsmType);
                 }
             }
 

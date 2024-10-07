@@ -83,8 +83,15 @@ namespace Parsing
     /// A default implementation of the IToken interface,
     /// as used for tokens with a precomputed value.
     /// </summary>
+    /// <remarks>
+    /// Constructor
+    /// </remarks>
+    /// <param name="tokenType">Parser token type as an integer</param>
+    /// <param name="val">Value associated with token</param>
+    /// <param name="pos">The location in the input stream
+    /// at which the token appeared</param>
 
-    public class ParserToken : IToken
+    public class ParserToken(int tokenType, object val, string pos) : IToken
     {
         /// <summary>
         /// The weak type for the token. May well
@@ -99,7 +106,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = tokenType;
 
         /// <summary>
         /// Data captured by the tokeniser that
@@ -113,7 +120,7 @@ namespace Parsing
         {
             get;
             set;
-        }
+        } = val;
 
         /// <summary>
         /// Constructor
@@ -126,21 +133,6 @@ namespace Parsing
         public ParserToken(int tokenType, object val, int line)
             : this(tokenType, val, line.ToString())
         {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="tokenType">Parser token type as an integer</param>
-        /// <param name="val">Value associated with token</param>
-        /// <param name="pos">The location in the input stream
-        /// at which the token appeared</param>
-
-        public ParserToken(int tokenType, object val, string pos)
-        {
-            Type = tokenType;
-            Value = val;
-            Position = pos;
         }
 
         /// <summary>
@@ -173,7 +165,7 @@ namespace Parsing
         {
             get;
             private set;
-        }
+        } = pos;
 
         /// <summary>
         /// Produce a string representation of the token for debugging

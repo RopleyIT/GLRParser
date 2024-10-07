@@ -23,14 +23,14 @@ namespace Parsing
         // The set of referenced assemblies used by the default parser
 
         private static readonly string[] defaultAssemblies =
-        {
+        [
             "System",
             "System.Private.CoreLib",
             "System.Runtime",
             "System.Collections",
             "System.Linq",
             "System.IO"
-        };
+        ];
 
         /// <summary>
         /// Compile a parser or state machine source code
@@ -153,7 +153,7 @@ namespace Parsing
         /// </summary>
         /// <returns>The six character identifier</returns>
 
-        private string UniqueId()
+        private static string UniqueId()
         {
             long stamp = DateTime.Now.Ticks;
 

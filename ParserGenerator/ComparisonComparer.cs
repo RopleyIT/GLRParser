@@ -34,23 +34,17 @@ namespace ParserGenerator
     /// </summary>
     /// <typeparam name="T">The type of the items 
     /// being ordered</typeparam>
+    /// <remarks>
+    /// Constructor. Wraps a Comparison(Of T)
+    /// so that it can be exposed as an
+    /// IComparer(Of T)
+    /// </remarks>
+    /// <param name="cmp">The comparison object
+    /// to be wrapped</param>
 
-    internal class ComparisonComparer<T> : IComparer<T>, IComparer
+    internal class ComparisonComparer<T>(Comparison<T> cmp) : IComparer<T>, IComparer
     {
-        private readonly Comparison<T> comparison;
-
-        /// <summary>
-        /// Constructor. Wraps a Comparison(Of T)
-        /// so that it can be exposed as an
-        /// IComparer(Of T)
-        /// </summary>
-        /// <param name="cmp">The comparison object
-        /// to be wrapped</param>
-
-        public ComparisonComparer(Comparison<T> cmp)
-        {
-            comparison = cmp;
-        }
+        private readonly Comparison<T> comparison = cmp;
 
         /// <summary>
         /// Implementation of the IComparer(Of T)
