@@ -20,6 +20,8 @@
 // software if you do not agree to these terms.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -191,7 +193,10 @@ namespace Parsing
             // this class, handling any errors along the way
 
             MethodInfo methInfo = parserClassType.GetMethod
-                (methodName, BindingFlags.Instance | BindingFlags.Public);
+                (methodName, BindingFlags.Instance 
+                    | BindingFlags.Static 
+                    | BindingFlags.Public 
+                    | BindingFlags.FlattenHierarchy);
             if (methInfo == null)
                 throw new ArgumentException
                     ("Method " + methodName + " not found in class " + parserClassType.Name);
@@ -220,76 +225,43 @@ namespace Parsing
         private static TProxy CreateProxy<TProxy>
             (Type containerClassType, string methodName, Type firstArgType, Type secondArgType, Type retType)
         {
+            if(firstArgType == null && secondArgType != null)
+                throw new ArgumentException("First argType cannot be null if second is not");
+
             MethodInfo method = GetParserMethodInfo(containerClassType, methodName);
 
-            // Build parameters to the new proxy method
-
-            ParameterExpression argumentParameter = null;
-            ParameterExpression secondArgParameter = null;
-
-            if (firstArgType != null)
-                argumentParameter = Expression.Parameter(firstArgType, "argument");
-            if (secondArgType != null)
-                secondArgParameter = Expression.Parameter(secondArgType, "argument2");
-
-            ParameterExpression instanceParameter = Expression.Parameter(typeof(object), "target");
-
-            // Create a call to the method for which we are a proxy, ensuring
-            // the class of the instance variable matches the class containing
+            // Build the expression for 'this' if an instance method. The
+            // class of the instance variable must match the class containing
             // the method to be invoked, and the single object parameter is
             // passed. This is analogous to writing source code:
             // ((ParserClassType)parserInstance).Guard(argument);
+            // If the method is a static method, we set up a dummy
+            // instance parameter for the lambda expression, but set the
+            // this reference for the static method to null.
 
-            Expression call;
-            if (secondArgParameter == null)
+            ParameterExpression instanceParameter 
+                = Expression.Parameter(typeof(object), "target");
+            UnaryExpression thisParameter = null;
+            if (!method.IsStatic)
             {
-                // One parameter to the method call
-
-                if (argumentParameter != null)
-                    call = Expression.Call
-                    (
-                        Expression.Convert
-                        (
-                            instanceParameter,
-                            method.DeclaringType
-                        ),
-                        method,
-                        argumentParameter
-                    );
-
-                // No parameters to the method call
-
-                else
-                    call = Expression.Call
-                    (
-                        Expression.Convert
-                        (
-                            instanceParameter,
-                            method.DeclaringType
-                        ),
-                        method
-                    );
+                thisParameter = Expression.Convert
+                (
+                    instanceParameter,
+                    method.DeclaringType
+                );
             }
-            else
-            {
-                if (argumentParameter != null)
 
-                    // Two parameters to the method call
+            // Build parameter list for the new proxy method
 
-                    call = Expression.Call
-                    (
-                        Expression.Convert
-                        (
-                            instanceParameter,
-                            method.DeclaringType
-                        ),
-                        method,
-                        argumentParameter,
-                        secondArgParameter
-                    );
-                else
-                    throw new ArgumentException("First argType cannot be null if second is not");
-            }
+            List<ParameterExpression> parms = [instanceParameter];
+            if (firstArgType != null)
+                parms.Add(Expression.Parameter(firstArgType, "argument"));
+            if (secondArgType != null)
+                parms.Add(Expression.Parameter(secondArgType, "argument2"));
+
+            // Create a call to the method for which we are a proxy, 
+
+            Expression call = Expression.Call(thisParameter, method, parms.Skip(1));
 
             // If the proxy is to a function that returns a value,
             // we need to cast the return data to the expected type.
@@ -305,41 +277,10 @@ namespace Parsing
             // the return type from the named method is cast to the expected
             // boolean type
 
-            Expression<TProxy> lambda;
-
-            // Two parameters to the method call
-
-            if (argumentParameter != null && secondArgParameter != null)
-                lambda = Expression.Lambda<TProxy>
-                (
-                    call,
-                    instanceParameter,
-                    argumentParameter,
-                    secondArgParameter
-                );
-
-            // One parameter to the method call
-
-            else if (argumentParameter != null)
-                lambda = Expression.Lambda<TProxy>
-                (
-                    call,
-                    instanceParameter,
-                    argumentParameter
-                );
-
-            // No parameters to the method call
-
-            else
-                lambda = Expression.Lambda<TProxy>
-                (
-                    call,
-                    instanceParameter
-                );
+            Expression<TProxy> lambda = Expression.Lambda<TProxy>(call, parms);
 
             // Convert the expression tree into IL code so that once it
-            // is executed, it will be executed rapidly after JIT
-            // compilation.
+            // has been executed once, it will be executed rapidly
 
             return lambda.Compile();
         }

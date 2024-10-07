@@ -98,13 +98,13 @@ namespace ParserParserTests
 
         // Guards
 
-        public bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
+        public static bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
 
-        public bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
+        public static bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
                 || arg.ToString().EndsWith("ed");
 
-        public bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
+        public static bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
 
-        public bool Past(object arg) => arg.ToString().EndsWith("ed");
+        public static bool Past(object arg) => arg.ToString().EndsWith("ed");
     }
 }

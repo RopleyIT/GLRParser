@@ -1752,10 +1752,10 @@ grammar(JourneyList)
 
     public class GPParser : Parser
     {
-        public bool C(object args) => true;
+        public static bool C(object _) => true;
 
-        public bool D(object args) => true;
+        public static bool D(object _) => true;
 
-        public bool E(object args) => true;
+        public static bool E(object _) => true;
     }
 }
