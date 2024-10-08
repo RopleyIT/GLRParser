@@ -1,0 +1,44 @@
+﻿@using PedXController
+@inject CrossingController CxController;
+@rendermode InteractiveServer
+
+<svg id="xingRq" width="240" height="240">
+    <style>
+        .stopgo {
+            font: bold 36px sans-serif;
+        }
+
+        .press {
+            font: 14px sans-serif;
+        }
+
+        .rqbutton:hover, .press:hover {
+            opacity: 0.25;
+        }
+    </style>
+
+    <rect x="110" y="0" width="20" height="240" style="fill:rgb(128, 128, 128);stroke-width:2;stroke:rgb(0,0,0)" />
+    <rect width="240" height="200" style="fill:rgb(0, 0, 0);stroke-width:2;stroke:rgb(0,0,0)" />
+    <text x="20" y="60" class="stopgo" fill=@GetRed()>Don't Walk!</text>
+    <text x="70" y="100" class="stopgo" fill=@GetGreen()>Walk!</text>
+    <rect width="60" height="30" x="90" y="130" fill="yellow" />
+    <text x="80" y="180" class="press" fill="white">Press to cross</text>
+    <rect class="rqbutton" width="60" height="30" x="90" y="130" fill="lightgray" @onclick=Cross />
+</svg>
+@code {
+    string Message = string.Empty;
+
+    string GetRed() => CxController.WalkIndicator.CanWalk ? "black" : "red";
+    string GetGreen() => CxController.WalkIndicator.CanWalk ? "green" : "black";
+
+    protected override void OnInitialized() =>
+        CxController.WalkIndicator.PropertyChanged += OnControllerChangeEvent;
+
+    private void Cross(MouseEventArgs evt)
+    {
+        CxController.InjectButtonPress();
+    }
+
+    private void OnControllerChangeEvent(object o, EventArgs e) =>
+        InvokeAsync(() => StateHasChanged());
+}

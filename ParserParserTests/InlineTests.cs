@@ -32,13 +32,6 @@ namespace ParserParserTests
     [TestClass]
     public class InlineTests
     {
-        public InlineTests()
-        {
-            //
-            // TODO: Add constructor logic here
-            //
-        }
-
         private TestContext testContextInstance;
 
         /// <summary>
@@ -293,6 +286,7 @@ namespace ParserParserTests
             Assert.IsTrue(result);
             Assert.AreEqual(3, itp.AdjectivesCount);
             Assert.AreEqual(1, itp.PastCount);
+            Assert.AreEqual(1, itp.PresentCount);
             Assert.AreEqual(1, itp.SingularCount);
             Assert.AreEqual(1, itp.PluralCount);
             Assert.AreEqual("pink", itp.AdjectiveList[2]);
@@ -308,6 +302,7 @@ namespace ParserParserTests
             Assert.IsTrue(result);
             Assert.AreEqual(3, clone.AdjectivesCount);
             Assert.AreEqual(1, clone.PastCount);
+            Assert.AreEqual(1, itp.PresentCount);
             Assert.AreEqual(1, clone.SingularCount);
             Assert.AreEqual(1, clone.PluralCount);
             Assert.AreEqual("pink", clone.AdjectiveList[2]);
