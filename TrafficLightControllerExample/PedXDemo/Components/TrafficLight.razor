@@ -13,7 +13,7 @@
     protected override void OnInitialized() =>
         CxController.Light.PropertyChanged += OnControllerChangeEvent;
 
-    private void OnControllerChangeEvent(object o, EventArgs e) =>
+    private void OnControllerChangeEvent(object? o, EventArgs e) =>
         InvokeAsync(() => StateHasChanged());
 
     string GetRed() => CxController.Light.Red ? "red" : "gray";

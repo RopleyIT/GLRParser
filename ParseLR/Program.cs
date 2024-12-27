@@ -44,8 +44,8 @@ namespace ParseLR
 
         // Paths to input and output files
 
-        private static string inputFile = null;
-        private static string outputFile = null;
+        private static string? inputFile = null;
+        private static string? outputFile = null;
 
         /// <summary>
         /// Entry point to application
@@ -286,8 +286,15 @@ namespace ParseLR
 
         private static void RenderHelpInfo(string errMessage)
         {
-            AssemblyName aName = Assembly.GetEntryAssembly().GetName();
-            Version ver = aName.Version;
+            string ver = "(Unknown)";
+            Assembly? entryAssembly = Assembly.GetEntryAssembly();
+            if (entryAssembly != null)
+            {
+                Version? version = entryAssembly.GetName().Version;
+                if(version != null)
+                    ver = version.ToString();
+            }
+
             Console.WriteLine
             (
                 $"PARSELR: A C# Canonical LR Parser Generator, ver. {ver}\r\n" +

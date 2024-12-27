@@ -121,7 +121,7 @@
 
     private void CalcClick(char c)
     {
-        if (Expression == "0" && (char.IsDigit(c) || c == '.'))
+        if (Expression == "0")
             Expression = c.ToString();
         else
             Expression += c;

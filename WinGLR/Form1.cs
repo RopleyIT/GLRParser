@@ -25,7 +25,7 @@ namespace WinGLR
             Application.Exit();
         }
 
-        private string inputFile = null;
+        private string? inputFile = null;
 
         private void mnuFileOpen_Click(object sender, EventArgs e)
         {
@@ -72,6 +72,9 @@ namespace WinGLR
 
                 // Connect the input and output files
 
+                if(inputFile == null)
+                    throw new ArgumentException("No input file specified");
+
                 inputStream = new StreamReader(inputFile);
                 outputStream = new StreamWriter($"{fileStem}.designer.cs", false);
 
@@ -88,18 +91,17 @@ namespace WinGLR
 
                 // Build the parser and associated objects
 
-                List<string> extRefs;
                 string errResult;
                 if (chkFSM.Checked)
                     errResult = FSMFactory.CreateOfflineStateMachine
-                        (inputStream, outputStream, chkErrorToken.Checked, out extRefs);
+                        (inputStream, outputStream, chkErrorToken.Checked, out _);
                 else
                 {
                     errResult = ParserFactory.CreateOfflineParser
                     (
                         inputStream, outputStream, tableStream,
                         debugStream, chkCompressSates.Checked, chkErrorToken.Checked,
-                        chkGLRParser.Checked, out extRefs
+                        chkGLRParser.Checked, out List<string> extRefs
                     );
 
                     // ParseLR is only used to create offline parsers for

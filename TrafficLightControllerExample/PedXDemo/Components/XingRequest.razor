@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 
 <svg id="xingRq" width="240" height="240">
-    <style>
+    <style type="text/css">
         .stopgo {
             font: bold 36px sans-serif;
         }
@@ -39,6 +39,6 @@
         CxController.InjectButtonPress();
     }
 
-    private void OnControllerChangeEvent(object o, EventArgs e) =>
+    private void OnControllerChangeEvent(object? o, EventArgs e) =>
         InvokeAsync(() => StateHasChanged());
 }
