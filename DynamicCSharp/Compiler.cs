@@ -87,7 +87,7 @@ namespace DynamicCSharp
             if (t == null)
                 throw new ArgumentException("Adding reference to null type");
 
-            var mdRef = MetadataReference.CreateFromFile(t.GetTypeInfo().Assembly.Location) 
+            var mdRef = MetadataReference.CreateFromFile(t.GetTypeInfo().Assembly.Location)
                     ?? throw new ArgumentException("Metadata reference not found");
             metaDataReferences.Add(mdRef);
         }
@@ -152,7 +152,7 @@ namespace DynamicCSharp
 
             if (string.IsNullOrEmpty(assemblyPath))
                 throw new ArgumentException("Assembly path not found in trusted assmeblies");
-            var mdRef = MetadataReference.CreateFromFile(assemblyPath) 
+            var mdRef = MetadataReference.CreateFromFile(assemblyPath)
                 ?? throw new ArgumentException("Metadata reference not found");
             metaDataReferences.Add(mdRef);
         }
@@ -235,7 +235,7 @@ namespace DynamicCSharp
         private void GenerateSyntaxTree()
         {
             var cSharpVersion = Enum
-                .GetValues(typeof(LanguageVersion))
+                .GetValues<LanguageVersion>()
                 .Cast<LanguageVersion>()
                 .Max();
             var parseOptions = new CSharpParseOptions

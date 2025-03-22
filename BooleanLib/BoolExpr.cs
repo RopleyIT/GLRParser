@@ -173,8 +173,7 @@ namespace BooleanLib
 
         public BooleanComparison CompareExpressions(BoolExpr otherExpr)
         {
-            if (otherExpr == null)
-                throw new ArgumentNullException(nameof(otherExpr));
+            ArgumentNullException.ThrowIfNull(otherExpr);
 
             // First check for independent boolean functions.
             // Such pairs of functions have non-overlapping
@@ -426,10 +425,9 @@ namespace BooleanLib
         {
             if (asIdentifier == null)
             {
-                if (leafIndexProvider == null)
-                    throw new ArgumentNullException(nameof(leafIndexProvider));
+                ArgumentNullException.ThrowIfNull(leafIndexProvider);
 
-                StringBuilder sb = new ();
+                StringBuilder sb = new();
 
                 // Find the normalised minimum set of leaf names
                 // that actually contribute to the expression
@@ -444,7 +442,7 @@ namespace BooleanLib
                 // which consists of the individual leaf names
                 // catenated in order, separated by underscores.
 
-                LeafIndexProvider exprProvider = new ();
+                LeafIndexProvider exprProvider = new();
                 foreach (string leafName in leafNames)
                 {
                     exprProvider.FindLeafIndex(leafName);

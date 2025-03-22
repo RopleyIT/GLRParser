@@ -86,8 +86,7 @@ namespace Parsing
 
         public string ToString(TwoWayMap<string, int> tokenMap)
         {
-            if (tokenMap == null)
-                throw new ArgumentNullException(nameof(tokenMap));
+            ArgumentNullException.ThrowIfNull(tokenMap);
 
             string result = tokenMap[InputToken];
             if (Condition != null)

@@ -193,9 +193,9 @@ namespace Parsing
             // this class, handling any errors along the way
 
             MethodInfo methInfo = parserClassType.GetMethod
-                (methodName, BindingFlags.Instance 
-                    | BindingFlags.Static 
-                    | BindingFlags.Public 
+                (methodName, BindingFlags.Instance
+                    | BindingFlags.Static
+                    | BindingFlags.Public
                     | BindingFlags.FlattenHierarchy);
             if (methInfo == null)
                 throw new ArgumentException
@@ -225,7 +225,7 @@ namespace Parsing
         private static TProxy CreateProxy<TProxy>
             (Type containerClassType, string methodName, Type firstArgType, Type secondArgType, Type retType)
         {
-            if(firstArgType == null && secondArgType != null)
+            if (firstArgType == null && secondArgType != null)
                 throw new ArgumentException("First argType cannot be null if second is not");
 
             MethodInfo method = GetParserMethodInfo(containerClassType, methodName);
@@ -239,7 +239,7 @@ namespace Parsing
             // instance parameter for the lambda expression, but set the
             // this reference for the static method to null.
 
-            ParameterExpression instanceParameter 
+            ParameterExpression instanceParameter
                 = Expression.Parameter(typeof(object), "target");
             UnaryExpression thisParameter = null;
             if (!method.IsStatic)

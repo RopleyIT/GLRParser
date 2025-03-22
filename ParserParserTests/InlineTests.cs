@@ -30,20 +30,14 @@ namespace ParserParserTests
     /// Summary description for InlineTests
     /// </summary>
     [TestClass]
-    public class InlineTests
+    public class InlineTests(TestContext context)
     {
-        private TestContext testContextInstance;
-
         /// <summary>
         /// Gets or sets the test context which provides
         /// information about and functionality for the current test run.
         /// </summary>
 
-        public TestContext TestContext
-        {
-            get => testContextInstance;
-            set => testContextInstance = value;
-        }
+        public TestContext TestContext { get; set; } = context;
 
         #region Additional test attributes
         //
@@ -265,7 +259,7 @@ namespace ParserParserTests
             );
             InlineTestParser itp = ParserFactory<InlineTestParser>.CreateInstance();
 
-            Assert.IsTrue(errString.Length == 0);
+            Assert.AreEqual(0, errString.Length);
             Assert.IsNotNull(itp);
 
             // Grammar based on the words: cat dog rabbit human,
@@ -333,7 +327,7 @@ namespace ParserParserTests
 
             InlineTestParser itp = ParserFactory<InlineTestParser>.CreateInstance();
 
-            Assert.IsTrue(ParserFactory<InlineTestParser>.CompilerErrors.Length == 0);
+            Assert.AreEqual(0, ParserFactory<InlineTestParser>.CompilerErrors.Length);
             Assert.IsNotNull(itp);
 
             // Grammar based on the words: cat dog rabbit human,
@@ -398,7 +392,7 @@ namespace ParserParserTests
             );
             InlineTestParser itp = ParserFactory<InlineTestParser>.CreateInstance();
 
-            Assert.IsTrue(ParserFactory<InlineTestParser>.CompilerErrors.Length == 0);
+            Assert.AreEqual(0, ParserFactory<InlineTestParser>.CompilerErrors.Length);
             Assert.IsNotNull(itp);
 
             // Grammar based on the words: cat dog rabbit human,

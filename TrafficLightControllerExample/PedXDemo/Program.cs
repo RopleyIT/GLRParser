@@ -1,5 +1,5 @@
-using PedXDemo.Components;
 using PedXController;
+using PedXDemo.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 

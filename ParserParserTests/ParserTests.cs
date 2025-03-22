@@ -1297,7 +1297,7 @@ grammar(JourneyList)
                 }";
 
             LRParser p = ParserFactory<LRParser>.CreateInstance();
-            p.ErrorLevel = MessageLevel.WARN;
+            p.ErrorLevel = Parsing.MessageLevel.WARN;
             StringBuilder se = new();
             //p.TraceLog = new StringWriter(sb);
             p.ErrStream = new StringWriter(se);
@@ -1633,13 +1633,13 @@ grammar(JourneyList)
             Assert.AreEqual(t1, gis.TransitionsInOrder[2].Element.Token);
             Assert.AreEqual(L, gis.TransitionsInOrder[2].Element.Guard);
             Assert.AreEqual(t1, gis.TransitionsInOrder[3].Element.Token);
-            Assert.AreEqual(null, gis.TransitionsInOrder[3].Element.Guard);
+            Assert.IsNull(gis.TransitionsInOrder[3].Element.Guard);
             Assert.AreEqual(t2, gis.TransitionsInOrder[4].Element.Token);
             Assert.AreEqual(LAndNotR, gis.TransitionsInOrder[4].Element.Guard);
             Assert.AreEqual(t2, gis.TransitionsInOrder[5].Element.Token);
             Assert.AreEqual(L, gis.TransitionsInOrder[5].Element.Guard);
             Assert.AreEqual(t2, gis.TransitionsInOrder[6].Element.Token);
-            Assert.AreEqual(null, gis.TransitionsInOrder[6].Element.Guard);
+            Assert.IsNull(gis.TransitionsInOrder[6].Element.Guard);
         }
 
         [TestMethod]
@@ -1682,13 +1682,13 @@ grammar(JourneyList)
             Assert.AreEqual(t1, gis.TransitionsInOrder[2].Element.Token);
             Assert.AreEqual(LOrNotR, gis.TransitionsInOrder[2].Element.Guard);
             Assert.AreEqual(t1, gis.TransitionsInOrder[3].Element.Token);
-            Assert.AreEqual(null, gis.TransitionsInOrder[3].Element.Guard);
+            Assert.IsNull(gis.TransitionsInOrder[3].Element.Guard);
             Assert.AreEqual(t2, gis.TransitionsInOrder[4].Element.Token);
             Assert.AreEqual(L, gis.TransitionsInOrder[4].Element.Guard);
             Assert.AreEqual(t2, gis.TransitionsInOrder[5].Element.Token);
             Assert.AreEqual(LOrNotR, gis.TransitionsInOrder[5].Element.Guard);
             Assert.AreEqual(t2, gis.TransitionsInOrder[6].Element.Token);
-            Assert.AreEqual(null, gis.TransitionsInOrder[6].Element.Guard);
+            Assert.IsNull(gis.TransitionsInOrder[6].Element.Guard);
         }
     }
 

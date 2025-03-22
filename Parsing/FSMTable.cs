@@ -147,8 +147,7 @@ namespace Parsing
         {
             // Argument validation
 
-            if (autoGenFSMType == null)
-                throw new ArgumentNullException(nameof(autoGenFSMType));
+            ArgumentNullException.ThrowIfNull(autoGenFSMType);
 
             // Create dynamic IL code to invoke the constructor
             // for the found parser class type, then cache it

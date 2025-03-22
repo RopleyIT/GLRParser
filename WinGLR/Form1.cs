@@ -1,15 +1,8 @@
-﻿using System;
+﻿using Parsing;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using ParserGenerator;
-using Parsing;
 
 namespace WinGLR
 {
@@ -30,7 +23,7 @@ namespace WinGLR
         private void mnuFileOpen_Click(object sender, EventArgs e)
         {
             var dlgResult = ofdGrammar.ShowDialog(this);
-            if(dlgResult == DialogResult.OK)
+            if (dlgResult == DialogResult.OK)
             {
                 inputFile = ofdGrammar.FileName;
                 btnGenerate.Enabled = true;
@@ -72,7 +65,7 @@ namespace WinGLR
 
                 // Connect the input and output files
 
-                if(inputFile == null)
+                if (inputFile == null)
                     throw new ArgumentException("No input file specified");
 
                 inputStream = new StreamReader(inputFile);

@@ -55,15 +55,13 @@ namespace GLRParserTests
         ";
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException),
-            "Failed to create parser:\r\nShift/reduce conflict")]
         public void TestEEiForConflicts()
         {
             StringBuilder tableString = new();
             StringBuilder srcString = new();
             using TextWriter tabOut = new StringWriter(tableString);
             using TextWriter srcOut = new StringWriter(srcString);
-            ParserFactory<EEiConflictedParser>.InitializeFromGrammar
+            Assert.ThrowsExactly<ArgumentException>(() => ParserFactory<EEiConflictedParser>.InitializeFromGrammar
             (
                 new StringReader(EEiGrammar),
                 tabOut,
@@ -71,8 +69,7 @@ namespace GLRParserTests
                 false,
                 false,
                 srcOut
-            );
-            Assert.IsTrue(string.IsNullOrEmpty(ParserFactory<EEiConflictedParser>.CompilerErrors));
+            ));
         }
 
         private static readonly string EEiGLRGrammar = @"
@@ -113,7 +110,7 @@ namespace GLRParserTests
                 true,
                 srcOut
             );
-            Assert.IsTrue(ParserFactory<EEiGLRParser>.CompilerErrors.Length == 0);
+            Assert.AreEqual(0, ParserFactory<EEiGLRParser>.CompilerErrors.Length);
             EEiGLRParser itp = ParserFactory<EEiGLRParser>.CreateInstance();
             Assert.IsNotNull(itp);
         }
@@ -215,7 +212,7 @@ namespace GLRParserTests
                 srcOut
             );
 
-            Assert.IsTrue(ParserFactory<EEiGLRParser>.CompilerErrors.Length == 0);
+            Assert.AreEqual(0, ParserFactory<EEiGLRParser>.CompilerErrors.Length);
             EEiGLRParser itp = ParserFactory<EEiGLRParser>.CreateInstance();
             Assert.IsNotNull(itp);
         }
@@ -622,7 +619,7 @@ namespace GLRParserTests
                 srcOut
             );
 
-            Assert.IsTrue(ParserFactory<InlineGLRTestParser>.CompilerErrors.Length == 0);
+            Assert.AreEqual(0, ParserFactory<InlineGLRTestParser>.CompilerErrors.Length);
             InlineGLRTestParser itp = ParserFactory<InlineGLRTestParser>.CreateInstance();
             Assert.IsNotNull(itp);
             //srcString = new StringBuilder();

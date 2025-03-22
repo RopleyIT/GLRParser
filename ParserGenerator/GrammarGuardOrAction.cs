@@ -59,6 +59,9 @@ namespace ParserGenerator
             private set;
         } = code;
 
+        private static readonly Regex RxDollarArg 
+            = new(@"\$([0-9]+)", RegexOptions.Compiled);
+
         /// <summary>
         /// Validate the $ arguments on the grammar rule to ensure
         /// they are in range for the grammar item the code follows
@@ -76,7 +79,7 @@ namespace ParserGenerator
             if (Code == null)
                 return string.Empty;
 
-            MatchCollection mList = Regex.Matches(Code, @"\$([0-9]+)");
+            MatchCollection mList = RxDollarArg.Matches(Code);
             if (mList != null)
             {
                 foreach (Match m in mList)

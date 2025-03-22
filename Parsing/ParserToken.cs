@@ -178,8 +178,7 @@ namespace Parsing
 
         public string AsString(TwoWayMap<string, int> tokenMap, bool showValue, int indent)
         {
-            if (tokenMap == null)
-                throw new ArgumentNullException(nameof(tokenMap));
+            ArgumentNullException.ThrowIfNull(tokenMap);
             string result = string.Empty;
             for (int i = 0; i < indent; i++)
                 result += "  ";

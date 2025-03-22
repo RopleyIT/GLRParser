@@ -1,5 +1,5 @@
-﻿using System.IO;
-using Parsing;
+﻿using Parsing;
+using System.IO;
 
 namespace CalculatorDemo
 {
@@ -109,7 +109,7 @@ namespace CalculatorDemo
             calc.DebugStream = debugResults;
             calc.ErrStream = errorResults;
             CalculatorTokeniser tokeniser
-                = new (input, calc.Tokens);
+                = new(input, calc.Tokens);
             bool success = calc.Parse(tokeniser);
 
             if (success && calc.ParserResults.Length == 1)

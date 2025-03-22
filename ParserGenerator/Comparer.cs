@@ -38,7 +38,7 @@ namespace ParserGenerator
 
     public class Comparer<T>(Func<T, T, bool> cmpDelegate) : IEqualityComparer<T>
     {
-        private readonly Func<T, T, bool> comparer = cmpDelegate 
+        private readonly Func<T, T, bool> comparer = cmpDelegate
             ?? throw new ArgumentNullException
                 ("cmpDelegate", "Need a comparer delegate");
 

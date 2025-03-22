@@ -291,7 +291,7 @@ namespace ParseLR
             if (entryAssembly != null)
             {
                 Version? version = entryAssembly.GetName().Version;
-                if(version != null)
+                if (version != null)
                     ver = version.ToString();
             }
 

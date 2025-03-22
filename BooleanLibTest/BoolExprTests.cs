@@ -158,7 +158,7 @@ namespace BooleanLibTest
             LeafIndexProvider bef = new();
             BoolExpr lexpr = SetupFourVarXor(bef, 'S');
             BoolExpr rexpr = SetupFourVarXor(bef, 'W');
-            OrExpr expr = new 
+            OrExpr expr = new
             (
                 new AndExpr(new NotExpr(lexpr), rexpr),
                 new AndExpr(lexpr, new NotExpr(rexpr))
@@ -192,8 +192,8 @@ namespace BooleanLibTest
             // Now create the expression (A|B)|(~A&~B)&xorExpr,
             // which should have the value xorExpr when minimised
 
-            OrExpr orExpr = new (leftLeaf, rightLeaf);
-            AndExpr andExpr = new 
+            OrExpr orExpr = new(leftLeaf, rightLeaf);
+            AndExpr andExpr = new
                 (new NotExpr(leftLeaf), new NotExpr(rightLeaf));
             orExpr = new OrExpr(andExpr, orExpr);
             andExpr = new AndExpr(xorExpr, orExpr);
@@ -227,8 +227,8 @@ namespace BooleanLibTest
             // Now create the expression (A|B)|(~A&~B)&xorExpr,
             // which should have the value xorExpr when minimised
 
-            OrExpr orExpr = new (leftLeaf, rightLeaf);
-            AndExpr andExpr = new 
+            OrExpr orExpr = new(leftLeaf, rightLeaf);
+            AndExpr andExpr = new
                 (new NotExpr(leftLeaf), new NotExpr(rightLeaf));
             orExpr = new OrExpr(andExpr, orExpr);
             andExpr = new AndExpr(xorExpr, orExpr);
@@ -300,8 +300,8 @@ namespace BooleanLibTest
             // Now create the expression (A|B)|(~A&~B)&xorExpr,
             // which should have the value xorExpr when minimised
 
-            OrExpr orExpr = new (leftLeaf, rightLeaf);
-            AndExpr andExpr = new 
+            OrExpr orExpr = new(leftLeaf, rightLeaf);
+            AndExpr andExpr = new
                 (new NotExpr(leftLeaf), new NotExpr(rightLeaf));
             orExpr = new OrExpr(andExpr, orExpr);
             andExpr = new AndExpr(xorExpr, orExpr);

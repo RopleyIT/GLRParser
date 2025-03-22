@@ -177,10 +177,8 @@ namespace Parsing
         {
             // Implement the exceptions defined for IList<T>.CopyTo()
 
-            if (array == null)
-                throw new ArgumentNullException(nameof(array));
-            if (arrayIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+            ArgumentNullException.ThrowIfNull(array);
+            ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
             if (WrappedList.Count > array.Length - arrayIndex)
                 throw new ArgumentException("Not enough space in array to copy list");
 

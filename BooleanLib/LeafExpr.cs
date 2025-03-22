@@ -56,8 +56,7 @@ namespace BooleanLib
 
         public LeafExpr(string name, LeafIndexProvider indexProvider)
         {
-            if (indexProvider == null)
-                throw new ArgumentNullException(nameof(indexProvider));
+            ArgumentNullException.ThrowIfNull(indexProvider);
 
             Name = name;
             index = indexProvider.FindLeafIndex(name);

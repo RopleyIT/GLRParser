@@ -177,8 +177,7 @@ namespace ParserGenerator
 
         public bool SameExcludingLookAheadToken(GrammarItem gr)
         {
-            if (gr == null)
-                throw new ArgumentNullException(nameof(gr));
+            ArgumentNullException.ThrowIfNull(gr);
 
             return Production == gr.Production && Position == gr.Position;
         }

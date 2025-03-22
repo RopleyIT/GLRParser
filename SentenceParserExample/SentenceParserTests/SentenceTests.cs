@@ -1,5 +1,5 @@
-﻿using Xunit;
-using SentenceParser;
+﻿using SentenceParser;
+using Xunit;
 
 namespace SentenceParserTests
 {
@@ -11,7 +11,7 @@ namespace SentenceParserTests
             string sentence =
                 "The hairy rabbit noisily licks a pink human.";
             InlineSentenceParser theParser
-                = new ();
+                = new();
             SentenceParser.SentenceParser parserInstance
                 = theParser.ParseSentence(sentence);
             Assert.True(string.IsNullOrEmpty(parserInstance.Errors));

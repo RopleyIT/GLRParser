@@ -30,7 +30,7 @@ namespace PedXController
             // Parse the grammar file to create the state machine engine for
             // the traffic light controller.
 
-            using StreamReader grammarStream = new (grammarFileLocation);
+            using StreamReader grammarStream = new(grammarFileLocation);
             FSMFactory<CrossingController>.InitializeFromGrammar(grammarStream, false);
             CrossingController cc = FSMFactory<CrossingController>.CreateInstance();
             return cc;

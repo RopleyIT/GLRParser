@@ -274,8 +274,7 @@ namespace Parsing
 
         public bool CheckAndInsertGuardToken(GrammarGuardOrAction guard)
         {
-            if (guard == null)
-                throw new ArgumentNullException(nameof(guard));
+            ArgumentNullException.ThrowIfNull(guard);
 
             // Make sure we are not reusing the identifier
 
@@ -421,7 +420,7 @@ namespace Parsing
             // Is this the name of a terminal token?
 
             GrammarToken tok = ConstructedGrammar.Terminals
-                .FirstOrDefault(t => t.Text == tokStr) 
+                .FirstOrDefault(t => t.Text == tokStr)
                 ?? ConstructedGrammar.Nonterminals
                     .FirstOrDefault(t => t.Text == tokStr);
 

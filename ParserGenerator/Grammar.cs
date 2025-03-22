@@ -311,7 +311,7 @@ namespace ParserGenerator
             // the list of terminal tokens recognised by the
             // parser
 
-            GrammarToken endingToken 
+            GrammarToken endingToken
                 = new(EOFTokenValue, TokenType.Terminal, "EOF");
             EndingElement = new GrammarElement
                 (endingToken, null);

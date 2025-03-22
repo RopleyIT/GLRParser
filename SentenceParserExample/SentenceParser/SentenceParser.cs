@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Parsing;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Parsing;
 
 namespace SentenceParser
 {

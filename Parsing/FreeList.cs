@@ -19,6 +19,7 @@
 // agreement to these terms and conditions. Do not use this 
 // software if you do not agree to these terms.
 
+using System.Threading;
 
 namespace Parsing
 {
@@ -74,7 +75,7 @@ namespace Parsing
 
         private T freeList;
         private readonly int growth;
-        private readonly object mutex;
+        private readonly Lock mutex;
 
         /// <summary>
         /// Constructor. Sets an initial expected capacity
@@ -89,7 +90,7 @@ namespace Parsing
         {
             // Create the multithreading lock
 
-            mutex = new object();
+            mutex = new Lock();
 
             // Tune the granularity by which
             // the free list is repopulated

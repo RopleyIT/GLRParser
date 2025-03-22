@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Parsing;
+using System;
 using System.IO;
 using System.Text;
-using Parsing;
 
 namespace SentenceParser
 {
@@ -39,7 +39,7 @@ namespace SentenceParser
         /// <summary>
         /// Optional output stream for verbose parsing output from the parser
         /// </summary>
-        
+
         public TextWriter DebugStream
         {
             get;
