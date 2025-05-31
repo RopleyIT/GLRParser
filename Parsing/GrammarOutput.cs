@@ -44,6 +44,8 @@ namespace Parsing
             "// This code represents the hidden derived class from the\r\n" +
             "// application-specific parser class, itself derived from\r\n" +
             "// Parsing.Parser. There should be no need to edit this file.\r\n" +
+            "\r\n" +
+            "#nullable enable // Allow nullable types in auto-generated code\r\n" +
             "\r\n";
 
         private readonly TextWriter sourceFile;
