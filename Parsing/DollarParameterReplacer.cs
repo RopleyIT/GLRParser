@@ -52,7 +52,7 @@ namespace Parsing
             if (!forceWeakTyping && !string.IsNullOrEmpty(gp.LHS.ValueType))
             {
                 declarations.Append
-                    ($"            {gp.LHS.ValueType} arg0 = default({gp.LHS.ValueType});\r\n");
+                    ($"            {gp.LHS.ValueType} arg0 = default({gp.LHS.ValueType})!;\r\n");
             }
         }
 

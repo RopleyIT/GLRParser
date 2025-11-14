@@ -724,7 +724,7 @@ namespace Parsing
                             "            }\r\n" +
                             "            finally\r\n" +
                             "            {\r\n" +
-                            "                args[0] = arg0;\r\n" +
+                            "                args[0] = arg0!;\r\n" +
                             "            }\r\n"
                         );
                     actionProcs.Append("        }\r\n");
