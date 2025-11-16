@@ -21,89 +21,88 @@
 
 using System;
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// Encapsulates an event, a guard condition,
+/// a transition action and a next state
+/// </summary>
+
+public class FSMTransition
 {
     /// <summary>
-    /// Encapsulates an event, a guard condition,
-    /// a transition action and a next state
+    /// The recognised input event type
+    /// that would cause this transition
+    /// to be taken.
     /// </summary>
 
-    public class FSMTransition
+    public int InputToken
     {
-        /// <summary>
-        /// The recognised input event type
-        /// that would cause this transition
-        /// to be taken.
-        /// </summary>
-
-        public int InputToken
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// The guard condition to test for that
-        /// is associated with this input event.
-        /// Both the input token must match and
-        /// the guard condition must be true
-        /// when executed, for the transition to
-        /// be taken according to this column.
-        /// </summary>
-
-        public IGuardEvaluator Condition
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// If used, a linked list of action functions to
-        /// be called when transition is made.
-        /// </summary>
-
-        public FSMInlineAction InlineActions
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// The link to the next state after this transition
-        /// </summary>
-
-        public FSMState NextState
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Render a meaningful representation of the transition
-        /// </summary>
-        /// <param name="tokenMap">Lookup table of event names</param>
-        /// <returns>Meaningful string representation of transition</returns>
-
-        public string ToString(TwoWayMap<string, int> tokenMap)
-        {
-            ArgumentNullException.ThrowIfNull(tokenMap);
-
-            string result = tokenMap[InputToken];
-            if (Condition != null)
-                result += $"[{Condition.AsString()}]";
-            if (NextState == null)
-                result += " terminates state machine";
-            else
-                result += $" -> {NextState.Name}";
-            return result;
-        }
-
-        /// <summary>
-        /// Standard override of ToString method. No
-        /// lookup of token type name used.
-        /// </summary>
-        /// <returns>String representation of transition</returns>
-
-        public override string ToString() => $"{InputToken}[{Condition.AsString()}] -> {NextState.Name}";
+        get;
+        set;
     }
+
+    /// <summary>
+    /// The guard condition to test for that
+    /// is associated with this input event.
+    /// Both the input token must match and
+    /// the guard condition must be true
+    /// when executed, for the transition to
+    /// be taken according to this column.
+    /// </summary>
+
+    public IGuardEvaluator Condition
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// If used, a linked list of action functions to
+    /// be called when transition is made.
+    /// </summary>
+
+    public FSMInlineAction InlineActions
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// The link to the next state after this transition
+    /// </summary>
+
+    public FSMState NextState
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// Render a meaningful representation of the transition
+    /// </summary>
+    /// <param name="tokenMap">Lookup table of event names</param>
+    /// <returns>Meaningful string representation of transition</returns>
+
+    public string ToString(TwoWayMap<string, int> tokenMap)
+    {
+        ArgumentNullException.ThrowIfNull(tokenMap);
+
+        string result = tokenMap[InputToken];
+        if (Condition != null)
+            result += $"[{Condition.AsString()}]";
+        if (NextState == null)
+            result += " terminates state machine";
+        else
+            result += $" -> {NextState.Name}";
+        return result;
+    }
+
+    /// <summary>
+    /// Standard override of ToString method. No
+    /// lookup of token type name used.
+    /// </summary>
+    /// <returns>String representation of transition</returns>
+
+    public override string ToString() => $"{InputToken}[{Condition.AsString()}] -> {NextState.Name}";
 }

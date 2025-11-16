@@ -22,89 +22,88 @@
 using Parsing;
 using System.Collections.Generic;
 
-namespace ParserParserTests
+namespace ParserParserTests;
+
+/// <summary>
+/// Test parser action and guard implementation
+/// </summary>
+
+public class InlineTestParser : Parser
 {
-    /// <summary>
-    /// Test parser action and guard implementation
-    /// </summary>
-
-    public class InlineTestParser : Parser
+    public int PresentCount
     {
-        public int PresentCount
-        {
-            get;
-            set;
-        }
-
-        public int PastCount
-        {
-            get;
-            set;
-        }
-
-        public int PluralCount
-        {
-            get;
-            set;
-        }
-
-        public int SingularCount
-        {
-            get;
-            set;
-        }
-
-        public int AdjectivesCount
-        {
-            get;
-            set;
-        }
-
-        public List<string> AdjectiveList
-        {
-            get;
-            set;
-        }
-
-        // Default constructor
-
-        public InlineTestParser() => AdjectiveList = [];
-
-        // Actions
-
-        public void BumpPresentTense() => PresentCount++;
-
-        public void BumpPastTense() => PastCount++;
-
-        public void BumpPlural() => PluralCount++;
-
-        public void BumpSingular() => SingularCount++;
-
-        public void BumpAdjectives() => AdjectivesCount++;
-
-        public void BumpAdjectiveList(int count) => AdjectivesCount += count;
-
-        public void AppendAdjective(string adjective)
-        {
-            AdjectiveList ??= [];
-            AdjectiveList.Add(adjective);
-        }
-
-        public void AppendAdjectiveList(IList<string> adjectives)
-        {
-            foreach (string s in adjectives)
-                AdjectiveList.Add(s);
-        }
-
-        // Guards
-
-        public static bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
-
-        public static bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
-                || arg.ToString().EndsWith("ed");
-
-        public static bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
-
-        public static bool Past(object arg) => arg.ToString().EndsWith("ed");
+        get;
+        set;
     }
+
+    public int PastCount
+    {
+        get;
+        set;
+    }
+
+    public int PluralCount
+    {
+        get;
+        set;
+    }
+
+    public int SingularCount
+    {
+        get;
+        set;
+    }
+
+    public int AdjectivesCount
+    {
+        get;
+        set;
+    }
+
+    public List<string> AdjectiveList
+    {
+        get;
+        set;
+    }
+
+    // Default constructor
+
+    public InlineTestParser() => AdjectiveList = [];
+
+    // Actions
+
+    public void BumpPresentTense() => PresentCount++;
+
+    public void BumpPastTense() => PastCount++;
+
+    public void BumpPlural() => PluralCount++;
+
+    public void BumpSingular() => SingularCount++;
+
+    public void BumpAdjectives() => AdjectivesCount++;
+
+    public void BumpAdjectiveList(int count) => AdjectivesCount += count;
+
+    public void AppendAdjective(string adjective)
+    {
+        AdjectiveList ??= [];
+        AdjectiveList.Add(adjective);
+    }
+
+    public void AppendAdjectiveList(IList<string> adjectives)
+    {
+        foreach (string s in adjectives)
+            AdjectiveList.Add(s);
+    }
+
+    // Guards
+
+    public static bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
+
+    public static bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
+            || arg.ToString().EndsWith("ed");
+
+    public static bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
+
+    public static bool Past(object arg) => arg.ToString().EndsWith("ed");
 }

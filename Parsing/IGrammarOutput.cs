@@ -21,34 +21,33 @@
 
 using ParserGenerator;
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// The interface expected by the parser
+/// generator in order to output the
+/// executable code for a parser.
+/// </summary>
+
+public interface IGrammarOutput
 {
     /// <summary>
-    /// The interface expected by the parser
-    /// generator in order to output the
-    /// executable code for a parser.
+    /// Given the list of item sets in the grammar
+    /// and the list of productions, generate the
+    /// necessary output code that will become the
+    /// parser for the grammar.
     /// </summary>
+    /// <param name="gram">The data structures
+    /// needed to construct an output parser</param>
+    /// <param name="verbose">True to include more debugging
+    /// information in the output state strings</param>
+    /// <param name="errRecovery">True to enable
+    /// stack-unwinding error recovery in
+    /// output parser.</param>
+    /// <param name="isGLR">Set true to generate
+    /// output code for a Generalised LR(1) parser
+    /// that can support ambiguous grammars. Set
+    /// false for traditional LR(1) parsers.</param>
 
-    public interface IGrammarOutput
-    {
-        /// <summary>
-        /// Given the list of item sets in the grammar
-        /// and the list of productions, generate the
-        /// necessary output code that will become the
-        /// parser for the grammar.
-        /// </summary>
-        /// <param name="gram">The data structures
-        /// needed to construct an output parser</param>
-        /// <param name="verbose">True to include more debugging
-        /// information in the output state strings</param>
-        /// <param name="errRecovery">True to enable
-        /// stack-unwinding error recovery in
-        /// output parser.</param>
-        /// <param name="isGLR">Set true to generate
-        /// output code for a Generalised LR(1) parser
-        /// that can support ambiguous grammars. Set
-        /// false for traditional LR(1) parsers.</param>
-
-        void RenderStateTables(Grammar gram, bool verbose, bool errRecovery, bool isGLR);
-    }
+    void RenderStateTables(Grammar gram, bool verbose, bool errRecovery, bool isGLR);
 }

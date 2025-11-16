@@ -1,7 +1,8 @@
 ﻿using SentenceParser;
 
-namespace SentenceParserTests;
+namespace SentenceParserMsTests;
 
+[TestClass]
 public class SentenceTests
 {
     [TestMethod]

@@ -21,293 +21,292 @@
 
 using System;
 
-namespace ParserGenerator
+namespace ParserGenerator;
+
+/// <summary>
+/// Multiplicity on tokens
+/// in a grammar input file.
+/// </summary>
+
+public enum Multiplicity
+{
+    ExactlyOne,
+    ZeroOrOne,
+    OneToMany,
+    ZeroToMany
+}
+
+/// <summary>
+/// Type of token, determining
+/// its role within a grammar.
+/// </summary>
+
+public enum TokenType
+{
+    Terminal,
+    Nonterminal,
+    Guard
+}
+
+/// <summary>
+/// Represents a terminal or non-terminal token
+/// captured from the input grammar
+/// </summary>
+
+public class GrammarToken
 {
     /// <summary>
-    /// Multiplicity on tokens
-    /// in a grammar input file.
+    /// Describes the role this token plays
+    /// in the grammar. A Terminal is an
+    /// indivisible token as returned from
+    /// the input tokeniser. A Nonterminal
+    /// is a token that appears to the left
+    /// of a production in the grammar. A
+    /// Guard is the name of some element
+    /// that returns a boolean when called.
+    /// A Code token is an element containing
+    /// verbatim code to be pasted into the
+    /// parser for calling when a rule is
+    /// recognised and reduced.
     /// </summary>
 
-    public enum Multiplicity
+    public TokenType TokenType
     {
-        ExactlyOne,
-        ZeroOrOne,
-        OneToMany,
-        ZeroToMany
+        get;
+        private set;
     }
 
     /// <summary>
-    /// Type of token, determining
-    /// its role within a grammar.
+    /// The name of the token, or in the
+    /// case of a code token, the actual
+    /// code itself.
     /// </summary>
 
-    public enum TokenType
+    public string Text
     {
-        Terminal,
-        Nonterminal,
-        Guard
+        get;
+        private set;
+    }
+
+    private string baseType;
+
+    /// <summary>
+    /// The string representation of the data
+    /// type a token's Value property holds
+    /// </summary>
+
+    public string ValueType
+    {
+        get
+        {
+            string mType = "object";
+            if (baseToken != null && !string.IsNullOrEmpty(baseToken.ValueType))
+                mType = baseToken.ValueType;
+
+            return Multiplicity switch
+            {
+                ParserGenerator.Multiplicity.ZeroOrOne => $"IOptional<{mType}>",
+                ParserGenerator.Multiplicity.ZeroToMany or ParserGenerator.Multiplicity.OneToMany => $"IList<{mType}>",
+                // Exactly one
+                _ => baseType,
+            };
+        }
+        set
+        {
+            SetMultiplicity(Multiplicity.ExactlyOne, null);
+            baseType = value;
+        }
     }
 
     /// <summary>
-    /// Represents a terminal or non-terminal token
-    /// captured from the input grammar
+    /// If this is a multiplicity, return the type of the
+    /// object this is a multiplicity of. If it is not,
+    /// return the type of the current token.
     /// </summary>
 
-    public class GrammarToken
+    public string BaseType
     {
-        /// <summary>
-        /// Describes the role this token plays
-        /// in the grammar. A Terminal is an
-        /// indivisible token as returned from
-        /// the input tokeniser. A Nonterminal
-        /// is a token that appears to the left
-        /// of a production in the grammar. A
-        /// Guard is the name of some element
-        /// that returns a boolean when called.
-        /// A Code token is an element containing
-        /// verbatim code to be pasted into the
-        /// parser for calling when a rule is
-        /// recognised and reduced.
-        /// </summary>
-
-        public TokenType TokenType
+        get
         {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// The name of the token, or in the
-        /// case of a code token, the actual
-        /// code itself.
-        /// </summary>
-
-        public string Text
-        {
-            get;
-            private set;
-        }
-
-        private string baseType;
-
-        /// <summary>
-        /// The string representation of the data
-        /// type a token's Value property holds
-        /// </summary>
-
-        public string ValueType
-        {
-            get
-            {
-                string mType = "object";
-                if (baseToken != null && !string.IsNullOrEmpty(baseToken.ValueType))
-                    mType = baseToken.ValueType;
-
-                return Multiplicity switch
-                {
-                    ParserGenerator.Multiplicity.ZeroOrOne => $"IOptional<{mType}>",
-                    ParserGenerator.Multiplicity.ZeroToMany or ParserGenerator.Multiplicity.OneToMany => $"IList<{mType}>",
-                    // Exactly one
-                    _ => baseType,
-                };
-            }
-            set
-            {
-                SetMultiplicity(Multiplicity.ExactlyOne, null);
-                baseType = value;
-            }
-        }
-
-        /// <summary>
-        /// If this is a multiplicity, return the type of the
-        /// object this is a multiplicity of. If it is not,
-        /// return the type of the current token.
-        /// </summary>
-
-        public string BaseType
-        {
-            get
-            {
-                if (baseToken != null)
-                    return baseToken.ValueType;
-                else
-                    return baseType;
-            }
-        }
-
-        /// <summary>
-        /// The integer code associated with the token
-        /// </summary>
-
-        public int TokenNumber
-        {
-            get;
-            private set;
-        }
-
-        // When the multiplicity is not exactly one,
-        // this is the other token we are a multiple of.
-        // This is used so that the correct data types
-        // can be obtained for the grammar output
-        // of action functions.
-
-        private GrammarToken baseToken;
-        private Multiplicity multiplicity;
-
-        /// <summary>
-        /// Whether this token identifies an element
-        /// that is followed by '?', '*' or '+'.
-        /// </summary>
-
-        public Multiplicity Multiplicity => multiplicity;
-
-        /// <summary>
-        /// Change the multiplicity of this token. If set to
-        /// anything other than the default Multiplicity.ExactlyOne,
-        /// another token this is a multiplicity of must be provided.
-        /// </summary>
-        /// <param name="m">The multiplicity</param>
-        /// <param name="tok">The token this is a multiplicity of</param>
-
-        public void SetMultiplicity(Multiplicity m, GrammarToken tok)
-        {
-            if (m == Multiplicity.ExactlyOne && tok != null
-                || m != Multiplicity.ExactlyOne && tok == null)
-                throw new ArgumentException("SetMultiplicity has inconsistent parameters");
-
-            if (m == Multiplicity.ExactlyOne)
-                baseToken = null;
+            if (baseToken != null)
+                return baseToken.ValueType;
             else
-                baseToken = tok;
-            multiplicity = m;
+                return baseType;
         }
+    }
 
-        /// <summary>
-        /// Grammar tokens are immutable. Hence
-        /// once constructed their properties
-        /// hold constant values.
-        /// </summary>
-        /// <param name="tokNum">The unique number for the token</param>
-        /// <param name="tokType">Whether the token being
-        /// created is terminal or non-terminal</param>
-        /// <param name="text">The name for the token, or
-        /// the code fragment if the token type is Code</param>
+    /// <summary>
+    /// The integer code associated with the token
+    /// </summary>
 
-        public GrammarToken(int tokNum, TokenType tokType, string text)
-            : this(tokNum, tokType, text, string.Empty)
-        { }
+    public int TokenNumber
+    {
+        get;
+        private set;
+    }
 
-        /// <summary>
-        /// Grammar tokens are immutable. Hence
-        /// once constructed their properties
-        /// hold constant values.
-        /// </summary>
-        /// <param name="tokNum">The unique number for the token</param>
-        /// <param name="tokType">Whether the token being
-        /// created is terminal or non-terminal</param>
-        /// <param name="text">The name for the token, or
-        /// the code fragment if the token type is Code</param>
-        /// <param name="valType">The string representation
-        /// of the data type held in the Value property
-        /// of an IToken</param>
+    // When the multiplicity is not exactly one,
+    // this is the other token we are a multiple of.
+    // This is used so that the correct data types
+    // can be obtained for the grammar output
+    // of action functions.
 
-        public GrammarToken(int tokNum, TokenType tokType, string text, string valType)
-        {
-            TokenType = tokType;
-            Text = text;
-            TokenNumber = tokNum;
-            ValueType = valType;
-        }
+    private GrammarToken baseToken;
+    private Multiplicity multiplicity;
 
-        /// <summary>
-        /// Ensure the same hash code appears for tokens considered identical
-        /// </summary>
-        /// <returns>The hash code for the token</returns>
+    /// <summary>
+    /// Whether this token identifies an element
+    /// that is followed by '?', '*' or '+'.
+    /// </summary>
 
-        public override int GetHashCode()
-        {
-            string hashStr = TokenType == TokenType.Terminal ? "T" : "N";
-            hashStr += Text;
-            return HashFromString(hashStr);
-        }
+    public Multiplicity Multiplicity => multiplicity;
 
-        /// <summary>
-        /// Create a reasonable hash value from a string
-        /// </summary>
-        /// <param name="s">The input string</param>
-        /// <returns>The computed hash value</returns>
+    /// <summary>
+    /// Change the multiplicity of this token. If set to
+    /// anything other than the default Multiplicity.ExactlyOne,
+    /// another token this is a multiplicity of must be provided.
+    /// </summary>
+    /// <param name="m">The multiplicity</param>
+    /// <param name="tok">The token this is a multiplicity of</param>
 
-        public static int HashFromString(string s)
-        {
-            int hash = 0;
-            if (s != null)
-                foreach (char c in s)
-                    hash = (c & 0xFF) + (hash << 6) + (hash << 16) - hash;
-            return hash;
-        }
+    public void SetMultiplicity(Multiplicity m, GrammarToken tok)
+    {
+        if (m == Multiplicity.ExactlyOne && tok != null
+            || m != Multiplicity.ExactlyOne && tok == null)
+            throw new ArgumentException("SetMultiplicity has inconsistent parameters");
 
-        /// <summary>
-        /// Implementation of by value comparison. Unused, since
-        /// operator == optimised to not call this method.
-        /// </summary>
-        /// <param name="obj">The other object to compare against</param>
-        /// <returns>True if same value</returns>
+        if (m == Multiplicity.ExactlyOne)
+            baseToken = null;
+        else
+            baseToken = tok;
+        multiplicity = m;
+    }
 
-        public override bool Equals(object obj)
-        {
-            if (obj is not GrammarToken gt)
-                return false;
+    /// <summary>
+    /// Grammar tokens are immutable. Hence
+    /// once constructed their properties
+    /// hold constant values.
+    /// </summary>
+    /// <param name="tokNum">The unique number for the token</param>
+    /// <param name="tokType">Whether the token being
+    /// created is terminal or non-terminal</param>
+    /// <param name="text">The name for the token, or
+    /// the code fragment if the token type is Code</param>
 
-            return gt.TokenType == TokenType
-                && gt.Text == Text;
-        }
+    public GrammarToken(int tokNum, TokenType tokType, string text)
+        : this(tokNum, tokType, text, string.Empty)
+    { }
 
-        /// <summary>
-        /// Reimplement operator == to compare by value
-        /// </summary>
-        /// <param name="l">Left operand</param>
-        /// <param name="r">Right operand</param>
-        /// <returns>True if both null, or both have same value</returns>
+    /// <summary>
+    /// Grammar tokens are immutable. Hence
+    /// once constructed their properties
+    /// hold constant values.
+    /// </summary>
+    /// <param name="tokNum">The unique number for the token</param>
+    /// <param name="tokType">Whether the token being
+    /// created is terminal or non-terminal</param>
+    /// <param name="text">The name for the token, or
+    /// the code fragment if the token type is Code</param>
+    /// <param name="valType">The string representation
+    /// of the data type held in the Value property
+    /// of an IToken</param>
 
-        public static bool operator ==(GrammarToken l, GrammarToken r)
-        {
-            // Obviously equal if same instance
+    public GrammarToken(int tokNum, TokenType tokType, string text, string valType)
+    {
+        TokenType = tokType;
+        Text = text;
+        TokenNumber = tokNum;
+        ValueType = valType;
+    }
 
-            if (l == (object)r)
-                return true;
+    /// <summary>
+    /// Ensure the same hash code appears for tokens considered identical
+    /// </summary>
+    /// <returns>The hash code for the token</returns>
 
-            // Deal with one or other being null
+    public override int GetHashCode()
+    {
+        string hashStr = TokenType == TokenType.Terminal ? "T" : "N";
+        hashStr += Text;
+        return HashFromString(hashStr);
+    }
 
-            if (l is null || r is null)
-                return false;
+    /// <summary>
+    /// Create a reasonable hash value from a string
+    /// </summary>
+    /// <param name="s">The input string</param>
+    /// <returns>The computed hash value</returns>
 
-            // Compare value fields
+    public static int HashFromString(string s)
+    {
+        int hash = 0;
+        if (s != null)
+            foreach (char c in s)
+                hash = (c & 0xFF) + (hash << 6) + (hash << 16) - hash;
+        return hash;
+    }
 
-            return l.TokenType == r.TokenType
-                && l.Text == r.Text;
-        }
+    /// <summary>
+    /// Implementation of by value comparison. Unused, since
+    /// operator == optimised to not call this method.
+    /// </summary>
+    /// <param name="obj">The other object to compare against</param>
+    /// <returns>True if same value</returns>
 
-        /// <summary>
-        /// Operator != implemented as complement
-        /// of operator ==.
-        /// </summary>
-        /// <param name="l">Left operand</param>
-        /// <param name="r">Right operand</param>
-        /// <returns>True if not equal or not both null</returns>
+    public override bool Equals(object obj)
+    {
+        if (obj is not GrammarToken gt)
+            return false;
 
-        public static bool operator !=(GrammarToken l, GrammarToken r) => !(l == r);
+        return gt.TokenType == TokenType
+            && gt.Text == Text;
+    }
 
-        /// <summary>
-        /// Produce a string representation of the token
-        /// </summary>
-        /// <returns>String representation of the token</returns>
+    /// <summary>
+    /// Reimplement operator == to compare by value
+    /// </summary>
+    /// <param name="l">Left operand</param>
+    /// <param name="r">Right operand</param>
+    /// <returns>True if both null, or both have same value</returns>
 
-        public override string ToString()
-        {
-            string valueType = string.Empty;
-            if (!string.IsNullOrEmpty(ValueType))
-                valueType = $"<{ValueType}>";
-            return $"{TokenType} ({Text}{valueType})";
-        }
+    public static bool operator ==(GrammarToken l, GrammarToken r)
+    {
+        // Obviously equal if same instance
+
+        if (l == (object)r)
+            return true;
+
+        // Deal with one or other being null
+
+        if (l is null || r is null)
+            return false;
+
+        // Compare value fields
+
+        return l.TokenType == r.TokenType
+            && l.Text == r.Text;
+    }
+
+    /// <summary>
+    /// Operator != implemented as complement
+    /// of operator ==.
+    /// </summary>
+    /// <param name="l">Left operand</param>
+    /// <param name="r">Right operand</param>
+    /// <returns>True if not equal or not both null</returns>
+
+    public static bool operator !=(GrammarToken l, GrammarToken r) => !(l == r);
+
+    /// <summary>
+    /// Produce a string representation of the token
+    /// </summary>
+    /// <returns>String representation of the token</returns>
+
+    public override string ToString()
+    {
+        string valueType = string.Empty;
+        if (!string.IsNullOrEmpty(ValueType))
+            valueType = $"<{ValueType}>";
+        return $"{TokenType} ({Text}{valueType})";
     }
 }

@@ -1,37 +1,36 @@
 ﻿using System;
 
-namespace PedXController
+namespace PedXController;
+
+public class StopWalkIndicator
 {
-    public class StopWalkIndicator
+    public event EventHandler PropertyChanged;
+
+    public StopWalkIndicator() => CanWalk = false;
+
+    private bool buttonPressed;
+    public bool ButtonPressed
     {
-        public event EventHandler PropertyChanged;
-
-        public StopWalkIndicator() => CanWalk = false;
-
-        private bool buttonPressed;
-        public bool ButtonPressed
+        get => buttonPressed;
+        set
         {
-            get => buttonPressed;
-            set
-            {
-                buttonPressed = value;
-                PropertyChanged?.Invoke(this, EventArgs.Empty);
-            }
+            buttonPressed = value;
+            PropertyChanged?.Invoke(this, EventArgs.Empty);
         }
-
-        private bool canWalk;
-        public bool CanWalk
-        {
-            get => canWalk;
-            set
-            {
-                canWalk = value;
-                PropertyChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        public bool Walk => CanWalk;
-
-        public bool Stop => !CanWalk;
     }
+
+    private bool canWalk;
+    public bool CanWalk
+    {
+        get => canWalk;
+        set
+        {
+            canWalk = value;
+            PropertyChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public bool Walk => CanWalk;
+
+    public bool Stop => !CanWalk;
 }

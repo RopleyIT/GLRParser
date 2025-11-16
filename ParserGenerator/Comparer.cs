@@ -22,50 +22,49 @@
 using System;
 using System.Collections.Generic;
 
-namespace ParserGenerator
+namespace ParserGenerator;
+
+/// <summary>
+/// Simplified comparer class that allows a
+/// Func to be used as an IEqualityComparer
+/// </summary>
+/// <typeparam name="T">The type of the objects
+/// being compared for equality</typeparam>
+/// <remarks>
+/// Constructor
+/// </remarks>
+/// <param name="cmpDelegate">The delegate or
+/// lambda expression being used as the comparer</param>
+
+public class Comparer<T>(Func<T, T, bool> cmpDelegate) : IEqualityComparer<T>
 {
+    private readonly Func<T, T, bool> comparer = cmpDelegate
+        ?? throw new ArgumentNullException
+            ("cmpDelegate", "Need a comparer delegate");
+
     /// <summary>
-    /// Simplified comparer class that allows a
-    /// Func to be used as an IEqualityComparer
+    /// Implementation of the equality operation. Merely
+    /// uses the delegate passed in the constructor.
     /// </summary>
-    /// <typeparam name="T">The type of the objects
-    /// being compared for equality</typeparam>
-    /// <remarks>
-    /// Constructor
-    /// </remarks>
-    /// <param name="cmpDelegate">The delegate or
-    /// lambda expression being used as the comparer</param>
+    /// <param name="x">Left item to be compared</param>
+    /// <param name="y">Right item to be compared</param>
+    /// <returns>True if deemed equal</returns>
 
-    public class Comparer<T>(Func<T, T, bool> cmpDelegate) : IEqualityComparer<T>
+    public bool Equals(T x, T y)
     {
-        private readonly Func<T, T, bool> comparer = cmpDelegate
-            ?? throw new ArgumentNullException
-                ("cmpDelegate", "Need a comparer delegate");
+        return comparer(x, y);
+    }
 
-        /// <summary>
-        /// Implementation of the equality operation. Merely
-        /// uses the delegate passed in the constructor.
-        /// </summary>
-        /// <param name="x">Left item to be compared</param>
-        /// <param name="y">Right item to be compared</param>
-        /// <returns>True if deemed equal</returns>
+    /// <summary>
+    /// Hard-wired algorithm for rendering the hash
+    /// code for each object being compared
+    /// </summary>
+    /// <param name="obj">The item whose hash
+    /// value is needed</param>
+    /// <returns>The item's hash value</returns>
 
-        public bool Equals(T x, T y)
-        {
-            return comparer(x, y);
-        }
-
-        /// <summary>
-        /// Hard-wired algorithm for rendering the hash
-        /// code for each object being compared
-        /// </summary>
-        /// <param name="obj">The item whose hash
-        /// value is needed</param>
-        /// <returns>The item's hash value</returns>
-
-        public int GetHashCode(T obj)
-        {
-            return obj.GetHashCode();
-        }
+    public int GetHashCode(T obj)
+    {
+        return obj.GetHashCode();
     }
 }

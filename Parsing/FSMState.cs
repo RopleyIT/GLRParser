@@ -20,58 +20,57 @@
 // software if you do not agree to these terms.
 
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// Represents one of the states in the state
+/// machine, when sequencing a simple state
+/// machine with the parser.
+/// </summary>
+
+public class FSMState
 {
     /// <summary>
-    /// Represents one of the states in the state
-    /// machine, when sequencing a simple state
-    /// machine with the parser.
+    /// Description of the state
     /// </summary>
 
-    public class FSMState
+    public string Name
     {
-        /// <summary>
-        /// Description of the state
-        /// </summary>
+        get;
+        set;
+    }
 
-        public string Name
-        {
-            get;
-            set;
-        }
+    /// <summary>
+    /// The list of event/guard/action/next-state
+    /// data structures that describe this state's
+    /// behaviour.
+    /// </summary>
 
-        /// <summary>
-        /// The list of event/guard/action/next-state
-        /// data structures that describe this state's
-        /// behaviour.
-        /// </summary>
+    public FSMTransition[] Transitions
+    {
+        get;
+        set;
+    }
 
-        public FSMTransition[] Transitions
-        {
-            get;
-            set;
-        }
+    /// <summary>
+    /// If used, a linked list of action functions to
+    /// be called when transition into this state is made.
+    /// </summary>
 
-        /// <summary>
-        /// If used, a linked list of action functions to
-        /// be called when transition into this state is made.
-        /// </summary>
+    public FSMInlineAction EntryActions
+    {
+        get;
+        set;
+    }
 
-        public FSMInlineAction EntryActions
-        {
-            get;
-            set;
-        }
+    /// <summary>
+    /// If used, a linked list of action functions to
+    /// be called when transition from this state is made.
+    /// </summary>
 
-        /// <summary>
-        /// If used, a linked list of action functions to
-        /// be called when transition from this state is made.
-        /// </summary>
-
-        public FSMInlineAction ExitActions
-        {
-            get;
-            set;
-        }
+    public FSMInlineAction ExitActions
+    {
+        get;
+        set;
     }
 }

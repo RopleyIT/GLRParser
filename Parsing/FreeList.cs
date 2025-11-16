@@ -21,171 +21,170 @@
 
 using System.Threading;
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// Nodes that can be managed by the FreeList
+/// class must support the following mechanism
+/// for taking them from or putting them onto
+/// a linked list free list. This is a way of
+/// reusing the object references that would
+/// otherwise be used in the stack data
+/// structure as free list links.
+/// </summary>
+
+public interface IFreeable<T>
 {
     /// <summary>
-    /// Nodes that can be managed by the FreeList
-    /// class must support the following mechanism
-    /// for taking them from or putting them onto
-    /// a linked list free list. This is a way of
-    /// reusing the object references that would
-    /// otherwise be used in the stack data
-    /// structure as free list links.
+    /// The reference to a next node in a list
+    /// </summary>
+    /// <returns>Reference to the new
+    /// head of the freelist</returns>
+
+    T NextFree
+    {
+        get;
+        set;
+    }
+}
+
+/// <summary>
+/// Implement a free list for holding second hand object
+/// references for objects of type T. This is useful
+/// where these objects are frequently allocated or
+/// deallocated, to avoid the overhead of garbage
+/// collection for those objects.
+/// </summary>
+/// <typeparam name="T">The type of object to create
+/// a free list for. Note that the objects to
+/// be managed must be reference types, and
+/// must support a default constructor. They must
+/// also expose the IFreeable interface so that
+/// they can be placed into a linked list.</typeparam>
+
+public class FreeList<T> where T : class, IFreeable<T>, new()
+{
+    /// <summary>
+    /// The default amount by which the free list grows
+    /// each time the list is exhausted.
     /// </summary>
 
-    public interface IFreeable<T>
-    {
-        /// <summary>
-        /// The reference to a next node in a list
-        /// </summary>
-        /// <returns>Reference to the new
-        /// head of the freelist</returns>
+    private const int DefaultGrowth = 32;
 
-        T NextFree
+    // Internal fields for the free list manager
+
+    private T freeList;
+    private readonly int growth;
+    private readonly Lock mutex;
+
+    /// <summary>
+    /// Constructor. Sets an initial expected capacity
+    /// for the free list, and arranges that if that
+    /// capacity is exceeded, the storage grows linearly
+    /// in multiples of that capacity.
+    /// </summary>
+    /// <param name="growsBy">The
+    /// incremental capacity of the free list</param>
+
+    public FreeList(int growsBy)
+    {
+        // Create the multithreading lock
+
+        mutex = new Lock();
+
+        // Tune the granularity by which
+        // the free list is repopulated
+
+        if (growsBy <= 0)
+            growth = DefaultGrowth;
+        else
+            growth = growsBy;
+
+        // Create an initial allocation of
+        // free objects ready for use.
+
+        lock (mutex)
         {
-            get;
-            set;
+            freeList = null;
+            PopulateFreeList();
         }
     }
 
     /// <summary>
-    /// Implement a free list for holding second hand object
-    /// references for objects of type T. This is useful
-    /// where these objects are frequently allocated or
-    /// deallocated, to avoid the overhead of garbage
-    /// collection for those objects.
+    /// Default constructor. Sets the amount the
+    /// freelist grows by to the default value.
     /// </summary>
-    /// <typeparam name="T">The type of object to create
-    /// a free list for. Note that the objects to
-    /// be managed must be reference types, and
-    /// must support a default constructor. They must
-    /// also expose the IFreeable interface so that
-    /// they can be placed into a linked list.</typeparam>
 
-    public class FreeList<T> where T : class, IFreeable<T>, new()
+    public FreeList()
+        : this(DefaultGrowth)
     {
-        /// <summary>
-        /// The default amount by which the free list grows
-        /// each time the list is exhausted.
-        /// </summary>
+    }
 
-        private const int DefaultGrowth = 32;
+    /// <summary>
+    /// Put ready-constructed objects into the stack
+    /// up to the specified initial capacity
+    /// </summary>
 
-        // Internal fields for the free list manager
-
-        private T freeList;
-        private readonly int growth;
-        private readonly Lock mutex;
-
-        /// <summary>
-        /// Constructor. Sets an initial expected capacity
-        /// for the free list, and arranges that if that
-        /// capacity is exceeded, the storage grows linearly
-        /// in multiples of that capacity.
-        /// </summary>
-        /// <param name="growsBy">The
-        /// incremental capacity of the free list</param>
-
-        public FreeList(int growsBy)
+    private void PopulateFreeList()
+    {
+        for (int i = 0; i < growth; i++)
         {
-            // Create the multithreading lock
-
-            mutex = new Lock();
-
-            // Tune the granularity by which
-            // the free list is repopulated
-
-            if (growsBy <= 0)
-                growth = DefaultGrowth;
-            else
-                growth = growsBy;
-
-            // Create an initial allocation of
-            // free objects ready for use.
-
-            lock (mutex)
+            T t = new()
             {
-                freeList = null;
+                NextFree = freeList
+            };
+            freeList = t;
+        }
+    }
+
+    /// <summary>
+    /// Obtain an object from the free list
+    /// to use in the application
+    /// </summary>
+    /// <returns>An object to use within the
+    /// application</returns>
+
+    public T Alloc()
+    {
+        lock (mutex)
+        {
+            if (freeList == null)
                 PopulateFreeList();
-            }
+            T head = freeList;
+            freeList = freeList.NextFree;
+            return head;
         }
+    }
 
-        /// <summary>
-        /// Default constructor. Sets the amount the
-        /// freelist grows by to the default value.
-        /// </summary>
+    /// <summary>
+    /// Place an object that is no longer
+    /// needed back into the free list
+    /// </summary>
+    /// <param name="t">The object that is no
+    /// longer needed</param>
 
-        public FreeList()
-            : this(DefaultGrowth)
+    public void Free(T t)
+    {
+        lock (mutex)
         {
+            t.NextFree = freeList;
+            freeList = t;
         }
+    }
 
-        /// <summary>
-        /// Put ready-constructed objects into the stack
-        /// up to the specified initial capacity
-        /// </summary>
+    /// <summary>
+    /// If the stack capacity becomes ridiculously
+    /// high, this will ensure that any spare
+    /// capacity is discarded, along with the
+    /// objects that are referenced by that
+    /// spare capacity.
+    /// </summary>
 
-        private void PopulateFreeList()
+    public void Truncate()
+    {
+        lock (mutex)
         {
-            for (int i = 0; i < growth; i++)
-            {
-                T t = new()
-                {
-                    NextFree = freeList
-                };
-                freeList = t;
-            }
-        }
-
-        /// <summary>
-        /// Obtain an object from the free list
-        /// to use in the application
-        /// </summary>
-        /// <returns>An object to use within the
-        /// application</returns>
-
-        public T Alloc()
-        {
-            lock (mutex)
-            {
-                if (freeList == null)
-                    PopulateFreeList();
-                T head = freeList;
-                freeList = freeList.NextFree;
-                return head;
-            }
-        }
-
-        /// <summary>
-        /// Place an object that is no longer
-        /// needed back into the free list
-        /// </summary>
-        /// <param name="t">The object that is no
-        /// longer needed</param>
-
-        public void Free(T t)
-        {
-            lock (mutex)
-            {
-                t.NextFree = freeList;
-                freeList = t;
-            }
-        }
-
-        /// <summary>
-        /// If the stack capacity becomes ridiculously
-        /// high, this will ensure that any spare
-        /// capacity is discarded, along with the
-        /// objects that are referenced by that
-        /// spare capacity.
-        /// </summary>
-
-        public void Truncate()
-        {
-            lock (mutex)
-            {
-                freeList = null;
-            }
+            freeList = null;
         }
     }
 }

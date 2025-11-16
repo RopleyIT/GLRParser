@@ -19,50 +19,49 @@
 // agreement to these terms and conditions. Do not use this 
 // software if you do not agree to these terms.
 
-namespace ParserGenerator
+namespace ParserGenerator;
+
+/// <summary>
+/// When using the state machine generator part
+/// of the grammar, this captures one of the
+/// rules that transits between states on an event
+/// and a guard condition.
+/// </summary>
+
+public class StateTransition
 {
     /// <summary>
-    /// When using the state machine generator part
-    /// of the grammar, this captures one of the
-    /// rules that transits between states on an event
-    /// and a guard condition.
+    /// The input event and optional guard condition
+    /// that must have occurred for the transition
+    /// to take place.
     /// </summary>
 
-    public class StateTransition
+    public GrammarElement TransitionEventAndGuard
     {
-        /// <summary>
-        /// The input event and optional guard condition
-        /// that must have occurred for the transition
-        /// to take place.
-        /// </summary>
+        get;
+        set;
+    }
 
-        public GrammarElement TransitionEventAndGuard
-        {
-            get;
-            set;
-        }
+    /// <summary>
+    /// The next state we jump to after the optional
+    /// transition action has taken place.
+    /// </summary>
 
-        /// <summary>
-        /// The next state we jump to after the optional
-        /// transition action has taken place.
-        /// </summary>
+    public GrammarToken TargetState
+    {
+        get;
+        set;
+    }
 
-        public GrammarToken TargetState
-        {
-            get;
-            set;
-        }
+    /// <summary>
+    /// Optional inline code to be executed
+    /// when this transition has been taken
+    /// successfully in the state machine.
+    /// </summary>
 
-        /// <summary>
-        /// Optional inline code to be executed
-        /// when this transition has been taken
-        /// successfully in the state machine.
-        /// </summary>
-
-        public GrammarGuardOrAction Code
-        {
-            get;
-            set;
-        }
+    public GrammarGuardOrAction Code
+    {
+        get;
+        set;
     }
 }

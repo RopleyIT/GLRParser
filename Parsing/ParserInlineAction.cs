@@ -21,64 +21,63 @@
 
 using System;
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// Represents one function to be called in a list of functions
+/// attached to a rule reduction. Also identifies which tokens
+/// that are arguments to the production should be passed
+/// </summary>
+/// <remarks>
+/// Constructor for a single inline action
+/// </remarks>
+/// <param name="methodName">The name of the action method
+/// within a class that will later be defined when Bind
+/// is invoked</param>
+
+public class ParserInlineAction(string method)
 {
     /// <summary>
-    /// Represents one function to be called in a list of functions
-    /// attached to a rule reduction. Also identifies which tokens
-    /// that are arguments to the production should be passed
+    /// The name of the action function within the parser
+    /// class. This is bound at run-time using a compiled
+    /// Expression tree so that performance is maintained.
     /// </summary>
-    /// <remarks>
-    /// Constructor for a single inline action
-    /// </remarks>
-    /// <param name="methodName">The name of the action method
-    /// within a class that will later be defined when Bind
-    /// is invoked</param>
 
-    public class ParserInlineAction(string method)
+    public string MethodName
     {
-        /// <summary>
-        /// The name of the action function within the parser
-        /// class. This is bound at run-time using a compiled
-        /// Expression tree so that performance is maintained.
-        /// </summary>
+        get;
+        private set;
+    } = method;
 
-        public string MethodName
-        {
-            get;
-            private set;
-        } = method;
+    /// <summary>
+    /// The delegate to the actual method to be called
+    /// </summary>
 
-        /// <summary>
-        /// The delegate to the actual method to be called
-        /// </summary>
+    public ActionProxy Function
+    {
+        get;
+        private set;
+    } = null;
 
-        public ActionProxy Function
-        {
-            get;
-            private set;
-        } = null;
+    /// <summary>
+    /// Render object in a human readable form
+    /// </summary>
+    /// <returns>A readable version of the inline action</returns>
 
-        /// <summary>
-        /// Render object in a human readable form
-        /// </summary>
-        /// <returns>A readable version of the inline action</returns>
+    public override string ToString() => MethodName + "(object[] args)";
 
-        public override string ToString() => MethodName + "(object[] args)";
+    /// <summary>
+    /// Implement run-time binding of the inline action functions,
+    /// converting the method name and parser class type into an
+    /// open instance delegate that calls the action method in
+    /// the derived parser class.
+    /// </summary>
+    /// <param name="parserClass">The type of derived
+    /// parser class</param>
 
-        /// <summary>
-        /// Implement run-time binding of the inline action functions,
-        /// converting the method name and parser class type into an
-        /// open instance delegate that calls the action method in
-        /// the derived parser class.
-        /// </summary>
-        /// <param name="parserClass">The type of derived
-        /// parser class</param>
+    public void Bind(Type parserClass) =>
+        // Attach a new action proxy for this inline action
 
-        public void Bind(Type parserClass) =>
-            // Attach a new action proxy for this inline action
-
-            Function = GuardAndActionBinder
-                .CreateParserActionProxy(parserClass, MethodName);
-    }
+        Function = GuardAndActionBinder
+            .CreateParserActionProxy(parserClass, MethodName);
 }

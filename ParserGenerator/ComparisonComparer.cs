@@ -24,81 +24,80 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ParserGenerator
+namespace ParserGenerator;
+
+/// <summary>
+/// Wrapper class hosting a Comparison(Of T) inside
+/// an IComparer(Of T), since the IEnumerable(Of T)
+/// interface's OrderBy extension method expects
+/// only an IComparer(Of T) as its argument.
+/// </summary>
+/// <typeparam name="T">The type of the items 
+/// being ordered</typeparam>
+/// <remarks>
+/// Constructor. Wraps a Comparison(Of T)
+/// so that it can be exposed as an
+/// IComparer(Of T)
+/// </remarks>
+/// <param name="cmp">The comparison object
+/// to be wrapped</param>
+
+internal class ComparisonComparer<T>(Comparison<T> cmp) : IComparer<T>, IComparer
 {
+    private readonly Comparison<T> comparison = cmp;
+
     /// <summary>
-    /// Wrapper class hosting a Comparison(Of T) inside
-    /// an IComparer(Of T), since the IEnumerable(Of T)
-    /// interface's OrderBy extension method expects
-    /// only an IComparer(Of T) as its argument.
+    /// Implementation of the IComparer(Of T)
     /// </summary>
-    /// <typeparam name="T">The type of the items 
-    /// being ordered</typeparam>
-    /// <remarks>
-    /// Constructor. Wraps a Comparison(Of T)
-    /// so that it can be exposed as an
-    /// IComparer(Of T)
-    /// </remarks>
-    /// <param name="cmp">The comparison object
-    /// to be wrapped</param>
+    /// <param name="x">Left item to be compared</param>
+    /// <param name="y">Right item to be compared</param>
+    /// <returns>negative if the items are already
+    /// in the correct order, zero of the items are
+    /// equal valued and could be placed either way
+    /// round, positive if the items should be
+    /// reversed to be in order.</returns>
 
-    internal class ComparisonComparer<T>(Comparison<T> cmp) : IComparer<T>, IComparer
+    public int Compare(T x, T y)
     {
-        private readonly Comparison<T> comparison = cmp;
-
-        /// <summary>
-        /// Implementation of the IComparer(Of T)
-        /// </summary>
-        /// <param name="x">Left item to be compared</param>
-        /// <param name="y">Right item to be compared</param>
-        /// <returns>negative if the items are already
-        /// in the correct order, zero of the items are
-        /// equal valued and could be placed either way
-        /// round, positive if the items should be
-        /// reversed to be in order.</returns>
-
-        public int Compare(T x, T y)
-        {
-            return comparison(x, y);
-        }
-
-        /// <summary>
-        /// Implementation of the IComparer
-        /// weakly typed interface
-        /// </summary>
-        /// <param name="x">Left item to be compared</param>
-        /// <param name="y">Right item to be compared</param>
-        /// <returns>negative if the items are already
-        /// in the correct order, zero of the items are
-        /// equal valued and could be placed either way
-        /// round, positive if the items should be
-        /// reversed to be in order.</returns>
-
-        public int Compare(object x, object y)
-        {
-            return comparison((T)x, (T)y);
-        }
+        return comparison(x, y);
     }
 
     /// <summary>
-    /// Extension methods to support deferred ordering of elements
+    /// Implementation of the IComparer
+    /// weakly typed interface
     /// </summary>
+    /// <param name="x">Left item to be compared</param>
+    /// <param name="y">Right item to be compared</param>
+    /// <returns>negative if the items are already
+    /// in the correct order, zero of the items are
+    /// equal valued and could be placed either way
+    /// round, positive if the items should be
+    /// reversed to be in order.</returns>
 
-    public static class OrderByExtensions
+    public int Compare(object x, object y)
     {
-        /// <summary>
-        /// Extends the OrderBy method overloads of the IEnumerable(Of T)
-        /// interface so that it can use a comparison object as well as the
-        /// already implemented IComparer(Of T)
-        /// </summary>
-        /// <typeparam name="T">The type of the items to be sorted</typeparam>
-        /// <param name="source">The enumerable to be sorted</param>
-        /// <param name="cmp">The comparison delegate to be used in sorting</param>
-        /// <returns>The enumerable with the sorting algorithm applied</returns>
+        return comparison((T)x, (T)y);
+    }
+}
 
-        public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> source, Comparison<T> cmp)
-        {
-            return source.OrderBy(t => t, new ComparisonComparer<T>(cmp));
-        }
+/// <summary>
+/// Extension methods to support deferred ordering of elements
+/// </summary>
+
+public static class OrderByExtensions
+{
+    /// <summary>
+    /// Extends the OrderBy method overloads of the IEnumerable(Of T)
+    /// interface so that it can use a comparison object as well as the
+    /// already implemented IComparer(Of T)
+    /// </summary>
+    /// <typeparam name="T">The type of the items to be sorted</typeparam>
+    /// <param name="source">The enumerable to be sorted</param>
+    /// <param name="cmp">The comparison delegate to be used in sorting</param>
+    /// <returns>The enumerable with the sorting algorithm applied</returns>
+
+    public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> source, Comparison<T> cmp)
+    {
+        return source.OrderBy(t => t, new ComparisonComparer<T>(cmp));
     }
 }

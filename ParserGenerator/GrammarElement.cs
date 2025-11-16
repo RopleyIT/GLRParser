@@ -21,154 +21,153 @@
 
 using BooleanLib;
 
-namespace ParserGenerator
+namespace ParserGenerator;
+
+/// <summary>
+/// Represents one element in the RHS of a production
+/// </summary>
+/// <remarks>
+/// Constructor for a new element
+/// </remarks>
+/// <param name="tok">The token in this element</param>
+/// <param name="guard">Any guard condition associated with the element. Set
+/// to null if no guard applies.</param>
+
+public class GrammarElement(GrammarToken tok, BoolExpr guard)
 {
     /// <summary>
-    /// Represents one element in the RHS of a production
+    /// The terminal or non-terminal token at this point
+    /// in the sequence of the production
     /// </summary>
-    /// <remarks>
-    /// Constructor for a new element
-    /// </remarks>
-    /// <param name="tok">The token in this element</param>
-    /// <param name="guard">Any guard condition associated with the element. Set
-    /// to null if no guard applies.</param>
 
-    public class GrammarElement(GrammarToken tok, BoolExpr guard)
+    public GrammarToken Token
     {
-        /// <summary>
-        /// The terminal or non-terminal token at this point
-        /// in the sequence of the production
-        /// </summary>
+        get;
+        set;
+    } = tok;
 
-        public GrammarToken Token
-        {
-            get;
-            set;
-        } = tok;
+    /// <summary>
+    /// A guard condition set on this element, if
+    /// in grammar. If no guard, should be null.
+    /// </summary>
 
-        /// <summary>
-        /// A guard condition set on this element, if
-        /// in grammar. If no guard, should be null.
-        /// </summary>
+    public BoolExpr Guard
+    {
+        get;
+        set;
+    } = guard;
 
-        public BoolExpr Guard
-        {
-            get;
-            set;
-        } = guard;
+    /// <summary>
+    /// Ensure that identical elements get identical hash codes.
+    /// </summary>
+    /// <returns>The hash value for the whole element</returns>
 
-        /// <summary>
-        /// Ensure that identical elements get identical hash codes.
-        /// </summary>
-        /// <returns>The hash value for the whole element</returns>
+    public override int GetHashCode() => Token.GetHashCode();
 
-        public override int GetHashCode() => Token.GetHashCode();
+    /// <summary>
+    /// Implementation of by value comparison. Unused, as the
+    /// operator == overload has been optimised not to use it.
+    /// </summary>
+    /// <param name="obj">The other object to compare against</param>
+    /// <returns>True if same value</returns>
 
-        /// <summary>
-        /// Implementation of by value comparison. Unused, as the
-        /// operator == overload has been optimised not to use it.
-        /// </summary>
-        /// <param name="obj">The other object to compare against</param>
-        /// <returns>True if same value</returns>
+    public override bool Equals(object obj)
+    {
+        if (obj is not GrammarElement ge)
+            return false;
 
-        public override bool Equals(object obj)
-        {
-            if (obj is not GrammarElement ge)
-                return false;
+        return ge.Token == Token
+            && ge.Guard == Guard;
+    }
 
-            return ge.Token == Token
-                && ge.Guard == Guard;
-        }
+    /// <summary>
+    /// Reimplement operator == to compare by value
+    /// </summary>
+    /// <param name="l">Left operand</param>
+    /// <param name="r">Right operand</param>
+    /// <returns>True if both null, or both have same value</returns>
 
-        /// <summary>
-        /// Reimplement operator == to compare by value
-        /// </summary>
-        /// <param name="l">Left operand</param>
-        /// <param name="r">Right operand</param>
-        /// <returns>True if both null, or both have same value</returns>
+    public static bool operator ==(GrammarElement l, GrammarElement r)
+    {
+        // Obviously equal if same instance
 
-        public static bool operator ==(GrammarElement l, GrammarElement r)
-        {
-            // Obviously equal if same instance
+        if (l == (object)r)
+            return true;
 
-            if (l == (object)r)
-                return true;
+        // Deal with one or other being null
 
-            // Deal with one or other being null
+        if (l is null || r is null)
+            return false;
 
-            if (l is null || r is null)
-                return false;
+        // Compare value fields
 
-            // Compare value fields
+        return l.Token == r.Token
+            && l.Guard == r.Guard;
+    }
 
-            return l.Token == r.Token
-                && l.Guard == r.Guard;
-        }
+    /// <summary>
+    /// Operator != implemented as complement
+    /// of operator ==.
+    /// </summary>
+    /// <param name="l">Left operand</param>
+    /// <param name="r">Right operand</param>
+    /// <returns>True if not equal or not both null</returns>
 
-        /// <summary>
-        /// Operator != implemented as complement
-        /// of operator ==.
-        /// </summary>
-        /// <param name="l">Left operand</param>
-        /// <param name="r">Right operand</param>
-        /// <returns>True if not equal or not both null</returns>
+    public static bool operator !=(GrammarElement l, GrammarElement r) => !(l == r);
 
-        public static bool operator !=(GrammarElement l, GrammarElement r) => !(l == r);
+    /// <summary>
+    /// Compute the Hamming weight of the element.
+    /// </summary>
+    /// <returns>A value between 0 and 0x4000000000000000
+    /// representing the proportion of the output truth table
+    /// that contains 1 values rather than 0 values. If the
+    /// guard condition on the element is null, this means
+    /// that the implied guard condition is always true
+    /// for all inputs. Hence the return value is the
+    /// maximum possible, at 0x4000000000000000.</returns>
 
-        /// <summary>
-        /// Compute the Hamming weight of the element.
-        /// </summary>
-        /// <returns>A value between 0 and 0x4000000000000000
-        /// representing the proportion of the output truth table
-        /// that contains 1 values rather than 0 values. If the
-        /// guard condition on the element is null, this means
-        /// that the implied guard condition is always true
-        /// for all inputs. Hence the return value is the
-        /// maximum possible, at 0x4000000000000000.</returns>
+    public long HammingWeight() => Guard?.HammingWeight() ?? 0x4000000000000000L;
 
-        public long HammingWeight() => Guard?.HammingWeight() ?? 0x4000000000000000L;
+    /// <summary>
+    /// Return a meaningful identifier name for the grammar element
+    /// </summary>
+    /// <param name="indexProvider">The leaf index proider
+    /// used to track all the leaves of expressions used
+    /// in the boolean expressions of this grammar.</param>
+    /// <returns>The element name in a form that can be used
+    /// as an identifier in the target language</returns>
 
-        /// <summary>
-        /// Return a meaningful identifier name for the grammar element
-        /// </summary>
-        /// <param name="indexProvider">The leaf index proider
-        /// used to track all the leaves of expressions used
-        /// in the boolean expressions of this grammar.</param>
-        /// <returns>The element name in a form that can be used
-        /// as an identifier in the target language</returns>
+    public string AsIdentifier(LeafIndexProvider indexProvider)
+    {
+        // Grab a meaningful string for the token part of the element
 
-        public string AsIdentifier(LeafIndexProvider indexProvider)
-        {
-            // Grab a meaningful string for the token part of the element
+        string result = Token.Text;
+        if (string.IsNullOrEmpty(result))
+            result = "\u03B5";
 
-            string result = Token.Text;
-            if (string.IsNullOrEmpty(result))
-                result = "\u03B5";
+        // If there is a guard associated with it, attach its
+        // identifier extension to the end of the token name
 
-            // If there is a guard associated with it, attach its
-            // identifier extension to the end of the token name
+        if (Guard != null)
+            result += '_' + Guard.AsIdentifier(indexProvider);
+        return result;
+    }
 
-            if (Guard != null)
-                result += '_' + Guard.AsIdentifier(indexProvider);
-            return result;
-        }
+    /// <summary>
+    ///  Produce a string representation of the element. The
+    ///  Greek epsilon character represents the empty token.
+    /// </summary>
+    /// <returns>String representation of the element</returns>
 
-        /// <summary>
-        ///  Produce a string representation of the element. The
-        ///  Greek epsilon character represents the empty token.
-        /// </summary>
-        /// <returns>String representation of the element</returns>
+    public override string ToString()
+    {
+        string tok = Token.Text;
+        if (string.IsNullOrEmpty(tok))
+            tok = "\u03B5";
 
-        public override string ToString()
-        {
-            string tok = Token.Text;
-            if (string.IsNullOrEmpty(tok))
-                tok = "\u03B5";
-
-            if (Guard != null)
-                return $"{tok}[{Guard}]";
-            else
-                return tok;
-        }
+        if (Guard != null)
+            return $"{tok}[{Guard}]";
+        else
+            return tok;
     }
 }

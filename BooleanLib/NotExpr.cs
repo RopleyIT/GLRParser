@@ -20,58 +20,57 @@
 // software if you do not agree to these terms.
 
 
-namespace BooleanLib
+namespace BooleanLib;
+
+public class NotExpr(BoolExpr arg) : BoolExpr
 {
-    public class NotExpr(BoolExpr arg) : BoolExpr
+    /// <summary>
+    /// Access the child node of this NOT operator
+    /// </summary>
+
+    public BoolExpr Argument
     {
-        /// <summary>
-        /// Access the child node of this NOT operator
-        /// </summary>
+        get;
+        private set;
+    } = arg;
 
-        public BoolExpr Argument
-        {
-            get;
-            private set;
-        } = arg;
+    /// <summary>
+    /// Return the block of 64 bits from the truth table
+    /// at block index specified in the argument.
+    /// </summary>
+    /// <param name="blockNum">Which block of the truth
+    /// table to return the block of result bits from.</param>
+    /// <returns>Bits 64*blockNum to 64*(blockNum+1)-1 of
+    /// the resulting truth table.</returns>
 
-        /// <summary>
-        /// Return the block of 64 bits from the truth table
-        /// at block index specified in the argument.
-        /// </summary>
-        /// <param name="blockNum">Which block of the truth
-        /// table to return the block of result bits from.</param>
-        /// <returns>Bits 64*blockNum to 64*(blockNum+1)-1 of
-        /// the resulting truth table.</returns>
+    public override ulong ResultBits(long blockNum) => ~Argument.ResultBits(blockNum);
 
-        public override ulong ResultBits(long blockNum) => ~Argument.ResultBits(blockNum);
+    /// <summary>
+    /// Return the block of 64 bits from the truth table
+    /// at block index specified in the argument.
+    /// </summary>
+    /// <param name="blockNum">Which block of the truth
+    /// table to return the block of result bits from.</param>
+    /// <param name="leafIndexProvider">An alternative
+    /// lookup table between leaf names and truth
+    /// table indexes.</param>
+    /// <returns>Bits 64*blockNum to 64*(blockNum+1)-1 of
+    /// the resulting truth table.</returns>
 
-        /// <summary>
-        /// Return the block of 64 bits from the truth table
-        /// at block index specified in the argument.
-        /// </summary>
-        /// <param name="blockNum">Which block of the truth
-        /// table to return the block of result bits from.</param>
-        /// <param name="leafIndexProvider">An alternative
-        /// lookup table between leaf names and truth
-        /// table indexes.</param>
-        /// <returns>Bits 64*blockNum to 64*(blockNum+1)-1 of
-        /// the resulting truth table.</returns>
+    public override ulong ResultBits(long blockNum, LeafIndexProvider leafIndexProvider) => ~Argument.ResultBits(blockNum, leafIndexProvider);
 
-        public override ulong ResultBits(long blockNum, LeafIndexProvider leafIndexProvider) => ~Argument.ResultBits(blockNum, leafIndexProvider);
+    /// <summary>
+    /// Bit mask with a bit set for each leaf variable
+    /// that appears in the current expression
+    /// </summary>
 
-        /// <summary>
-        /// Bit mask with a bit set for each leaf variable
-        /// that appears in the current expression
-        /// </summary>
+    public override long Leaves => Argument.Leaves;
 
-        public override long Leaves => Argument.Leaves;
-
-        public override string ToString()
-        {
-            if (Argument is AndExpr || Argument is OrExpr)
-                return $"NOT ({Argument})";
-            else
-                return "NOT {Argument}";
-        }
+    public override string ToString()
+    {
+        if (Argument is AndExpr || Argument is OrExpr)
+            return $"NOT ({Argument})";
+        else
+            return "NOT {Argument}";
     }
 }

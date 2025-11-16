@@ -21,64 +21,63 @@
 
 using System.Collections.Generic;
 
-namespace ParserGenerator
+namespace ParserGenerator;
+
+/// <summary>
+/// One state within the simple state machine recogniser
+/// </summary>
+/// <remarks>
+/// Create an instance of a state in a state machine
+/// </remarks>
+/// <param name="stateName">The name of the new state</param>
+/// <param name="entryCode">An entry action function</param>
+/// <param name="exitCode">An exit action function</param>
+
+public class State(GrammarToken stateName, GrammarGuardOrAction entryCode, GrammarGuardOrAction exitCode)
 {
     /// <summary>
-    /// One state within the simple state machine recogniser
+    /// The name of the current state. Should be a member
+    /// of the Nonterminals list in the Grammar object.
     /// </summary>
-    /// <remarks>
-    /// Create an instance of a state in a state machine
-    /// </remarks>
-    /// <param name="stateName">The name of the new state</param>
-    /// <param name="entryCode">An entry action function</param>
-    /// <param name="exitCode">An exit action function</param>
 
-    public class State(GrammarToken stateName, GrammarGuardOrAction entryCode, GrammarGuardOrAction exitCode)
+    public GrammarToken StateName
     {
-        /// <summary>
-        /// The name of the current state. Should be a member
-        /// of the Nonterminals list in the Grammar object.
-        /// </summary>
+        get;
+        set;
+    } = stateName;
 
-        public GrammarToken StateName
-        {
-            get;
-            set;
-        } = stateName;
+    /// <summary>
+    /// The list of possible transitions that may cause
+    /// a transition from this state.
+    /// </summary>
 
-        /// <summary>
-        /// The list of possible transitions that may cause
-        /// a transition from this state.
-        /// </summary>
+    public List<StateTransition> Transitions
+    {
+        get;
+        private set;
+    } = [];
 
-        public List<StateTransition> Transitions
-        {
-            get;
-            private set;
-        } = [];
+    /// <summary>
+    /// Optional inline code to be executed
+    /// when this state has been entered
+    /// in the state machine.
+    /// </summary>
 
-        /// <summary>
-        /// Optional inline code to be executed
-        /// when this state has been entered
-        /// in the state machine.
-        /// </summary>
+    public GrammarGuardOrAction EntryCode
+    {
+        get;
+        set;
+    } = entryCode;
 
-        public GrammarGuardOrAction EntryCode
-        {
-            get;
-            set;
-        } = entryCode;
+    /// <summary>
+    /// Optional inline code to be executed
+    /// when this state is being left
+    /// in the state machine.
+    /// </summary>
 
-        /// <summary>
-        /// Optional inline code to be executed
-        /// when this state is being left
-        /// in the state machine.
-        /// </summary>
-
-        public GrammarGuardOrAction ExitCode
-        {
-            get;
-            set;
-        } = exitCode;
-    }
+    public GrammarGuardOrAction ExitCode
+    {
+        get;
+        set;
+    } = exitCode;
 }

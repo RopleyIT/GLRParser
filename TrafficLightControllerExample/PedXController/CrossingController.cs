@@ -3,152 +3,151 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace PedXController
+namespace PedXController;
+
+/// <summary>
+/// The implementation of the application-specific
+/// parts of the state machine controller.
+/// </summary>
+
+public class CrossingController : FSM, IEnumerable<IToken>
 {
     /// <summary>
-    /// The implementation of the application-specific
-    /// parts of the state machine controller.
+    /// Factory method
+    /// </summary>
+    /// <returns>An instance of a crossing controller</returns>
+
+    public static CrossingController Create(TextWriter debugStream, TextWriter errStream)
+    {
+        // Find the path to the grammar file so that it can be parsed into
+        // a dynamic assembly at runtime. The grammar file is copied to the
+        // executable folder on build as if it were a resource.
+
+        string grammarFileLocation = typeof(CrossingController).Assembly.Location;
+        grammarFileLocation = Path.GetDirectoryName(grammarFileLocation);
+        grammarFileLocation = Path.Combine(grammarFileLocation, "CrossingController.g");
+
+        // Parse the grammar file to create the state machine engine for
+        // the traffic light controller.
+
+        using StreamReader grammarStream = new(grammarFileLocation);
+        FSMFactory<CrossingController>.InitializeFromGrammar(grammarStream, false);
+        CrossingController cc = FSMFactory<CrossingController>.CreateInstance();
+        return cc;
+    }
+
+    /// <summary>
+    /// The traffic light being controlled
     /// </summary>
 
-    public class CrossingController : FSM, IEnumerable<IToken>
+    public TrafficLight Light
     {
-        /// <summary>
-        /// Factory method
-        /// </summary>
-        /// <returns>An instance of a crossing controller</returns>
+        get;
+        private set;
+    }
 
-        public static CrossingController Create(TextWriter debugStream, TextWriter errStream)
+    /// <summary>
+    /// The pedestrian walk indicator being controlled
+    /// </summary>
+
+    public StopWalkIndicator WalkIndicator
+    {
+        get;
+        private set;
+    }
+
+    private readonly TimerQueue crossingTimer;
+
+    /// <summary>
+    /// Create a crossing controller that starts
+    /// life permitting vehicles to pass, and
+    /// telling pedestrians to wait.
+    /// </summary>
+
+    public CrossingController()
+    {
+        Light = new TrafficLight();
+        WalkIndicator = new StopWalkIndicator
         {
-            // Find the path to the grammar file so that it can be parsed into
-            // a dynamic assembly at runtime. The grammar file is copied to the
-            // executable folder on build as if it were a resource.
+            ButtonPressed = false
+        };
+        crossingTimer = new TimerQueue();
+        inputEvents = new Queue<IToken>();
+    }
 
-            string grammarFileLocation = typeof(CrossingController).Assembly.Location;
-            grammarFileLocation = Path.GetDirectoryName(grammarFileLocation);
-            grammarFileLocation = Path.Combine(grammarFileLocation, "CrossingController.g");
+    // Actions that set the colour of the
+    // traffic lights, or the crossing indicator.
 
-            // Parse the grammar file to create the state machine engine for
-            // the traffic light controller.
+    public void SetLightRedAndYellow() => Light.Colour = LightColour.REDANDYELLOW;
 
-            using StreamReader grammarStream = new(grammarFileLocation);
-            FSMFactory<CrossingController>.InitializeFromGrammar(grammarStream, false);
-            CrossingController cc = FSMFactory<CrossingController>.CreateInstance();
-            return cc;
-        }
+    public void SetLightGreen() => Light.Colour = LightColour.GREEN;
 
-        /// <summary>
-        /// The traffic light being controlled
-        /// </summary>
+    public void SetLightRed() => Light.Colour = LightColour.RED;
 
-        public TrafficLight Light
-        {
-            get;
-            private set;
-        }
+    public void SetLightYellow() => Light.Colour = LightColour.YELLOW;
 
-        /// <summary>
-        /// The pedestrian walk indicator being controlled
-        /// </summary>
+    public void SetLightWalk() => WalkIndicator.CanWalk = true;
 
-        public StopWalkIndicator WalkIndicator
-        {
-            get;
-            private set;
-        }
+    public void SetLightDontWalk() => WalkIndicator.CanWalk = false;
 
-        private readonly TimerQueue crossingTimer;
+    // Action to capture the fact that the
+    // request to cross button has been pressed.
 
-        /// <summary>
-        /// Create a crossing controller that starts
-        /// life permitting vehicles to pass, and
-        /// telling pedestrians to wait.
-        /// </summary>
+    public void RecordButtonPressed() => WalkIndicator.ButtonPressed = true;
 
-        public CrossingController()
-        {
-            Light = new TrafficLight();
-            WalkIndicator = new StopWalkIndicator
-            {
-                ButtonPressed = false
-            };
-            crossingTimer = new TimerQueue();
-            inputEvents = new Queue<IToken>();
-        }
+    // Actions to queue a time interval for the
+    // various phases of the crossing controller.
 
-        // Actions that set the colour of the
-        // traffic lights, or the crossing indicator.
+    public void SetGreenTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
 
-        public void SetLightRedAndYellow() => Light.Colour = LightColour.REDANDYELLOW;
+    public void SetYellowTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
 
-        public void SetLightGreen() => Light.Colour = LightColour.GREEN;
+    public void SetWalkTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
 
-        public void SetLightRed() => Light.Colour = LightColour.RED;
+    public void SetAllRedTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
 
-        public void SetLightYellow() => Light.Colour = LightColour.YELLOW;
+    public void SetRedAndYellowTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
 
-        public void SetLightWalk() => WalkIndicator.CanWalk = true;
+    // Clear down the record of the request to
+    // cross button, as the crossing has been
+    // permitted.
 
-        public void SetLightDontWalk() => WalkIndicator.CanWalk = false;
+    public void ClearButtonPress() => WalkIndicator.ButtonPressed = false;
 
-        // Action to capture the fact that the
-        // request to cross button has been pressed.
+    // Event input management
 
-        public void RecordButtonPressed() => WalkIndicator.ButtonPressed = true;
+    private readonly Queue<IToken> inputEvents;
 
-        // Actions to queue a time interval for the
-        // various phases of the crossing controller.
+    /// <summary>
+    /// Cause a timer tick event to be placed on the input
+    /// </summary>
 
-        public void SetGreenTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
+    public void InjectTickEvent() => ProcessEvent(new ParserToken(FSMTable.Tokens["TIMERTICK"]));
 
-        public void SetYellowTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
+    /// <summary>
+    /// Cause a button press event to be placed on the input
+    /// </summary>
 
-        public void SetWalkTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
+    public void InjectButtonPress() => ProcessEvent(new ParserToken(FSMTable.Tokens["BUTTONPRESS"]));
 
-        public void SetAllRedTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
+    /// <summary>
+    /// Capture the next input event from the input queue. Note that
+    /// this uses a polled loop to capture the event. A better approach
+    /// would be to use event objects on the queue.
+    /// </summary>
+    /// <returns>Each successive input token</returns>
 
-        public void SetRedAndYellowTimer() => crossingTimer.Schedule(DateTime.Now.AddSeconds(3), InjectTickEvent);
+    public IEnumerator<IToken> GetEnumerator()
+    {
+        while (inputEvents.Count <= 0)
+            System.Threading.Thread.Sleep(500);
+        yield return inputEvents.Dequeue();
+    }
 
-        // Clear down the record of the request to
-        // cross button, as the crossing has been
-        // permitted.
-
-        public void ClearButtonPress() => WalkIndicator.ButtonPressed = false;
-
-        // Event input management
-
-        private readonly Queue<IToken> inputEvents;
-
-        /// <summary>
-        /// Cause a timer tick event to be placed on the input
-        /// </summary>
-
-        public void InjectTickEvent() => ProcessEvent(new ParserToken(FSMTable.Tokens["TIMERTICK"]));
-
-        /// <summary>
-        /// Cause a button press event to be placed on the input
-        /// </summary>
-
-        public void InjectButtonPress() => ProcessEvent(new ParserToken(FSMTable.Tokens["BUTTONPRESS"]));
-
-        /// <summary>
-        /// Capture the next input event from the input queue. Note that
-        /// this uses a polled loop to capture the event. A better approach
-        /// would be to use event objects on the queue.
-        /// </summary>
-        /// <returns>Each successive input token</returns>
-
-        public IEnumerator<IToken> GetEnumerator()
-        {
-            while (inputEvents.Count <= 0)
-                System.Threading.Thread.Sleep(500);
-            yield return inputEvents.Dequeue();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            while (inputEvents.Count <= 0)
-                System.Threading.Thread.Sleep(500);
-            yield return inputEvents.Dequeue();
-        }
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        while (inputEvents.Count <= 0)
+            System.Threading.Thread.Sleep(500);
+        yield return inputEvents.Dequeue();
     }
 }

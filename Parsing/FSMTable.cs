@@ -22,172 +22,171 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// Contains the shared data structures that define a state machine.
+/// Note that one instance of this class can be shared across a
+/// number of parallel state machine instances.
+/// </summary>
+/// <remarks>
+/// Constructor. Initialises the state table and guard evaluators.
+/// </remarks>
+/// <param name="states">The behavioural description of
+/// the finite state machine.</param>
+/// <param name="guards">The list of guard evaluators
+/// used as conditions on events.</param>
+/// <param name="tokens">The lookup table that
+/// associates names with integer values</param>
+
+public class FSMTable(FSMState[] states,
+    TwoWayMap<string, int> tokens, bool ignoreErrors)
 {
+
     /// <summary>
-    /// Contains the shared data structures that define a state machine.
-    /// Note that one instance of this class can be shared across a
-    /// number of parallel state machine instances.
+    /// The state transition table
     /// </summary>
-    /// <remarks>
-    /// Constructor. Initialises the state table and guard evaluators.
-    /// </remarks>
-    /// <param name="states">The behavioural description of
-    /// the finite state machine.</param>
-    /// <param name="guards">The list of guard evaluators
-    /// used as conditions on events.</param>
-    /// <param name="tokens">The lookup table that
-    /// associates names with integer values</param>
 
-    public class FSMTable(FSMState[] states,
-        TwoWayMap<string, int> tokens, bool ignoreErrors)
+    public FSMState[] States
     {
+        get;
+        private set;
+    } = states;
 
-        /// <summary>
-        /// The state transition table
-        /// </summary>
+    /// <summary>
+    /// Indicates whether the state machine is expected to
+    /// just drop events that are not recognised for the
+    /// current state (true), or just terminate (false).
+    /// </summary>
 
-        public FSMState[] States
+    public bool ErrorRecoveryEnabled
+    {
+        get;
+        set;
+    } = ignoreErrors;
+
+    /// <summary>
+    /// Lookup table for names of tokens as used
+    /// in the grammar, since we are using
+    /// inbounded integers as the token types
+    /// rather than an enum, so that the tokens
+    /// can be set at runtime.
+    /// </summary>
+
+    public TwoWayMap<string, int> Tokens
+    {
+        get;
+        set;
+    } = tokens;
+
+    /// <summary>
+    /// Indicates whether the run-time binding operation
+    /// has taken place on the FSM tables. This run-time
+    /// binding compiles the proxies that link the actions
+    /// and guards in the FSM tables with the equivalent
+    /// methods in the derived parser class.
+    /// </summary>
+
+    public bool Bound
+    {
+        get;
+        set;
+    } = false;
+
+    /// <summary>
+    /// At run-time, convert all the guard and action method names
+    /// into proxy functions that call the real guard and action
+    /// functions with those names in their derived FSM class.
+    /// </summary>
+    /// <param name="fsmType">The type of the FSM derived class</param>
+
+    public void Bind(Type fsmType)
+    {
+        // Bind all the guard and action functions using a
+        // compiled expression proxy. This has the benefits
+        // of late binding, with the performance (nearly)
+        // of compile time binding.
+
+        foreach (FSMState state in States)
         {
-            get;
-            private set;
-        } = states;
+            // Bind the entry and exit actions
 
-        /// <summary>
-        /// Indicates whether the state machine is expected to
-        /// just drop events that are not recognised for the
-        /// current state (true), or just terminate (false).
-        /// </summary>
+            state.EntryActions?.Bind(fsmType);
+            state.ExitActions?.Bind(fsmType);
 
-        public bool ErrorRecoveryEnabled
-        {
-            get;
-            set;
-        } = ignoreErrors;
+            // Now bind the guards and transition actions
 
-        /// <summary>
-        /// Lookup table for names of tokens as used
-        /// in the grammar, since we are using
-        /// inbounded integers as the token types
-        /// rather than an enum, so that the tokens
-        /// can be set at runtime.
-        /// </summary>
-
-        public TwoWayMap<string, int> Tokens
-        {
-            get;
-            set;
-        } = tokens;
-
-        /// <summary>
-        /// Indicates whether the run-time binding operation
-        /// has taken place on the FSM tables. This run-time
-        /// binding compiles the proxies that link the actions
-        /// and guards in the FSM tables with the equivalent
-        /// methods in the derived parser class.
-        /// </summary>
-
-        public bool Bound
-        {
-            get;
-            set;
-        } = false;
-
-        /// <summary>
-        /// At run-time, convert all the guard and action method names
-        /// into proxy functions that call the real guard and action
-        /// functions with those names in their derived FSM class.
-        /// </summary>
-        /// <param name="fsmType">The type of the FSM derived class</param>
-
-        public void Bind(Type fsmType)
-        {
-            // Bind all the guard and action functions using a
-            // compiled expression proxy. This has the benefits
-            // of late binding, with the performance (nearly)
-            // of compile time binding.
-
-            foreach (FSMState state in States)
+            foreach (FSMTransition col in state.Transitions)
             {
-                // Bind the entry and exit actions
-
-                state.EntryActions?.Bind(fsmType);
-                state.ExitActions?.Bind(fsmType);
-
-                // Now bind the guards and transition actions
-
-                foreach (FSMTransition col in state.Transitions)
-                {
-                    col.Condition?.Bind(fsmType, false);
-                    col.InlineActions?.Bind(fsmType);
-                }
+                col.Condition?.Bind(fsmType, false);
+                col.InlineActions?.Bind(fsmType);
             }
-
-            // Mark the state tables as bound
-
-            Bound = true;
         }
 
-        /// <summary>
-        /// Delegate to a method containing the code:
-        /// return new MyParserNamespace.AutoGenerated.MyParser_AutoGenerated();
-        /// where the programmer-written parser class was called
-        /// MyParserNamespace.MyParser.
-        /// </summary>
+        // Mark the state tables as bound
 
-        private Delegate fsmDefaultConstructor = null;
+        Bound = true;
+    }
 
-        /// <summary>
-        /// Initialize the factory delegate for creating 
-        /// instances of the state machine class
-        /// </summary>
-        /// <param name="autoGenFSMType">The autogenerated FSM class</param>
+    /// <summary>
+    /// Delegate to a method containing the code:
+    /// return new MyParserNamespace.AutoGenerated.MyParser_AutoGenerated();
+    /// where the programmer-written parser class was called
+    /// MyParserNamespace.MyParser.
+    /// </summary>
 
-        public void InitializeFSMConstructor(Type autoGenFSMType)
-        {
-            // Argument validation
+    private Delegate fsmDefaultConstructor = null;
 
-            ArgumentNullException.ThrowIfNull(autoGenFSMType);
+    /// <summary>
+    /// Initialize the factory delegate for creating 
+    /// instances of the state machine class
+    /// </summary>
+    /// <param name="autoGenFSMType">The autogenerated FSM class</param>
 
-            // Create dynamic IL code to invoke the constructor
-            // for the found parser class type, then cache it
-            // into the delegate field reserved for that purpose.
+    public void InitializeFSMConstructor(Type autoGenFSMType)
+    {
+        // Argument validation
 
-            LambdaExpression newLambda = Expression.Lambda(Expression.New(autoGenFSMType));
-            fsmDefaultConstructor = newLambda.Compile();
-        }
+        ArgumentNullException.ThrowIfNull(autoGenFSMType);
 
-        /// <summary>
-        /// Create an instance of the state machine whose
-        /// class is associated with this FSMTable
-        /// </summary>
-        /// <typeparam name="T">The type of the FSM class to create. Note
-        /// that this should be either the programmer's FSM class type
-        /// as derived from Parsing.FSM, or could be just Parsing.FSM
-        /// if we don't need the actual FSM type.</typeparam>
-        /// <returns>An instance of the FSM with the specified class</returns>
+        // Create dynamic IL code to invoke the constructor
+        // for the found parser class type, then cache it
+        // into the delegate field reserved for that purpose.
 
-        public T CreateFSM<T>() where T : FSM, new()
-        {
-            // Before this factory method is called, we need to bind the
-            // constructor for the auto-generated derived FSM class so
-            // that subsequent calls to this method execute very quickly.
-            // To do this, call InitializeFSMConstructor before calling
-            // this CreateFSM<T> method.
+        LambdaExpression newLambda = Expression.Lambda(Expression.New(autoGenFSMType));
+        fsmDefaultConstructor = newLambda.Compile();
+    }
 
-            if (fsmDefaultConstructor == null)
-                throw new InvalidOperationException
-                    ("InitializeFSMConstructor should be called before CreateFSM<T>");
+    /// <summary>
+    /// Create an instance of the state machine whose
+    /// class is associated with this FSMTable
+    /// </summary>
+    /// <typeparam name="T">The type of the FSM class to create. Note
+    /// that this should be either the programmer's FSM class type
+    /// as derived from Parsing.FSM, or could be just Parsing.FSM
+    /// if we don't need the actual FSM type.</typeparam>
+    /// <returns>An instance of the FSM with the specified class</returns>
 
-            // Invoke the constructor for the auto-generated FSM derived class,
-            // but return it as a reference to the programmer-written parser class
-            // the programmer wrote. There is no reason for a developer to want
-            // direct access to the autogenerated methods of the derived FSM
-            // class. Note that the FSM table is also injected here.
+    public T CreateFSM<T>() where T : FSM, new()
+    {
+        // Before this factory method is called, we need to bind the
+        // constructor for the auto-generated derived FSM class so
+        // that subsequent calls to this method execute very quickly.
+        // To do this, call InitializeFSMConstructor before calling
+        // this CreateFSM<T> method.
 
-            T newFSM = ((Func<T>)fsmDefaultConstructor)();
-            newFSM.FSMTable = this;
-            return newFSM;
-        }
+        if (fsmDefaultConstructor == null)
+            throw new InvalidOperationException
+                ("InitializeFSMConstructor should be called before CreateFSM<T>");
+
+        // Invoke the constructor for the auto-generated FSM derived class,
+        // but return it as a reference to the programmer-written parser class
+        // the programmer wrote. There is no reason for a developer to want
+        // direct access to the autogenerated methods of the derived FSM
+        // class. Note that the FSM table is also injected here.
+
+        T newFSM = ((Func<T>)fsmDefaultConstructor)();
+        newFSM.FSMTable = this;
+        return newFSM;
     }
 }

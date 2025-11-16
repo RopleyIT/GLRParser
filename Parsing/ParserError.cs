@@ -20,36 +20,35 @@
 // software if you do not agree to these terms.
 
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// Container type used to return action errors
+/// from action functions into the parser
+/// </summary>
+
+public class ParserError
 {
     /// <summary>
-    /// Container type used to return action errors
-    /// from action functions into the parser
+    /// Set true to terminate the parse.
+    /// Set false to allow the parse to
+    /// continue with a warning.
     /// </summary>
 
-    public class ParserError
+    public bool Fatal
     {
-        /// <summary>
-        /// Set true to terminate the parse.
-        /// Set false to allow the parse to
-        /// continue with a warning.
-        /// </summary>
+        get;
+        set;
+    }
 
-        public bool Fatal
-        {
-            get;
-            set;
-        }
+    /// <summary>
+    /// The error message to
+    /// report back to the parser
+    /// </summary>
 
-        /// <summary>
-        /// The error message to
-        /// report back to the parser
-        /// </summary>
-
-        public string Message
-        {
-            get;
-            set;
-        }
+    public string Message
+    {
+        get;
+        set;
     }
 }

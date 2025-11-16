@@ -22,94 +22,93 @@
 using Parsing;
 using System.Collections.Generic;
 
-namespace GLRParserTests
+namespace GLRParserTests;
+
+/// <summary>
+/// Test parser action and guard implementation
+/// </summary>
+
+public class InlineGLRTestParser : GeneralisedParser
 {
-    /// <summary>
-    /// Test parser action and guard implementation
-    /// </summary>
-
-    public class InlineGLRTestParser : GeneralisedParser
+    public int PresentCount
     {
-        public int PresentCount
-        {
-            get;
-            set;
-        }
-
-        public int PastCount
-        {
-            get;
-            set;
-        }
-
-        public int PluralCount
-        {
-            get;
-            set;
-        }
-
-        public int SingularCount
-        {
-            get;
-            set;
-        }
-
-        public int AdjectivesCount
-        {
-            get;
-            set;
-        }
-
-        public List<string> AdjectiveList
-        {
-            get;
-            set;
-        }
-
-        // Default constructor
-
-        public InlineGLRTestParser() => AdjectiveList = [];
-
-        // Actions
-
-        public void BumpPresentTense(object[] args) => PresentCount++;
-
-        public void BumpPastTense(object[] args) => PastCount++;
-
-        public void BumpPlural(object[] args) => PluralCount++;
-
-        public void BumpSingular(object[] args) => SingularCount++;
-
-        public void BumpAdjectives(object[] args) => AdjectivesCount++;
-
-        public void BumpAdjectiveList(object[] args)
-        {
-            IList<string> adjectives = AsList<string>(args[1]);
-            AdjectivesCount += adjectives.Count;
-        }
-
-        public void AppendAdjective(object[] args)
-        {
-            AdjectiveList ??= [];
-            AdjectiveList.Add(args[1].ToString());
-        }
-
-        public void AppendAdjectiveList(object[] args)
-        {
-            IList<string> adjectives = AsList<string>(args[1]);
-            foreach (string s in adjectives)
-                AdjectiveList.Add(s);
-        }
-
-        // Guards
-
-        public static bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
-
-        public static bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
-                || arg.ToString().EndsWith("ed");
-
-        public static bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
-
-        public static bool Past(object arg) => arg.ToString().EndsWith("ed");
+        get;
+        set;
     }
+
+    public int PastCount
+    {
+        get;
+        set;
+    }
+
+    public int PluralCount
+    {
+        get;
+        set;
+    }
+
+    public int SingularCount
+    {
+        get;
+        set;
+    }
+
+    public int AdjectivesCount
+    {
+        get;
+        set;
+    }
+
+    public List<string> AdjectiveList
+    {
+        get;
+        set;
+    }
+
+    // Default constructor
+
+    public InlineGLRTestParser() => AdjectiveList = [];
+
+    // Actions
+
+    public void BumpPresentTense(object[] args) => PresentCount++;
+
+    public void BumpPastTense(object[] args) => PastCount++;
+
+    public void BumpPlural(object[] args) => PluralCount++;
+
+    public void BumpSingular(object[] args) => SingularCount++;
+
+    public void BumpAdjectives(object[] args) => AdjectivesCount++;
+
+    public void BumpAdjectiveList(object[] args)
+    {
+        IList<string> adjectives = AsList<string>(args[1]);
+        AdjectivesCount += adjectives.Count;
+    }
+
+    public void AppendAdjective(object[] args)
+    {
+        AdjectiveList ??= [];
+        AdjectiveList.Add(args[1].ToString());
+    }
+
+    public void AppendAdjectiveList(object[] args)
+    {
+        IList<string> adjectives = AsList<string>(args[1]);
+        foreach (string s in adjectives)
+            AdjectiveList.Add(s);
+    }
+
+    // Guards
+
+    public static bool PluralNoun(object arg) => arg.ToString().EndsWith('s');
+
+    public static bool SingularVerb(object arg) => arg.ToString().EndsWith('s')
+            || arg.ToString().EndsWith("ed");
+
+    public static bool PluralVerb(object arg) => !arg.ToString().EndsWith('s');
+
+    public static bool Past(object arg) => arg.ToString().EndsWith("ed");
 }

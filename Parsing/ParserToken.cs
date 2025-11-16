@@ -21,171 +21,170 @@
 
 using System;
 
-namespace Parsing
+namespace Parsing;
+
+/// <summary>
+/// The expected interface that each successive
+/// input token read from the token input stream
+/// exposes
+/// </summary>
+
+public interface IToken
 {
     /// <summary>
-    /// The expected interface that each successive
-    /// input token read from the token input stream
-    /// exposes
+    /// The weakly-typed representation of the type of token,
+    /// being a member of the list of token types retrieved
+    /// from the parser's Tokens two way map by name lookup.
     /// </summary>
 
-    public interface IToken
+    int Type
     {
-        /// <summary>
-        /// The weakly-typed representation of the type of token,
-        /// being a member of the list of token types retrieved
-        /// from the parser's Tokens two way map by name lookup.
-        /// </summary>
-
-        int Type
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Data captured by the tokeniser that
-        /// accompanies the input token type. For
-        /// example, a token type might be
-        /// INTEGER, and the Value property would
-        /// be the parsed value of that integer.
-        /// </summary>
-
-        object Value
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Positional information for where the token came from.
-        /// Could be the line number from which the token came,
-        /// or a token number in a sequence.
-        /// </summary>
-
-        string Position
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Produce a string representation of the token for debugging
-        /// </summary>
-        /// <param name="tokenMap">The lookup table for tokens</param>
-        /// <param name="showValue">True to include the token value
-        /// in the string, false to only show the type</param>
-        /// <param name="indent">Indent spacing for resulting string</param>
-        /// <returns>String representation of the token</returns>
-
-        string AsString(TwoWayMap<string, int> tokenMap, bool showValue, int indent);
+        get;
     }
 
     /// <summary>
-    /// A default implementation of the IToken interface,
-    /// as used for tokens with a precomputed value.
+    /// Data captured by the tokeniser that
+    /// accompanies the input token type. For
+    /// example, a token type might be
+    /// INTEGER, and the Value property would
+    /// be the parsed value of that integer.
     /// </summary>
-    /// <remarks>
+
+    object Value
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// Positional information for where the token came from.
+    /// Could be the line number from which the token came,
+    /// or a token number in a sequence.
+    /// </summary>
+
+    string Position
+    {
+        get;
+    }
+
+    /// <summary>
+    /// Produce a string representation of the token for debugging
+    /// </summary>
+    /// <param name="tokenMap">The lookup table for tokens</param>
+    /// <param name="showValue">True to include the token value
+    /// in the string, false to only show the type</param>
+    /// <param name="indent">Indent spacing for resulting string</param>
+    /// <returns>String representation of the token</returns>
+
+    string AsString(TwoWayMap<string, int> tokenMap, bool showValue, int indent);
+}
+
+/// <summary>
+/// A default implementation of the IToken interface,
+/// as used for tokens with a precomputed value.
+/// </summary>
+/// <remarks>
+/// Constructor
+/// </remarks>
+/// <param name="tokenType">Parser token type as an integer</param>
+/// <param name="val">Value associated with token</param>
+/// <param name="pos">The location in the input stream
+/// at which the token appeared</param>
+
+public class ParserToken(int tokenType, object val, string pos) : IToken
+{
+    /// <summary>
+    /// The weak type for the token. May well
+    /// be represented by an enum, but used as
+    /// an integer because we may want to
+    /// create and run a parser in the same
+    /// application, where we can't just
+    /// define a new enum at runtime.
+    /// </summary>
+
+    public int Type
+    {
+        get;
+        private set;
+    } = tokenType;
+
+    /// <summary>
+    /// Data captured by the tokeniser that
+    /// accompanies the input token type. For
+    /// example, a token type might be
+    /// INTEGER, and the Value property would
+    /// be the parsed value of that integer.
+    /// </summary>
+
+    public object Value
+    {
+        get;
+        set;
+    } = val;
+
+    /// <summary>
     /// Constructor
-    /// </remarks>
+    /// </summary>
     /// <param name="tokenType">Parser token type as an integer</param>
     /// <param name="val">Value associated with token</param>
-    /// <param name="pos">The location in the input stream
-    /// at which the token appeared</param>
+    /// <param name="line">The line of the input stream
+    /// on which the token appeared</param>
 
-    public class ParserToken(int tokenType, object val, string pos) : IToken
+    public ParserToken(int tokenType, object val, int line)
+        : this(tokenType, val, line.ToString())
     {
-        /// <summary>
-        /// The weak type for the token. May well
-        /// be represented by an enum, but used as
-        /// an integer because we may want to
-        /// create and run a parser in the same
-        /// application, where we can't just
-        /// define a new enum at runtime.
-        /// </summary>
+    }
 
-        public int Type
-        {
-            get;
-            private set;
-        } = tokenType;
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="tokenType">Parser token type as an integer</param>
+    /// <param name="val">Value associated with token</param>
 
-        /// <summary>
-        /// Data captured by the tokeniser that
-        /// accompanies the input token type. For
-        /// example, a token type might be
-        /// INTEGER, and the Value property would
-        /// be the parsed value of that integer.
-        /// </summary>
+    public ParserToken(int tokenType, object val)
+        : this(tokenType, val, string.Empty)
+    {
+    }
 
-        public object Value
-        {
-            get;
-            set;
-        } = val;
+    /// <summary>
+    /// Constructor
+    /// </summary>
+    /// <param name="tokenType">Parser token type as an integer</param>
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="tokenType">Parser token type as an integer</param>
-        /// <param name="val">Value associated with token</param>
-        /// <param name="line">The line of the input stream
-        /// on which the token appeared</param>
+    public ParserToken(int tokenType)
+        : this(tokenType, null)
+    {
+    }
 
-        public ParserToken(int tokenType, object val, int line)
-            : this(tokenType, val, line.ToString())
-        {
-        }
+    /// <summary>
+    /// The line of the input file where the
+    /// token came from
+    /// </summary>
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="tokenType">Parser token type as an integer</param>
-        /// <param name="val">Value associated with token</param>
+    public string Position
+    {
+        get;
+        private set;
+    } = pos;
 
-        public ParserToken(int tokenType, object val)
-            : this(tokenType, val, string.Empty)
-        {
-        }
+    /// <summary>
+    /// Produce a string representation of the token for debugging
+    /// </summary>
+    /// <param name="tokenMap">The lookup table for tokens</param>
+    /// <param name="showValue">True to include the token value
+    /// in the string, false to only show the type</param>
+    /// <param name="indent">Indent spacing for resulting string</param>
+    /// <returns>String representation of the token</returns>
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="tokenType">Parser token type as an integer</param>
-
-        public ParserToken(int tokenType)
-            : this(tokenType, null)
-        {
-        }
-
-        /// <summary>
-        /// The line of the input file where the
-        /// token came from
-        /// </summary>
-
-        public string Position
-        {
-            get;
-            private set;
-        } = pos;
-
-        /// <summary>
-        /// Produce a string representation of the token for debugging
-        /// </summary>
-        /// <param name="tokenMap">The lookup table for tokens</param>
-        /// <param name="showValue">True to include the token value
-        /// in the string, false to only show the type</param>
-        /// <param name="indent">Indent spacing for resulting string</param>
-        /// <returns>String representation of the token</returns>
-
-        public string AsString(TwoWayMap<string, int> tokenMap, bool showValue, int indent)
-        {
-            ArgumentNullException.ThrowIfNull(tokenMap);
-            string result = string.Empty;
-            for (int i = 0; i < indent; i++)
-                result += "  ";
-            result += tokenMap[Type];
-            if (showValue && Value != null)
-                result += "[" + Value.ToString() + "]";
-            return result;
-        }
+    public string AsString(TwoWayMap<string, int> tokenMap, bool showValue, int indent)
+    {
+        ArgumentNullException.ThrowIfNull(tokenMap);
+        string result = string.Empty;
+        for (int i = 0; i < indent; i++)
+            result += "  ";
+        result += tokenMap[Type];
+        if (showValue && Value != null)
+            result += "[" + Value.ToString() + "]";
+        return result;
     }
 }
