@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BooleanLib\BooleanLib.csproj" />
-    <ProjectReference Include="..\DynamicCSharp\DynamicCSharp.csproj" />
+    <ProjectReference Include="..\..\DynamicCSharp\DynamicCSharp\DynamicCSharp.csproj" />
     <ProjectReference Include="..\ParserGenerator\ParserGenerator.csproj" />
   </ItemGroup>
 
