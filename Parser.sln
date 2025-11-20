@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Parsing", "Parsing\Parsing.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParserGenerator", "ParserGenerator\ParserGenerator.csproj", "{136901A7-E636-4E9A-A827-0C791833D8AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicCSharp", "..\DynamicCSharp\DynamicCSharp\DynamicCSharp.csproj", "{3EB69EF2-4309-4763-A8FB-67D683F5AD5A}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParseLR", "ParseLR\ParseLR.csproj", "{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PedXController", "TrafficLightControllerExample\PedXController\PedXController.csproj", "{64C9CF1B-B49A-4F9C-9ACE-1DB903ACC8F6}"
@@ -36,8 +34,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentenceParserMsTests", "Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooleanLibMsTests", "BooleanLibMsTests\BooleanLibMsTests.csproj", "{F71B5EE3-FCC9-4443-A419-7E7D5229B309}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicCSharpMsTests", "..\DynamicCSharp\DynamicCSharpMsTests\DynamicCSharpMsTests.csproj", "{2B1F2F56-62BE-4339-A5B8-DDDF1CB6A70F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLRParserMsTests", "GLRParserMsTests\GLRParserMsTests.csproj", "{766B06EB-7A92-4A30-B910-793F89910678}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParserParserMsTests", "ParserParserMsTests\ParserParserMsTests.csproj", "{EA214B42-D685-449D-992D-52D554C0B32E}"
@@ -60,10 +56,6 @@ Global
 		{136901A7-E636-4E9A-A827-0C791833D8AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{136901A7-E636-4E9A-A827-0C791833D8AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{136901A7-E636-4E9A-A827-0C791833D8AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EB69EF2-4309-4763-A8FB-67D683F5AD5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EB69EF2-4309-4763-A8FB-67D683F5AD5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EB69EF2-4309-4763-A8FB-67D683F5AD5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EB69EF2-4309-4763-A8FB-67D683F5AD5A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7CA2F93-DEC6-4A90-8BC6-48376E4244C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -104,10 +96,6 @@ Global
 		{F71B5EE3-FCC9-4443-A419-7E7D5229B309}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F71B5EE3-FCC9-4443-A419-7E7D5229B309}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F71B5EE3-FCC9-4443-A419-7E7D5229B309}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2B1F2F56-62BE-4339-A5B8-DDDF1CB6A70F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B1F2F56-62BE-4339-A5B8-DDDF1CB6A70F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B1F2F56-62BE-4339-A5B8-DDDF1CB6A70F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B1F2F56-62BE-4339-A5B8-DDDF1CB6A70F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{766B06EB-7A92-4A30-B910-793F89910678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{766B06EB-7A92-4A30-B910-793F89910678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{766B06EB-7A92-4A30-B910-793F89910678}.Release|Any CPU.ActiveCfg = Release|Any CPU

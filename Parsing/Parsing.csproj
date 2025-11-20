@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DynamicCSharp" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BooleanLib\BooleanLib.csproj" />
-    <ProjectReference Include="..\..\DynamicCSharp\DynamicCSharp\DynamicCSharp.csproj" />
     <ProjectReference Include="..\ParserGenerator\ParserGenerator.csproj" />
   </ItemGroup>
 
