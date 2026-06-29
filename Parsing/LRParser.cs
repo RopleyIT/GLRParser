@@ -602,7 +602,7 @@ public class LRParser : Parser
         if (ggaLatestNonterminalInList == null)
         {
             string code =
-                "List<object> argList = args[1] as List<object>;\r\n" +
+                "List<object> argList = args[1] as List<object> ?? new();\r\n" +
                 "argList.Add(args[2]);\r\n" +
                 "args[0] = argList;\r\n";
             ggaLatestNonterminalInList = new GrammarGuardOrAction
